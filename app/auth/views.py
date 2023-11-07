@@ -71,7 +71,7 @@ def login():
                 next = url_for('main.home')
             return redirect(next)
         flash('Incorrect password or email address!', 'error')
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/connexion.html', form=form)
 
 @auth.route('/logout/')
 @login_required
