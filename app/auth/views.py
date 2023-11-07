@@ -26,8 +26,8 @@ google = OAuth().remote_app(
 # Initialize Apple OAuth
 apple = OAuth().remote_app(
     'apple',
-    consumer_key='YOUR_APPLE_CLIENT_ID',
-    consumer_secret='YOUR_APPLE_CLIENT_SECRET',
+    consumer_key='',
+    consumer_secret='',
     request_token_params={},
     base_url='https://appleid.apple.com/auth/authorize',
     request_token_url=None,
