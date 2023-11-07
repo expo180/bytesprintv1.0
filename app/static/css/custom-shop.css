@@ -1,0 +1,41 @@
+@import url('fonts.css');
+*{
+    font-family:'Telegraf-Regular', sans-serif;
+    box-sizing:border-box;
+}
+body{
+  overflow-x:hidden;
+}
+.cta-discover{
+    text-decoration: none;
+    color:rgb(1,16,89);
+}
+.navbar{
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    background-color:rgb(7,95,195);
+
+}
+.btn{
+    font-family:'Telegraf-UltraBold', sans-serif;
+}
+.cta-learn{
+    color:white;
+    text-decoration: none;
+}
+.dropdown-toggle::after {
+    display: none;
+}
+.offer-section{
+    background-image:url("Sans titre 110_20230804184131.png");
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size:cover;
+    padding:10em 5em;
+}
+.pattern{
+    background-image:url("Sans titre 110_20230804184040.png");
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size:cover;
+    padding:10em 5em;
+}

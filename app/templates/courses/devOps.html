@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/web.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Gajraj+One&family=Gloock&family=Inter:wght@100;
+	200;300;900&family=Open+Sans:wght@300&family=Poppins:wght@400;500;900&family=Questrial&family=Roboto:ital,
+	wght@0,900;1,700&family=Urbanist:wght@800&display=swap" rel="stylesheet">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/animations.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='script/charge.js')}}"></script>
+	<title>Ingénierie DevOps - frame genesis</title>
+</head>
+<body>
+	{% include 'header.html' %}
+	<div class="web-dev">
+		<form>
+			<div class="inline"><button><i class="fa fa-search"></i></button><input type="text" name="research" placeholder="Créer des sites web dynamiques avec php et MySQL"></div>
+		</form>
+		<div class="web-dev-courses">
+			{% for web_dev in web_dev %}
+			<div class="column">
+				<h2 class="courses-title">{{web_dev['title']}}</h2>
+				<p class="courses-description">{{web_dev['description']}}</p>
+				<h3 class="niveau">{{web_dev['niveau']}}</h3>
+				<h3 class="état">{{web_dev['état']}}</h3>
+				<h4 class="courses-duration">{{web_dev['duration']}}</h4>
+				<h4 class="price"><b>{{web_dev['price']}}</b></h4>
+				<div class="btn">
+					<a href="{{url_for('paiement')}}" class="buy"><i class="fa fa-shopping-cart"></i></a>
+					<a href="" class="aper">Aperçu</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% include 'footer.html' %}
+</body>
+</html>
+

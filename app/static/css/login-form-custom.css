@@ -1,0 +1,141 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+.submit-login{
+    background-color: #007bff;
+    color:white;
+    transition:.6s ease-in-out;
+}
+.email-serverless-raise-error{
+    display: none;
+}
+
+.form-control:invalid {
+    border-color: rgb(255, 100, 100);
+}
+
+.email-serverless-raise-error {
+    display: none;
+    color: rgb(255, 100, 100);
+}
+
+.submit-login:disabled {
+    color: rgb(180, 180, 180);
+}
+
+#showPass {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: black;
+    transition: color 0.3s;
+    z-index: 2;
+}
+
+#showPass:hover {
+    color:#007bff;
+}
+
+#barOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    display: none;
+}
+
+.submit-login:hover{
+    background-color:#238cfc;
+    color:white;
+}
+.submit-api{
+    border:solid 1px black;
+}
+.submit-api:hover{
+    border:solid 1px black;
+    background-color:rgb(243, 239, 239);
+    transition:.5s ease-in-out;
+}
+.copyright-info,
+.form-select
+{
+    font-size:0.55rem;
+}
+.form-select{
+    color:rgb(24, 24, 24);
+    margin-top:0.3em;
+}
+.general-info{
+    display:grid;
+    grid-auto-flow:column dense;
+}
+body{
+    background-image:url('home-background-img.png');
+    background-size:contain;
+    background-repeat:repeat;
+    background-position:center;
+    height:100vh;
+}
+main{
+    margin-top:0.3em; 
+    max-width:300px;
+    min-width:100px;
+    background-color:white;
+}
+.api-text{
+    font-size:0.68rem;
+}
+.btn-register{
+    color:rgb(0,63,140);
+    background-color:rgb(243, 239, 239);
+}
+#facebook-api{
+    font-size:0.62rem;
+}
+.api-logo{
+    width:20px;
+}
+@media(min-width:400px){
+    .api-logo{
+        width:20px;
+    }
+    main{
+        max-width:400px;
+    }
+    .copyright-info{
+        font-size:0.65rem;
+    }
+    .form-select{
+        font-size:0.7rem;
+        color:rgb(24, 24, 24);
+    }
+}
+@media(min-width:576px){
+    .copyright-info{
+        font-size:0.75rem;
+    }
+    .form-select{
+        font-size:0.8rem;
+        color:rgb(24, 24, 24);
+    }
+}
+@media(min-width:992px){
+    main{
+        max-width:500px;
+    }
+    .api-text,
+    #facebook-api
+    {
+        font-size:1rem;
+    }
+    .api-logo{
+        width:30px;
+    }
+}

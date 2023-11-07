@@ -1,0 +1,16 @@
+Users       Products       Categories     Product_Category
+┌─────┐     ┌────────┐     ┌────────┐     ┌────────────┐
+│user_id│     │product_id│     │category_id│     │product_id  │
+│username│     │name    │     │name    │     │category_id│
+│email   │     │description │     │description │     └────────────┘
+│...     │     │price   │     └────────┘
+└─────┘     │stock_quantity│
+             └────────┘
+Orders      Order_Items
+┌─────┐     ┌────────────┐
+│order_id│     │order_item_id│
+│user_id │     │order_id    │
+│order_date│     │product_id  │
+│total_amount│     │quantity    │
+└─────┘     │subtotal    │
+             └────────────┘

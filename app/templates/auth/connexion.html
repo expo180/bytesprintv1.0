@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="login portal">
+	<meta name="keywords" content="login, account, user'">
+	<meta name="author" content="voilier, Inc">
+	<title>voilier: Sign in</title>
+	<!--fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Gajraj+One&family=Gloock&family=Inter:wght@100;
+	200;300;900&family=Open+Sans:wght@300&family=Poppins:wght@400;500;900&family=Questrial&family=Roboto:ital,
+	wght@0,900;1,700&family=Urbanist:wght@800&display=swap" rel="stylesheet">
+	<!-- Favicons -->
+	<link rel="apple-touch-icon" href="{{url_for('static', filename='media/favicons/apple-touch-icon.png')}}" sizes="180x180">
+	<link rel="icon" href="{{url_for('static', filename='media/favicons/favicon-32x32.png')}}" sizes="32x32" type="image/png">
+	<link rel="icon" href="{{url_for('static', filename='media/favicons/favicon-16x16.png')}}" sizes="16x16" type="image/png">
+	<link rel="icon" href="{{url_for('static', filename='media/favicons/favicon.png')}}" type="image/png">
+	<link rel="stylesheet" href="">
+	<!--bootstrap style-->
+	<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <!--bootstrap grid style-->
+	<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap-grid.css')}}">
+    <!--custom style-->
+	<link rel="stylesheet" href="{{url_for('static', filename='css/login-form-custom.css')}}">
+	<!-- bootstrap-icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<!--Jquery-->
+	<script src="{{url_for('static', filename='js/jquery-3.7.0.js.js')}}" type="text/javascript"></script>
+    <!--show password script-->
+    <script src="{{url_for('static', filename='js/showpass-script.js')}}"></script>
+    <!--email-checker script-->
+    <script src="{{url_for('static', filename='js/email-checker-script.js')}}"></script>
+    <!--Google login-->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!--Facebook login-->
+    {% include 'api/facebook-login.html' %}
+    <!--Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!--Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    <!--flags script-->
+    <script src="{{url_for('static', filename='js/flags-select.js')}}"></script>
+</head>
+<body>
+    <main class="form-signin mx-auto shadow-lg rounded-4 py-5">
+        <form class="px-5" method="POST" action="{{ url_for('auth.connexion') }}">
+            <img class="mb-4" src="{{url_for('static', filename='media/form-logo.svg')}}" alt="voilier" width="72" height="57" alt="">
+            <h1 class="h3 mb-3 fw-normal" style="font-family:Poppins, sans-serif;">{{ gettext('Sign in') }}</h1>  
+            {{ form.hidden_tag() }}
+            <div class="d-flex flex-column gap-3">
+                <div class="form-floating">
+                    {{ form.email(class='form-control', id='floatingInput', placeholder='Adresse e-mail') }}
+                    {{ form.email.label }}
+                </div>
+                {% for message in get_flashed_messages() %}
+                <small class="text-danger">{{ message }}</small>
+                {% endfor %}
+                <small class="email-serverless-raise-error">
+                    Invalid email!
+                </small>
+            </div>
+            <div class="form-floating mt-3">
+                {{ form.password(class='form-control pass', id='floatingPassword', placeholder='Password', type='password') }}
+                {{ form.password.label }}
+                <button id="showPass" type="button">
+                    <i class="bi bi-eye"></i>
+                    <i class="bi bi-eye-slash" style="display:none;"></i>
+                </button>
+                <div id="barOverlay"></div>
+            </div>                
+            <div class="form-check text-start my-3">
+                {{ form.remember_me(class='form-check-input', id='flexCheckDefault') }}
+                {{ form.remember_me.label(class='form-check-label', for='flexCheckDefault') }}
+            </div>
+            <div class="d-flex flex-column gap-4">
+                {{ form.submit(class='btn submit-login py-2') }}
+                <div class="d-flex flex-column gap-2 justify-content-center text-center">
+                    <button class="btn submit-api d-flex gap-2 py-3">
+                        <img src="{{url_for('static', filename='media/google-color.svg')}}" alt="google" class="api-logo" loading="lazy">
+                        <span style="margin-top:0.2em;" class="api-text">Continue with Google</span>
+                    </button>
+                    <button class="btn submit-api d-flex gap-2 py-3">
+                        <img src="{{url_for('static', filename='media/facebook-color.svg')}}" alt="facebook" class="api-logo" loading="lazy">   
+                        <span style="margin-top:0.2em;" class="api-text" id="facebook-api">Continue with Facebook</span>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-4 text-start copyright-info">
+                New user? Create your account <a href="{{url_for('auth.register')}}">here</a>. Forgot your password? Please reset it <a href="{{url_for('auth.password_reset_request')}}">here</a>.
+            </div>            
+        </form>
+        <div class="container mt-4">
+            <div class="general-info">
+                <div class="copyright-info pt-2 ms-4">&copy; 2023 voilier, Inc.</div>
+                <div class="btn-group dropup lang-select">
+                    <select class="form-select form-select-sm lang-select" aria-label=".form-select-sm example">
+                        <option value="fr" data-thumbnail="{{ url_for('static', filename='media/france.svg') }}" selected>Français (France)</option>
+                        <option value="us" data-thumbnail="{{ url_for('static', filename='media/great_britain.svg') }}">English (US)</option>
+                        <option value="uk" data-thumbnail="{{ url_for('static', filename='media/flag-uk.png') }}">English (UK)</option>
+                        <option value="es" data-thumbnail="{{ url_for('static', filename='media/flag-es.png') }}">Español (España)</option>
+                        <option value="de" data-thumbnail="{{ url_for('static', filename='media/flag-de.png') }}">Deutsch (Deutschland)</option>
+                    </select>                                 
+                </div>
+            </div>
+        </div>
+    </main>
+    <!--bundle-->
+	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+</body>
+</html>
+  

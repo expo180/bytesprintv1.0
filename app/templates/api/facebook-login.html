@@ -1,0 +1,13 @@
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : 'YOUR_APP_ID',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v13.0'
+        });
+
+        FB.AppEvents.logPageView();
+    };
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>

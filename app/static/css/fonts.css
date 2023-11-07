@@ -1,0 +1,24 @@
+@font-face{
+    font-family:'NeueMachina-Regular';
+    src: url('../fonts/neue-machina/NeueMachina-Regular.otf') format("opentype");
+}
+@font-face {
+    font-family:'NeueMachina-Ultrabold';
+    src: url('../fonts/neue-machina/NeueMachina-Ultrabold.otf') format("opentype");
+}
+@font-face {
+    font-family:'Telegraf-UltraLight';
+    src: url('../fonts/telegraf/PPTelegraf-UltraLight.otf') format("opentype");
+}
+@font-face {
+    font-family:'Telegraf-UltraBold';
+    src: url('../fonts/telegraf/PPTelegraf-UltraBold.otf') format("opentype");
+}
+@font-face {
+    font-family:'Telegraf-Regular';
+    src: url('../fonts/telegraf/PPTelegraf-Regular.otf') format("opentype");
+}
+@font-face {
+    font-family:'Everett-Medium';
+    src: url('../fonts/everett/TWKEverett-Medium.otf') format("opentype");
+}
