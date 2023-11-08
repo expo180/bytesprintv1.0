@@ -45,7 +45,8 @@ body{
   background-size:cover;
 }
 .navbar{
-  overflow-x:none;
+  overflow-x:hidden;
+  box-sizing:border-box;
 }
 /* Slider */
 .slick-slide {
