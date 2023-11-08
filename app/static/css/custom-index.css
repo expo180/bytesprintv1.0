@@ -1,7 +1,12 @@
 @import url("fonts.css");
 *{
-    font-family:'Telegraf-Regular', sans-serif;
-    box-sizing:border-box;
+  font-family:'Telegraf-Regular', sans-serif;
+  box-sizing:border-box;
+}
+html,
+body
+{
+  overflow-x:hidden;
 }
 .hero-heading{
   font-family:'NeueMachina-Regular', sans-serif;
@@ -58,7 +63,7 @@
   
 .slick-slide img {
   width:100%;
-  min-width:80px;
+  min-width:60px;
   max-width:200px;
 }
   

@@ -85,8 +85,8 @@ body{
 }
 main{
     margin-top:0.3em; 
-    max-width:300px;
-    min-width:100px;
+    max-width:400px;
+    min-width:200px;
     background-color:white;
 }
 .api-text{

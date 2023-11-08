@@ -8,7 +8,7 @@ from flask_login import LoginManager
 from flask_oauthlib.client import OAuth
 
 login_manager = LoginManager()
-login_manager.login_view = 'auth.connexion'
+login_manager.login_view = 'auth.login'
 
 bootstrap = Bootstrap()
 mail = Mail()
