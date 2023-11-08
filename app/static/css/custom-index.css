@@ -3,9 +3,6 @@
     font-family:'Telegraf-Regular', sans-serif;
     box-sizing:border-box;
 }
-body{
-  overflow-x:hidden;
-}
 .hero-heading{
   font-family:'NeueMachina-Regular', sans-serif;
   text-transform:uppercase;
@@ -44,10 +41,6 @@ body{
   background-repeat: no-repeat;
   background-size:cover;
 }
-.navbar{
-  overflow-x:hidden;
-  box-sizing:border-box;
-}
 /* Slider */
 .slick-slide {
   margin: 0px 20px;
@@ -65,7 +58,7 @@ body{
   
 .slick-slide img {
   width:100%;
-  min-width:40px;
+  min-width:80px;
   max-width:200px;
 }
   
