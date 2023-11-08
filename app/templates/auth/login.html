@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="login portal">
 	<meta name="keywords" content="login, account, user'">
-	<meta name="author" content="voilier, Inc">
-	<title>voilier: Sign in</title>
+	<meta name="author" content="bytesprint, LLC">
+	<title>Bytesprint: Sign in</title>
 	<!--fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,9 +46,9 @@
 </head>
 <body>
     <main class="form-signin mx-auto shadow-lg rounded-4 py-5">
-        <form class="px-5" method="POST" action="{{ url_for('auth.connexion') }}">
+        <form class="px-5" method="POST" action="{{ url_for('auth.login') }}">
             <img class="mb-4" src="{{url_for('static', filename='media/form-logo.svg')}}" alt="voilier" width="72" height="57" alt="">
-            <h1 class="h3 mb-3 fw-normal" style="font-family:Poppins, sans-serif;">{{ gettext('Sign in') }}</h1>  
+            <h1 class="h3 mb-3 fw-normal" style="font-family:Poppins, sans-serif;">Sign in</h1>  
             {{ form.hidden_tag() }}
             <div class="d-flex flex-column gap-3">
                 <div class="form-floating">
@@ -78,14 +78,14 @@
             <div class="d-flex flex-column gap-4">
                 {{ form.submit(class='btn submit-login py-2') }}
                 <div class="d-flex flex-column gap-2 justify-content-center text-center">
-                    <button class="btn submit-api d-flex gap-2 py-3">
-                        <img src="{{url_for('static', filename='media/google-color.svg')}}" alt="google" class="api-logo" loading="lazy">
-                        <span style="margin-top:0.2em;" class="api-text">Continue with Google</span>
-                    </button>
-                    <button class="btn submit-api d-flex gap-2 py-3">
-                        <img src="{{url_for('static', filename='media/facebook-color.svg')}}" alt="facebook" class="api-logo" loading="lazy">   
-                        <span style="margin-top:0.2em;" class="api-text" id="facebook-api">Continue with Facebook</span>
-                    </button>
+                    <a href="{{ url_for('auth.google_signup') }}" class="g-signin2">
+                        <i class="bi bi-google"></i>
+                        Continue with Google
+                    </a>
+                    <a href="{{ url_for('auth.apple_signup') }}" class="appleID" id="apple-signup">
+                        <i class="bi bi-apple"></i>
+                        Continue with Apple ID
+                    </a>
                 </div>
             </div>
             <div class="mt-4 text-start copyright-info">
@@ -94,7 +94,7 @@
         </form>
         <div class="container mt-4">
             <div class="general-info">
-                <div class="copyright-info pt-2 ms-4">&copy; 2023 voilier, Inc.</div>
+                <div class="copyright-info pt-2 ms-4">&copy; 2023 bytesprint, LLC.</div>
                 <div class="btn-group dropup lang-select">
                     <select class="form-select form-select-sm lang-select" aria-label=".form-select-sm example">
                         <option value="fr" data-thumbnail="{{ url_for('static', filename='media/france.svg') }}" selected>Français (France)</option>

@@ -27,44 +27,44 @@ def home():
 def courses():
     return render_template('courses/cours.html')
 
-@main.route("/Développement_web/")
+@main.route("/web_development/")
 def web_dev():
     return render_template('web.html')
 
-@main.route("/Sciences_des_données/")
+@main.route("/data_science/")
 def data():
     return render_template('data_science.html')
 
-@main.route("/Intelligence_artificielle/")
+@main.route("/AI/")
 def IA():
     return render_template('intelligence_artificielle.html')
 
-@main.route("/Robotique_et_systèmes_embarqués/")
+@main.route("/Robotics&embedded_systems/")
 def robotics():
     return render_template('robot.html')
 
 
-@main.route("/cybersecurité/")
+@main.route("/cybersecurity/")
 def hacking():
     return render_template('hacking.html')
 
-@main.route("/Flutter/")
+@main.route("/flutter/")
 def flutter():
     return render_template('flutter.html')
 
-@main.route("/Unity/")
+@main.route("/unity/")
 def unity():
     return render_template('unity.html')
 
-@main.route("/Ingénierie_DevOps/")
+@main.route("/DevOps/")
 def devOps():
     return render_template('devOps.html')
 
-@main.route("/Développement_de_jeux_vidéos/")
+@main.route("/game_development/")
 def game():
     return render_template('jeux.html')
 
-@main.route("/Développement_de_cryptomonnaies/")
+@main.route("/cryptocurrency_development/")
 def bitcoin():
     return render_template('crypto.html')
 
@@ -72,67 +72,13 @@ def bitcoin():
 def documentation():
     return render_template('documentation.html')
 
-
-@main.route("/jeux/")
-def jeux():
-    return render_template("jeux.html")
-
-
-@main.route("/livres/")
-def livres():
-    return render_template("livres.html")
-
-
-@main.route("/musique/")
-def musique():
-    return render_template('musiques.html')
-
-
-@main.route("/tools/")
-def outils():
-    return render_template('musiques.html')
-
-
 @main.route("/shop/")
 def boutique():
     return render_template("shop/boutique.html")
 
-
 @main.route("/cartographie3D/")
 def cartographie():
     return render_template("cartographie.html")
-
-@main.route("/HTML5&CSS3_documentation/")
-def hypertext():
-    return render_template('HTML5&CSS3_doc.html')
-
-@main.route("/Javascript_documentation/")
-def Javascript():
-    return render_template('javascript_doc.html')
-
-@main.route("/MATLAB_documentation/")
-def MATLAB():
-    return render_template('matlab_doc.html')
-
-@main.route("/Bootstrap_documentation/")
-def Bootstrap():
-    return render_template('bootstrap_doc.html')
-
-@main.route("/Physique_quantique_documentation/")
-def quantum():
-    return render_template('physique-quantique.html')
-
-@main.route("/Théorie_de_la_relativité_documentation/")
-def relativity():
-    return render_template('relativity_doc.html')
-
-@main.route("/Equations_différentielles_documentation/")
-def differential_equations():
-    return render_template('equations_différentielles_doc.html')
-
-@main.route("/Fonctions_logarithmes_documentation/")
-def logarithmic_functions():
-    return render_template('logarithmic_functions_doc.html')
 
 @main.route('/user/<first_name>')
 def user(first_name):

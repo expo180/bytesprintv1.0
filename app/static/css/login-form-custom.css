@@ -139,3 +139,52 @@ main{
         width:30px;
     }
 }
+.signup-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.g-signin2{
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 18px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    text-decoration:none;
+
+}
+
+}
+.g-signin2:hover {
+    background-color: #0056b3;
+}
+
+.appleID{
+    background-color:#000;
+    color:#fff;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-decoration:none;
+
+}
+
+.signup-button i {
+    font-size:80px;
+    margin-right: 10px;
+}
+
+.signup-button + .signup-button {
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .signup-button {
+        font-size: 16px;
+    }
+}

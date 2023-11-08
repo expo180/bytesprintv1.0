@@ -162,6 +162,18 @@
   background-size:cover;
   padding:10em 2em;
 }
+.features-elt{
+  padding:5em 2em;
+}
+@media(min-width:1000px){
+  .documentation-cool,
+  .offer-section,
+  .features-elt
+  {
+    padding:10em 5em;
+  }
+
+}
 .feature-icon{
   font-size:2rem;
 }
