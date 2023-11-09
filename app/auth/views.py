@@ -9,8 +9,9 @@ from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from flask_oauthlib.client import OAuth
 
-# Initialize Google OAuth
-google = OAuth().remote_app(
+oauth = OAuth()
+
+google = oauth.remote_app(
     'google',
     consumer_key='176959984300-4t6mne05ddmd866l7eije2eq2t2gia5m.apps.googleusercontent.com',
     consumer_secret='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',
@@ -24,18 +25,19 @@ google = OAuth().remote_app(
     authorize_url='https://accounts.google.com/o/oauth2/auth',
 )
 
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
 
-@auth.route('/apple_signup', methods=['GET'])
-def apple_signup():
-    return apple.authorize(callback=url_for('auth.apple_authorized', _external=True))
 
 @auth.route('/sign_up/', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data.lower())
+        user = User.query.filter_by(email=form.email.data.lower()).first()
         if user:
             flash('Account already exists please login!', 'error')
+            return redirect(url_for('auth.register'))
         user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
@@ -128,17 +130,19 @@ def authorized():
     age = request.args.get('age')
     country = request.args.get('country')
     gender = request.args.get('gender')
-    user = User.query.filter_by(email=email)
+    user = User.query.filter_by(email=email).first()
     if user:
         flash('Account already exists please login!', 'error')
-    User(
+    user = User(
         first_name=first_name,
         last_name=last_name,
         email=email,
         country=country,
         age=age,
         sexe=gender
-        )
+    )
+    db.session.add(user)
+    db.session.commit()
     session['user_email'] = email
     session['user_first_name'] = first_name
     session['user_last_name'] = last_name
@@ -146,17 +150,3 @@ def authorized():
     session['user_country'] = country
     session['user_gender'] = gender
     return f'Logged in as: {email}, Name: {first_name} {last_name}, Age: {age}, Country: {country}, Gender: {gender}'
-
-
-@auth.route('/apple_authorized', methods=['GET'])
-def apple_authorized():
-    response = apple.authorized_response()
-    if response is None or response.get('access_token') is None:
-        return 'Access denied: reason={} error={}'.format(
-            request.args['error_reason'],
-            request.args['error_description']
-        )
-    session['apple_token'] = (response['access_token'], '')
-    user_info = apple.get('userinfo')
-    # Implement user creation or login logic with Apple user_info
-    return 'Logged in as: ' + user_info.data['email']

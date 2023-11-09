@@ -55,9 +55,17 @@
                     {{ form.email(class='form-control', id='floatingInput', placeholder='Adresse e-mail') }}
                     {{ form.email.label }}
                 </div>
-                {% for message in get_flashed_messages() %}
-                <small class="text-danger">{{ message }}</small>
-                {% endfor %}
+                <small>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                        <small class="alert {{ category }}">
+                            {{ message}}
+                        </small>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                </small>
                 <small class="email-serverless-raise-error">
                     Invalid email!
                 </small>
@@ -82,9 +90,9 @@
                         <i class="bi bi-google"></i>
                         Continue with Google
                     </a>
-                    <a href="{{ url_for('auth.apple_signup') }}" class="appleID" id="apple-signup">
-                        <i class="bi bi-apple"></i>
-                        Continue with Apple
+                    <a href="" class="Facebook-login">
+                        <i class="bi bi-facebook"></i>
+                        Continue with Facebook
                     </a>
                 </div>
             </div>
@@ -109,6 +117,14 @@
     </main>
     <!--bundle-->
 	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+    <script>
+        const flashMessages = document.querySelectorAll('[id^="flash-message-"]');
+        flashMessages.forEach((message, index) => {
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, (index + 1) * 3000);
+        });
+    </script>
 </body>
 </html>
   

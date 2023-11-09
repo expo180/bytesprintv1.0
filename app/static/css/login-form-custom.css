@@ -10,6 +10,12 @@
     display: none;
 }
 
+.alert.success {
+    color: green;
+}  
+.alert.error {
+    color:rgb(255, 100, 100);
+}
 .form-control:invalid {
     border-color: rgb(255, 100, 100);
 }
@@ -145,8 +151,9 @@ main{
     align-items: center;
 }
 
-.g-signin2{
-    background-color: #007bff;
+.g-signin2,
+.Facebook-login
+{
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -157,21 +164,16 @@ main{
     text-decoration:none;
 
 }
+.g-signin2{
+    background-color: #007bff;
+}
+.Facebook-login{
+    background-color:#3b5999;
+}
 
 }
 .g-signin2:hover {
     background-color: #0056b3;
-}
-
-.appleID{
-    background-color:#000;
-    color:#fff;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 12px 20px;
-    border-radius: 6px;
-    text-decoration:none;
-
 }
 
 .signup-button i {
