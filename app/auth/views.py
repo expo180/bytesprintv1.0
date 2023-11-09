@@ -33,6 +33,9 @@ def apple_signup():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data.lower())
+        if user:
+            flash('Account already exists please login!', 'error')
         user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
@@ -44,6 +47,14 @@ def register():
         )
         db.session.add(user)
         db.session.commit()
+        token = user.generate_confirmation_token()
+        send_email(
+            user.email, 
+            'Confirm your account',
+            'auth/email/confirm', 
+            user=user, 
+            token=token
+        )
         flash("A confirmation email has been sent to your email address.", 'success')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
@@ -111,7 +122,31 @@ def authorized():
         )
     session['google_token'] = (response['access_token'], '')
     user_info = google.get('userinfo')
-    return 'Logged in as: ' + user_info.data['email']
+    email = user_info.data.get('email')
+    first_name = user_info.data.get('given_name')
+    last_name = user_info.data.get('family_name')
+    age = request.args.get('age')
+    country = request.args.get('country')
+    gender = request.args.get('gender')
+    user = User.query.filter_by(email=email)
+    if user:
+        flash('Account already exists please login!', 'error')
+    User(
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        country=country,
+        age=age,
+        sexe=gender
+        )
+    session['user_email'] = email
+    session['user_first_name'] = first_name
+    session['user_last_name'] = last_name
+    session['user_age'] = age
+    session['user_country'] = country
+    session['user_gender'] = gender
+    return f'Logged in as: {email}, Name: {first_name} {last_name}, Age: {age}, Country: {country}, Gender: {gender}'
+
 
 @auth.route('/apple_authorized', methods=['GET'])
 def apple_authorized():

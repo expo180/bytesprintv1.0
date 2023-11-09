@@ -3,8 +3,14 @@
     font-family:'Telegraf-Regular', sans-serif;
     box-sizing:border-box;
 }
-body{
+html,
+body
+{
   overflow-x:hidden;
+}
+h1,h4{
+    font-family:'Telegraf-UltraBold', sans-serif;
+
 }
 .cta-discover{
     text-decoration: none;

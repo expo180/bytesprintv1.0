@@ -27,47 +27,6 @@ def home():
 def courses():
     return render_template('courses/cours.html')
 
-@main.route("/web_development/")
-def web_dev():
-    return render_template('web.html')
-
-@main.route("/data_science/")
-def data():
-    return render_template('data_science.html')
-
-@main.route("/AI/")
-def IA():
-    return render_template('intelligence_artificielle.html')
-
-@main.route("/Robotics&embedded_systems/")
-def robotics():
-    return render_template('robot.html')
-
-
-@main.route("/cybersecurity/")
-def hacking():
-    return render_template('hacking.html')
-
-@main.route("/flutter/")
-def flutter():
-    return render_template('flutter.html')
-
-@main.route("/unity/")
-def unity():
-    return render_template('unity.html')
-
-@main.route("/DevOps/")
-def devOps():
-    return render_template('devOps.html')
-
-@main.route("/game_development/")
-def game():
-    return render_template('jeux.html')
-
-@main.route("/cryptocurrency_development/")
-def bitcoin():
-    return render_template('crypto.html')
-
 @main.route("/documentation/")
 def documentation():
     return render_template('documentation.html')
@@ -75,10 +34,6 @@ def documentation():
 @main.route("/shop/")
 def boutique():
     return render_template("shop/boutique.html")
-
-@main.route("/cartographie3D/")
-def cartographie():
-    return render_template("cartographie.html")
 
 @main.route('/user/<first_name>')
 def user(first_name):
@@ -96,3 +51,40 @@ def for_admins_only():
 @permission_required(Permission.MODERATE)
 def for_moderators_only():
     return "Accès réservé aux moderateurs!"
+
+@main.route('/robotic_basics/')
+def robotic_basics():
+    return render_template('robotic_basics.html')
+
+@main.route('/industrial_robotics/')
+def industrial_robots():
+    return render_template('industrial_robotics.html')
+
+@main.route('/mobile_robotics/')
+def mobile_robotics():
+    return render_template('mobile_robotics.html')
+
+@main.route('/humanoid/')
+def humanoid():
+    return render_template('humanoid.html')
+
+@main.route('/robot_vision/')
+def robot_vision():
+    return render_template('robot_vision.html')
+
+@main.route('/robot_manipulation/')
+def robot_manipulation():
+    return render_template('robot_manipulation.html')
+
+@main.route('/aerial_robotics/')
+def aerial_robotics():
+    return render_template('aerial_robotics.html')
+
+@main.route('/underwater_robots/')
+def underwater_robots():
+    return render_template('underwater_robots.html')
+
+@main.route('/Iot&embedded_systems/')
+def Iot():
+    return render_template('Iot.html')
+

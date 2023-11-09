@@ -80,14 +80,6 @@ class RegistrationForm(FlaskForm):
     )
     submit = SubmitField( ('Next'))
 
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Ce compte existe déja!')
-
-    def validate_username(self, field):
-        if User.query.filter_by(username=field.data).first():
-            raise ValidationError("Ce nom d'utilisateur existe déja!")
-
 
 class LoginForm(FlaskForm):
     email = StringField(
@@ -129,7 +121,7 @@ class ChangePasswordForm(FlaskForm):
             DataRequired(), 
             EqualTo(
                 'password2', 
-                message = 'Les mots de passe doivent correspondre'
+                message = 'Passwords must match'
             )
         ]
     )
@@ -148,7 +140,7 @@ class PasswordResetForm(FlaskForm):
             DataRequired(), 
             EqualTo(
                 'password2', 
-                message='Les mots de passe doivent correspondre')
+                message='Passwords must match')
         ]
     )
     password2 = PasswordField(
