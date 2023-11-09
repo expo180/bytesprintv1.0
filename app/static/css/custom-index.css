@@ -186,6 +186,9 @@ body
   cursor:pointer;
   opacity:75%;
 }
+h6{
+  font-family:'Telegraf-UltraBold', sans-serif;
+}
 .none{
   display: none;
 }

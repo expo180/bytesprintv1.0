@@ -29,8 +29,11 @@ google = oauth.remote_app(
 def get_google_oauth_token():
     return session.get('google_token')
 
+def email_slicer(email):
+    first_name = email.split('@')[0]
+    return first_name
 
-@auth.route('/sign_up/', methods=['GET', 'POST'])
+@auth.route('/register/', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -49,15 +52,7 @@ def register():
         )
         db.session.add(user)
         db.session.commit()
-        token = user.generate_confirmation_token()
-        send_email(
-            user.email, 
-            'Confirm your account',
-            'auth/email/confirm', 
-            user=user, 
-            token=token
-        )
-        flash("A confirmation email has been sent to your email address.", 'success')
+        flash("Your account has been created successfully!", 'success')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
@@ -70,6 +65,7 @@ def login():
             login_user(user, form.remember_me.data)
             next = request.args.get('next')
             if not next or not next.startswith('/'):
+                print(current_user.is_administrator())
                 next = url_for('main.home')
             return redirect(next)
         flash('Incorrect password or email address!', 'error')
@@ -110,11 +106,11 @@ def change_password():
             flash('Invalid password.', 'error')
     return render_template('auth/change_password.html', form=form)
 
-@auth.route('/login')
+@auth.route('/login/')
 def google_signup():
     return google.authorize(callback=url_for('auth.authorized', _external=True))
 
-@auth.route('/login/authorized')
+@auth.route('/login/authorized/')
 def authorized():
     response = google.authorized_response()
     if response is None or response.get('access_token') is None:
@@ -124,29 +120,22 @@ def authorized():
         )
     session['google_token'] = (response['access_token'], '')
     user_info = google.get('userinfo')
+    print(user_info.data)
     email = user_info.data.get('email')
-    first_name = user_info.data.get('given_name')
-    last_name = user_info.data.get('family_name')
-    age = request.args.get('age')
-    country = request.args.get('country')
-    gender = request.args.get('gender')
+    first_name = email_slicer(email)
     user = User.query.filter_by(email=email).first()
     if user:
         flash('Account already exists please login!', 'error')
+        return redirect(url_for('auth.register'))
+    
+    default_password='ghp_gcxdTBEc3e3M9'
     user = User(
-        first_name=first_name,
-        last_name=last_name,
         email=email,
-        country=country,
-        age=age,
-        sexe=gender
+        first_name=first_name,
+        last_name=first_name,
+        password_hash=generate_password_hash(default_password)
     )
     db.session.add(user)
     db.session.commit()
-    session['user_email'] = email
-    session['user_first_name'] = first_name
-    session['user_last_name'] = last_name
-    session['user_age'] = age
-    session['user_country'] = country
-    session['user_gender'] = gender
-    return f'Logged in as: {email}, Name: {first_name} {last_name}, Age: {age}, Country: {country}, Gender: {gender}'
+    flash('You have successfully log into your account')
+    return redirect(url_for('main.home'))

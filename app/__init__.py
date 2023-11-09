@@ -34,6 +34,8 @@ def create_app(development=True):
 
     with app.app_context():
         db.create_all()
+        from app.models import Role
+        Role.insert_roles()
         
 
     return app
