@@ -36,10 +36,20 @@
     </head>
 <body>
     {% include 'headers/header3D.html' %}
+    <div class="py-4"></div>
     {% include '3D/hero.html' %}
     {% include 'main/doc-info.html' %}
-    {% include 'footers/footer-3d.html' %}
+    {% include '3D/deep_imagination.html' %}
+    {% include 'graduates-info/graduates-found-work-at.html' %}
+    <div class="py-4"></div>
+    <div class="py-5"></div>
+    <div class="py-5"></div>
+    {% include 'shop/buy-freely.html' %}
+    <div class="py-4"></div>
+    {% include 'main/FAQs.html' %}
     <div class="pattern"></div>
+    {% include 'footers/footer-3d.html' %}
     <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/slideshow-img-animation.js') }}"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 @import url('fonts.css');
 *{
-    font-family:'Telegraf-Regular', sans-serif;
-    box-sizing:border-box;
+  font-family:'Telegraf-Regular', sans-serif;
+  box-sizing:border-box;
 }
 .pattern{
   background-image:url("Sans titre 110_20230804184040.png");
@@ -10,13 +10,42 @@
   background-size:cover;
   padding:10em 5em;
 }
+.features-elt{
+  padding:5em 2em;
+}
+
+.documentation-cool{
+  background-image:url("documentation-background.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  padding:10em 2em;
+}
+.offer-section{
+  background-image:url("home-background-img.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  padding:10em 2em;
+}
+@media(min-width:1000px){
+  .documentation-cool,
+  .offer-section,
+  .features-elt
+  {
+    padding:10em 5em;
+}
+
+}
 html,
 body
 {
   overflow-x:hidden;
 }
-h6{
-    font-family:'Telegraf-UltraBold',sans-serif;
+h6,
+strong
+{
+  font-family:'Telegraf-UltraBold',sans-serif;
 }
 .navbar{
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -40,9 +69,9 @@ h6{
     display: none;
 }
 .pattern{
-    background-image:url("Sans titre 110_20230804184040.png");
-    background-position:center;
-    background-repeat: no-repeat;
-    background-size:cover;
-    padding:10em 5em;
+  background-image:url("Sans titre 110_20230804184040.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  padding:10em 5em;
 }

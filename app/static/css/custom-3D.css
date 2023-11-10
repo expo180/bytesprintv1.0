@@ -1,1 +1,8 @@
 @import 'custom-index.css';
+strong{
+	font-family:'Telegraf-UltraBold', sans-serif;
+}
+.cta-discover-3d{
+	color:rgb(1,16,89);
+	text-decoration:none;
+}

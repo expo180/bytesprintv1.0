@@ -1,7 +1,20 @@
 @import url('fonts.css');
 *{
-    font-family:'Telegraf-Regular', sans-serif;
-    box-sizing:border-box;
+  font-family:'Telegraf-Regular', sans-serif;
+  box-sizing:border-box;
+}
+.documentation-cool{
+  background-image:url("documentation-background.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  padding:10em 2em;
+}
+@media(min-width:1000px){
+  .documentation-cool{
+    padding:10em 5em;
+  }
+
 }
 .pattern{
   background-image:url("Sans titre 110_20230804184040.png");

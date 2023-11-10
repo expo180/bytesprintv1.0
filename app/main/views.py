@@ -39,6 +39,9 @@ def bioinformatics():
 def shop_more():
     return render_template('shop/shop_more.html')
 
+@main.route("/shop/FAQs/ultra-secure-shop")
+def ultra_secure_shop():
+    return render_template('ultra-secure-shop.html')
 
 @main.route("/blog/OOP/")
 def OOP():
@@ -72,6 +75,10 @@ def hacking():
 @main.route("/flutter/")
 def flutter():
     return render_template('flutter.html')
+
+@main.route("/3D_tools/")
+def tools3D():
+    return render_template("3D_tools")
 
 @main.route("/game_design/")
 def game():
