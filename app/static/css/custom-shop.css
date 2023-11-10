@@ -3,6 +3,13 @@
     font-family:'Telegraf-Regular', sans-serif;
     box-sizing:border-box;
 }
+.pattern{
+  background-image:url("Sans titre 110_20230804184040.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  padding:10em 5em;
+}
 html,
 body
 {

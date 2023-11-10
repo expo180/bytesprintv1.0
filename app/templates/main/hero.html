@@ -30,7 +30,7 @@
             <div class="col-lg-6">
                 {% if current_user.is_authenticated %}
                 <div class="d-flex flex-column gap-4 quote py-4">
-                    <blockquote class="hero-heading display-6">
+                    <blockquote class="display-6" style="font-family:'Telegraf-UltraBold', sans-serif;color:white;">
                        {{ random_quote.quote }}
                     </blockquote>
                     <footer class="blockquote-footer text-light">{{ random_quote.author }}</footer>

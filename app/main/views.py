@@ -23,6 +23,27 @@ def home():
     random_quote = random.choice(quotes_with_authors)
     return render_template('main/index.html', random_quote=random_quote)
 
+@main.route("/blog/certification/importance/")
+def certifications():
+    return render_template('blog/certification.html')
+
+@main.route("/financial_aid/")
+def financial_aid():
+    return render_template("finances/financial_aid.html")
+
+@main.route("/blog/bioinformatics/")
+def bioinformatics():
+    return render_template('blog/bioinformatics.html')
+
+@main.route("/shop/more/")
+def shop_more():
+    return render_template('shop/shop_more.html')
+
+
+@main.route("/blog/OOP/")
+def OOP():
+    return render_template('blog/OOP.html')
+
 @main.route("/courses/")
 def courses():
     return render_template('courses/cours.html')
@@ -53,7 +74,7 @@ def flutter():
     return render_template('flutter.html')
 
 @main.route("/game_design/")
-def unity():
+def game():
     return render_template('unity.html')
 
 @main.route("/DevOps/")
@@ -72,10 +93,13 @@ def documentation():
 def boutique():
     return render_template("shop/boutique.html")
 
-@main.route('/user/<first_name>/')
-def user(first_name):
-    user = User.query.filter_by(first_name=first_name).first_or_404()
-    return render_template('user.html', user=user)
+@main.route("/3Dmap/")
+def map3D():
+    return render_template('3D/map.html')
+
+@main.route("/docs/")
+def doc():
+    return render_template('docs/documentation.html')
 
 @main.route('/admin/')
 @login_required

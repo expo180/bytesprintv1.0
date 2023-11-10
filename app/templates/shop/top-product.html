@@ -1,4 +1,4 @@
-<section class="products d-flex flex-column gap-5 py-5 px-5" style="z-index:-3;background:linear-gradient(rgb(1,16,89)40%, rgb(7,95,195));;">
+<section class="products d-flex flex-column gap-5 py-5 px-5" id="top_prod" style="z-index:-3;background:linear-gradient(rgb(1,16,89)40%, rgb(7,95,195));;">
     <div><h3 class="text-center text-light display-4 border-bottom pb-5" style="font-weight:500;">Our products</h3></div>
     <div class="d-flex lg-flex-row md-flex-column justify-content-center flex-wrap gap-4">
         <div class="card shadow-lg" style="width: 18rem;">
@@ -39,6 +39,8 @@
         </div>
     </div>
     <div class="mx-auto">
-        <button class="btn btn-outline-light">More<i class="bi bi-arrow-right"></i></button>
+        <a href="{{ url_for('main.shop_more') }}" class="btn btn-outline-light">
+          More
+        </a>
     </div>
 </section>

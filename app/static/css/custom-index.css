@@ -8,6 +8,9 @@ body
 {
   overflow-x:hidden;
 }
+.bi-search:hover{
+  cursor:pointer;
+}
 .hero-heading{
   font-family:'NeueMachina-Regular', sans-serif;
   text-transform:uppercase;

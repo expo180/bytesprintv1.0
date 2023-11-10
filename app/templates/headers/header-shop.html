@@ -1,17 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top px-1">
   <div class="container-fluid">
     <a class="navbar-brand me-4" href="#">
-      <img src="{{url_for('static', filename='media/logo.svg')}}" width="50" height="50" alt="Logo">
+      <img src="{{url_for('static', filename='media/logo.svg')}}" width="50" height="50" alt="bytesprint">
     </a>
-    <div class="d-flex gap-3">
-      <ul class="list-unstyled mt-2 d-lg-none flex-shrink-0" style="color: white; font-size: 1.2rem;">
+    <div class="d-flex gap-1 gap-md-2">
+      <ul class="list-unstyled mt-3 d-lg-none flex-shrink-0" style="color: white; font-size: 1.2rem;">
         <li><i class="bi bi-search"></i></li>
       </ul>
-      <button class="d-flex d-lg-none flex-column py-2 px-2 toggle flex-shrink-0 mt-1" style="gap: 0.4em; background: none; border:none;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
-        <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
-        <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
-      </button>
       {% if current_user.is_authenticated %}
       <ul class="nav">
         <li class="nav-item me-3 mt-2 d-lg-none list-unstyled flex-shrink-0">
@@ -36,13 +31,21 @@
             <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a></li>
           </ul>
         </li>
+        <li class="nav-item list-unstyled me-5 d-none d-xl-inline"></li>
+        <li class="nav-item list-unstyled me-3 d-none d-xl-inline"></li>
       </ul>
-      <button class="d-flex d-lg-none flex-column py-2 px-2 toggle flex-shrink-0 mt-1" style="gap: 0.4em; background: none; border:none;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="d-flex d-lg-none flex-column py-2 px-2 toggle flex-shrink-0 me-2" style="gap: 0.4em; background: none; border:none;margin-top:0.8em" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
         <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
         <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
       </button>
-      {% endif %}
+    {% else %}
+    <button class="d-flex d-lg-none flex-column py-2 px-2 toggle flex-shrink-0" style="gap: 0.4em; background: none; border:none;margin-top:0.7em" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
+      <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
+      <span class="bg-light rounded-1" style="width: 28px; height: 2px;"></span>
+    </button>
+    {% endif %}
     </div>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
@@ -62,12 +65,12 @@
           </a>
         </li>
         <li class="nav-item mt-2">
-          <a class="nav-link" href="" style="color: white;">
+          <a class="nav-link" href="{{ url_for('main.doc') }}" style="color: white;">
             Documentation
           </a>
         </li>
         <li class="nav-item mt-2">
-          <a class="nav-link" href="" style="color: white;">
+          <a class="nav-link" href="{{ url_for('main.map3D') }}" style="color: white;">
             3D Mapping
           </a>
         </li>
@@ -130,6 +133,8 @@
             <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a></li>
           </ul>
         </li>
+        <li class="nav-item list-unstyled me-5 d-none d-xl-inline"></li>
+        <li class="nav-item list-unstyled me-3 d-none d-xl-inline"></li>
       </ul>
       {% else %}
       <ul class="navbar-nav ms-auto">
