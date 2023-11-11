@@ -1,41 +1,9 @@
 <h4 class="py-4 mt-4 border-3 border-bottom mb-4 ms-5 border-primary" style="font-family:'Telegraf-UltraBold', sans-serif">
-  {% if current_user.is_authenticated %}
-    My courses
-  {% else %}
   Courses and Trainings
-  {% endif %}
 </h4>
-
 <div class="album py-5 bg-body-tertiary">
   <div class="container">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      {% if current_user.is_authenticated %}
-        {% if enrolled_courses %}
-          {% for course in enrolled_courses %}
-            <div class="col">
-              <div class="card shadow-sm">
-                <!-- Add your course card content here -->
-                <!-- Use course.image, course.title, course.description, etc. as needed-->
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-        <div class="px-4 py-5 my-5 text-center">
-          <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-          <div class="col-lg-6 mx-auto">
-            <p class="lead mb-4">
-              You have not enrolled in any courses yet.
-            </p>
-            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-              <a href="{{ url_for('main.courselist') }}" class="btn btn-lg btn-primary">
-                <i class="bi bi-search"></i>
-                Browse
-              </a>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-      {% else %}
       <div class="col">
         <div class="card shadow-sm">
           <div class="px-3 py-3" style="border-bottom-right-radius:20px;max-width:100px;background-color:rgb(0,63,140)">
@@ -77,7 +45,7 @@
                   </a>
                 </div>
                 <small class="text-body-secondary fs-italic">
-                  $ 500
+                 $ 500
                 </small>
               </div>
             </div>
@@ -157,7 +125,7 @@
             </div>
             <div class="card-body">
               <h6 style="font-size: 1.2rem; font-weight:500;">Unity Game Development</h6>
-              <p class="card-text">Create stunning games with Unity. Dive into the world of game development and build your own interactive experiences.</p>
+              <p class="card-text">Create stunning games with Unity. Dive into the world of game development and build your own interactive experiences. Explore the exciting possibilities with Unity</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="">
                   <a href="{{url_for('main.game')}}" class="btn btn-outline-primary d-flex flex-row gap-2">
@@ -179,9 +147,7 @@
             </div>
             <div class="card-body">
               <h6 style="font-size: 1.2rem; font-weight:500;">DevOps Engineering</h6>
-              <p class="card-text">
-                Master the principles of DevOps and streamline your software development process.
-              </p>
+              <p class="card-text">Master the principles of DevOps and streamline your software development process. Learn how to optimize efficiency and collaboration with our DevOps Engineering course.</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="">
                   <a href="{{url_for('main.devOps')}}" class="btn btn-outline-primary d-flex flex-row gap-2">
@@ -234,13 +200,14 @@
                   </a>
                 </div>
                 <small class="text-body-secondary fs-italic">
-                  $ 750
+                  <div>$ 750</div>
+                  <div>Financial aid available</div>
                 </small>
               </div>
             </div>              
           </div>
         </div>
-      {% endif %}
+      </div>
     </div>
   </div>
 </div>

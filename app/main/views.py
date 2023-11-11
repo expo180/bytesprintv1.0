@@ -108,6 +108,11 @@ def boutique():
 def map3D():
     return render_template('3D/map.html')
 
+@login_required
+@main.route("/courses/list/")
+def courselist():
+    return render_template('courses/courseslist.html')
+
 @main.route("/docs/")
 def doc():
     return render_template('docs/documentation.html')

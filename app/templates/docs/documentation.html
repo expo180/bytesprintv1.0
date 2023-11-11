@@ -34,11 +34,10 @@
         {% include 'headers/header-doc.html' %}
         {% include 'docs/doc-body.html' %}
         {% include 'docs/page-content-right.html' %}
+        {% include 'docs/doc-modal.html' %}
+        <div class="pattern"></div>
+        {% include 'footers/footer-doc.html' %}
         <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script> 
         <script src="{{url_for('static', filename='js/cheatseet.js')}}" type="text/javascript"></script>
     </body>
 </html>
-<!--
-    <div class="pattern"></div>
-    {% include 'footers/footer-doc.html' %}
--->

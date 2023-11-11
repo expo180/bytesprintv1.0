@@ -25,6 +25,16 @@ google = oauth.remote_app(
     authorize_url='https://accounts.google.com/o/oauth2/auth',
 )
 
+facebook = oauth.remote_app('facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key='350477707655423',
+    consumer_secret='952f700df029093910a999d747c938a2',
+    request_token_params={'scope': 'email'}
+)
+
 @google.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
@@ -106,12 +116,16 @@ def change_password():
             flash('Invalid password.', 'error')
     return render_template('auth/change_password.html', form=form)
 
-@auth.route('/login/')
+@auth.route('/google/sign_up/')
 def google_signup():
-    return google.authorize(callback=url_for('auth.authorized', _external=True))
+    return google.authorize(callback=url_for('auth.google_signup_authorized', _external=True))
 
-@auth.route('/login/authorized/')
-def authorized():
+@auth.route('/google/login/')
+def google_login():
+    return google.authorize(callback=url_for('auth.google_login_authorized', _external=True))
+
+@auth.route('/google/login/authorized/')
+def google_login_authorized():
     response = google.authorized_response()
     if response is None or response.get('access_token') is None:
         return 'Access denied: reason={} error={}'.format(
@@ -120,10 +134,32 @@ def authorized():
         )
     session['google_token'] = (response['access_token'], '')
     user_info = google.get('userinfo')
-    print(user_info.data)
+    email = user_info.data.get('email')
+    user = User.query.filter_by(email=email.lower()).first()
+    if user is not None:
+        login_user(user)
+        next = request.args.get('next')
+        if not next or not next.startswith('/'):
+            next = url_for('main.home')
+        return redirect(next)
+    flash('Incorrect password or email address!', 'error')
+    return render_template('auth/login.html', form=form)
+
+
+
+@auth.route('/google/sign_up/authorized/')
+def google_signup_authorized():
+    response = google.authorized_response()
+    if response is None or response.get('access_token') is None:
+        return 'Access denied: reason={} error={}'.format(
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session['google_token'] = (response['access_token'], '')
+    user_info = google.get('userinfo')
     email = user_info.data.get('email')
     first_name = email_slicer(email)
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=email.lower()).first()
     if user:
         flash('Account already exists please login!', 'error')
         return redirect(url_for('auth.register'))
@@ -137,5 +173,5 @@ def authorized():
     )
     db.session.add(user)
     db.session.commit()
-    flash('You have successfully log into your account')
+    flash('You have successfully log into your account', 'success')
     return redirect(url_for('main.home'))
