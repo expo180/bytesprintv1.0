@@ -76,7 +76,11 @@ def hacking():
 def flutter():
     return render_template('flutter.html')
 
-@main.route("/3D_tools/")
+@main.route("/3D/more_complex_tools/")
+def deep_imagination():
+    return render_template('deep_imagination.html')
+
+@main.route("/3D/3D_tools/")
 def tools3D():
     return render_template("3D_tools")
 

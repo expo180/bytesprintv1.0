@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="boutique pour matériels électroniques, musique classique, frameworks, outils de productivité, 
-        packages de programmation">
-        <meta name="keywords" content="Arduino, ROS, Rasberry-Pi, Ordinateurs, Livres">
-        <meta name="author" content="voilier Inc">
-        <title>Bytesprint: The Largest Science and Technology Documenation</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Explore the largest collection of science and technology documentation, including programming packages and resources. Dive into comprehensive guides, tutorials, and manuals to enhance your knowledge and skills.">
+        <meta name="keywords" content="Bytesprint, Documentation, Science, Technology, Programming, Arduino, ROS, Rasberry-Pi, Computers, Books">
+        <meta name="author" content="Bytesprint LLC">
+        <title>Bytesprint: The Largest Science and Technology Documentation</title>
         <!--fonts-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,24 +15,30 @@
         200;300;900&family=Open+Sans:wght@300&family=Poppins:wght@400;500;900&family=Questrial&family=Roboto:ital,
         wght@0,900;1,700&family=Urbanist:wght@800&display=swap" rel="stylesheet">
         <!-- Favicons -->
-        <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-        <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-        <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-        <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">	
-        <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-        <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
-        <link rel="stylesheet" href="">
+        <link rel="apple-touch-icon" href="{{url_for('static', filename='media/favicons/apple-touch-icon.png')}}" sizes="180x180">
+        <link rel="icon" href="{{url_for('static', filename='media/favicons/favicon-32x32.png')}}" sizes="32x32" type="image/png">
+        <link rel="icon" href="{{url_for('static', filename='media/favicons/favicon-16x16.png')}}" sizes="16x16" type="image/png">
+        <link rel="icon" href="{{url_for('static', filename='media/favicons/favicon.png')}}" type="image/png">
         <!--bootstrap style-->
         <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
         <!--custom css-->
         <link rel="stylesheet" href="{{url_for('static', filename='css/custom-documentation.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/cheatsheet.css')}}">
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+        <!-- jQuery-->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <!-- bootstrap-icons-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-        <!--Jquery-->
-        <script src="{{url_for('static', filename='')}}" type="text/javascript"></script>
     </head>
     <body>
-
-        <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+        {% include 'headers/header-doc.html' %}
+        {% include 'docs/doc-body.html' %}
+        {% include 'docs/page-content-right.html' %}
+        <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script> 
+        <script src="{{url_for('static', filename='js/cheatseet.js')}}" type="text/javascript"></script>
     </body>
 </html>
+<!--
+    <div class="pattern"></div>
+    {% include 'footers/footer-doc.html' %}
+-->
