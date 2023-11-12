@@ -20,16 +20,16 @@
             </div>
           {% endfor %}
         {% else %}
-        <div class="px-4 py-5 my-5 text-center">
-          <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-          <div class="col-lg-6 mx-auto">
+        <div class="px-4 py-5 my-5 mx-auto text-center">
+          <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='media/no_courses.png') }}" alt="" width="100">
+          <div class="">
             <p class="lead mb-4">
               You have not enrolled in any courses yet.
             </p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-              <a href="{{ url_for('main.courselist') }}" class="btn btn-lg btn-primary">
+              <a href="{{ url_for('main.courselist') }}" class="btn btn-primary">
                 <i class="bi bi-search"></i>
-                Browse
+                Browse courses
               </a>
             </div>
           </div>

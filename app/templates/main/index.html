@@ -11,7 +11,7 @@
 	Bash, Linux, React.js, React Native, Unity, Bootstrap, Arduino, Objective-C.">
 	<meta name="author" content="bytesprint LLC">
 	{% if current_user.is_authenticated %}
-	<title>Welcome {{ current_user.last_name }}, Let's create something new !</title>
+	<title>Hey {{ current_user.last_name }}, Let's create something new !</title>
 	{% else %}
 	<title>Bytesprint: Navigating Complexity for Advancement of the Human Species</title>
 	{% endif %}
@@ -45,21 +45,29 @@
 		{% include 'headers/header-index.html' %}
 		{% include 'main/hero.html' %}
 		{% include 'courses/course-links.html' %}
+		{% if current_user.is_authenticated %}
+		{% include 'main/my_projects.html' %}
+		{% include 'main/my_maps.html' %}
+		{% include 'main/courses-offer.html' %}
+		{% include 'courses/cool-courses.html' %}
+		{% include 'footers/footer.html' %}
+		{% else %}
 		{% include 'main/courses-offer.html' %}
 		{% include 'main/features.html' %}
+		{% include 'main/certificate-info.html' %}
+		{% include 'main/doc-info.html' %}
 		<div class="separator py-5 border-bottom"></div>
 		{% include 'tools/githubCopilot.html' %}
 		<div class="separator py-3"></div>
 		{% include 'graduates-info/graduates-found-work-at.html' %}
 		<div class="separator py-5 border-bottom"></div>
-		{% include 'main/certificate-info.html' %}
-		{% include 'main/doc-info.html' %}
 		{% include 'main/courses-philosophy.html'  %}
 		{% include 'main/Testimonials.html' %}
 		{% include 'main/FAQs.html' %}
 		{% include 'main/cta.html' %}
 		{% include 'courses/cool-courses.html' %}
 		{% include 'footers/footer.html' %}
+		{% endif %}
 	</main>
 	<!--bundle-->
 	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>

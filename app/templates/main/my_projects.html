@@ -1,0 +1,33 @@
+<h4 class="py-4 mt-4 border-3 border-bottom mb-4 ms-5 border-primary" style="font-family:'Telegraf-UltraBold', sans-serif">
+  My projects
+</h4>
+<div class="album py-5 bg-body-tertiary">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% if project_start %}
+        {% for projects in project_start %}
+          <div class="col">
+            <div class="card shadow-sm">
+              <!-- Add your project card content here -->
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="px-4 py-5 my-5 mx-auto text-center">
+          <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='media/microscope.png') }}" alt="" width="100">
+          <div class="">
+            <p class="lead mb-4">
+              You have not started any projects yet.
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <a href="{{ url_for('main.project_start') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>
+                Create a new project
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

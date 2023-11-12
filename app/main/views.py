@@ -84,6 +84,11 @@ def deep_imagination():
 def tools3D():
     return render_template("3D_tools")
 
+@login_required
+@main.route("/projects/my_projects/")
+def project_start():
+    return render_template('project.html')
+
 @main.route("/game_design/")
 def game():
     return render_template('unity.html')
@@ -107,6 +112,10 @@ def boutique():
 @main.route("/3Dmap/")
 def map3D():
     return render_template('3D/map.html')
+
+@main.route("/user/<id>/settings/")
+def settings(id):
+    return render_template('user/settings.html')
 
 @login_required
 @main.route("/courses/list/")
