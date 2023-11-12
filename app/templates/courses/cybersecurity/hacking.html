@@ -12,7 +12,7 @@
 	{% if current_user.is_authenticated %}
 	<title>Hey {{ current_user.last_name }}, Let's create something new !</title>
 	{% else %}
-	<title>Bytesprint: Web development</title>
+	<title>Bytesprint: Cybersecurity</title>
 	{% endif %}
 	<!-- Favicons -->
 	<link rel="apple-touch-icon" href="{{url_for('static', filename='media/favicons/apple-touch-icon.png')}}" sizes="180x180">
@@ -36,6 +36,8 @@
 </head>
 <body>
 	
+<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/slideshow-img-animation.js') }}"></script>
 </body>
 </html>
 
