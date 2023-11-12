@@ -49,30 +49,30 @@ def OOP():
 
 @main.route("/courses/")
 def courses():
-    return render_template('courses/cours.html')
+    return render_template('/courses/cours.html')
 
-@main.route("/web_development/")
+@main.route("/courses/web_development/")
 def web_dev():
-    return render_template('web.html')
+    return render_template('/courses/Web/web.html')
 
-@main.route("/data_science/")
+@main.route("/courses/data_science/")
 def data():
-    return render_template('data_science.html')
+    return render_template('/courses/data_science/data_science.html')
 
-@main.route("/artificial_intelligence/")
+@main.route("/courses/AI/")
 def IA():
-    return render_template('intelligence_artificielle.html')
+    return render_template('/courses/AI/intelligence_artificielle.html')
 
-@main.route("/robotics_&_embedded_systems/")
+@main.route("/courses/robotics_&_embedded_systems/")
 def robotics():
-    return render_template('robot.html')
+    return render_template('/courses/robotics/robotics.html')
 
 
-@main.route("/cybersecurity/")
+@main.route("/courses/cybersecurity/")
 def hacking():
-    return render_template('hacking.html')
+    return render_template('courses/cybersecurity/hacking.html')
 
-@main.route("/flutter/")
+@main.route("/courses/flutter/")
 def flutter():
     return render_template('flutter.html')
 
