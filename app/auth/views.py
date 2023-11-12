@@ -173,5 +173,70 @@ def google_signup_authorized():
     )
     db.session.add(user)
     db.session.commit()
-    flash('You have successfully log into your account', 'success')
+    flash('You have successfully logged into your account', 'success')
+    return redirect(url_for('main.home'))
+
+@auth.route('/facebook/sign_up/')
+def facebook_sign_up():
+    return facebook.authorize(callback=url_for('auth.facebook_sign_up_authorized', _external=True))
+
+@auth.route('/facebook/login/')
+def facebook_login():
+    return facebook.authorize(callback=url_for('auth.facebook_login_authorized', _external=True))
+
+@auth.route('/facebook/login/authorized/')
+def facebook_login_authorized():
+    response = facebook.authorized_response()
+    if response is None or response.get('access_token') is None:
+        flash('Access denied: reason={} error={}'.format(
+            request.args['error_reason'],
+            request.args['error_description']
+        ), 'error')
+        return redirect(url_for('auth.login'))
+
+    session['facebook_token'] = (response['access_token'], '')
+    user_info = facebook.get('/me?fields=id,email')
+    email = user_info.data.get('email')
+
+    user = User.query.filter_by(email=email.lower()).first()
+    if user is not None:
+        login_user(user)
+        next = request.args.get('next')
+        if not next or not next.startswith('/'):
+            next = url_for('main.home')
+        return redirect(next)
+
+    flash('Incorrect password or email address!', 'error')
+    return redirect(url_for('auth.login'))
+
+@auth.route('/facebook/sign_up/authorized/')
+def facebook_sign_up_authorized():
+    response = facebook.authorized_response()
+    if response is None or response.get('access_token') is None:
+        flash('Access denied: reason={} error={}'.format(
+            request.args['error_reason'],
+            request.args['error_description']
+        ), 'error')
+        return redirect(url_for('auth.register'))
+
+    session['facebook_token'] = (response['access_token'], '')
+    user_info = facebook.get('/me?fields=id,email')
+    email = user_info.data.get('email')
+    first_name = email_slicer(email)
+
+    user = User.query.filter_by(email=email.lower()).first()
+    if user:
+        flash('Account already exists, please login!', 'error')
+        return redirect(url_for('auth.login'))
+
+    default_password = 'ghp_gcxdTBEc3e3M9'
+    user = User(
+        email=email,
+        first_name=first_name,
+        last_name=first_name,
+        password_hash=generate_password_hash(default_password)
+    )
+    db.session.add(user)
+    db.session.commit()
+    flash('You have successfully logged into your account', 'success')
     return redirect(url_for('main.home'))
