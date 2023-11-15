@@ -16,7 +16,16 @@ quotes_with_authors = [
     {"quote": "The scientist discovers a new type of material or energy and the engineer discovers a new use for it.", "author": "Gordon Lindsay Glegg"},
     {"quote": "The art and science of asking questions is the source of all knowledge.", "author": "Thomas Berger"},
     {"quote": "All of science is nothing more than the refinement of everyday thinking.", "author": "Albert Einstein"},
+    {"quote": "The engineer has been, and is, a maker of history.", "author": "James Kip Finch"},
+    {"quote": "Technology is a word that describes something that doesn’t work yet.", "author": "Douglas Adams"},
+    {"quote": "The ideal engineer is a composite... He is not a scientist, he is not a mathematician, he is not a sociologist or a writer, but he may use the knowledge and techniques of any or all of these disciplines in solving engineering problems.", "author": "Nathan W. Dougherty"},
+    {"quote": "The scientist only imposes two things, namely truth and sincerity, imposes them upon himself and upon other scientists.", "author": "Erwin Schrödinger"},
+    {"quote": "The engineer's first problem in any design situation is to discover what the problem really is.", "author": "Unknown"},
+    {"quote": "Engineering stimulates the mind. Kids get bored easily. They have got to get out and get their hands dirty: make things, dismantle things, fix things. When the schools can offer that, you’ll have an engineer for life.", "author": "Bruce Dickinson"},
 ]
+@main.route("/courses&trainings/pricing")
+def pricing():
+    return render_template('courses/pricing.html')
 
 @main.route("/")
 def home():
@@ -91,15 +100,15 @@ def project_start():
 
 @main.route("/game_design/")
 def game():
-    return render_template('unity.html')
+    return render_template('courses/Game/unity.html')
 
 @main.route("/DevOps/")
 def devOps():
-    return render_template('devOps.html')
+    return render_template('courses/devOps/devOps.html')
 
 @main.route("/cryptocurrency_development/")
 def bitcoin():
-    return render_template('crypto.html')
+    return render_template('courses/crypto/crypto.html')
 
 @main.route("/documentation/")
 def documentation():

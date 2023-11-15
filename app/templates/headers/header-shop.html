@@ -48,34 +48,34 @@
     {% endif %}
     </div>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
+      <ul class="navbar-nav nav-underline me-auto">
         <li class="nav-item mt-2">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('main.home') }}" style="color: white; position: relative;">
+          <a class="nav-link nav-link {% if request.path == url_for('main.home') %}active{% endif %}" aria-current="page" href="{{ url_for('main.home') }}" style="color: white; position: relative;">
             Home
           </a>
         </li>
         <li class="nav-item mt-2">
-          <a class="nav-link" href="{{ url_for('main.boutique') }}" style="color: white;">
+          <a class="nav-link nav-link {% if request.path == url_for('main.boutique') %}active{% endif %}" href="{{ url_for('main.boutique') }}" style="color: white;">
             Shop
           </a>
         </li>
         <li class="nav-item mt-2">
-          <a class="nav-link" href="{{ url_for('main.courses') }}" style="color: white;">
+          <a class="nav-link {% if request.path == url_for('main.courses') %}active{% endif %}" href="{{ url_for('main.courses') }}" style="color: white;">
             Courses
           </a>
         </li>
         <li class="nav-item mt-2">
-          <a class="nav-link" href="{{ url_for('main.doc') }}" style="color: white;">
-            Documentation
+          <a class="nav-link {% if request.path == url_for('main.doc') %}active{% endif %}" href="{{ url_for('main.doc') }}" style="color: white;">
+            Docs
           </a>
         </li>
         <li class="nav-item mt-2">
-          <a class="nav-link" href="{{ url_for('main.map3D') }}" style="color: white;">
+          <a class="nav-link {% if request.path == url_for('main.map3D') %}active{% endif %}" href="{{ url_for('main.map3D') }}" style="color: white;">
             3D Mapping
           </a>
         </li>
         {% if current_user.is_authenticated %}
-        <ul class="navbar-nav">
+        <ul class="navbar-nav nav-underline">
           <li class="nav-item me-4 mt-2 d-none d-lg-inline">
             <a class="nav-link text-light link-opacity-75-hover position-relative" href="#">
               <i class="bi bi-bell align-middle" style="font-size: 1.5rem;"></i>
@@ -137,7 +137,7 @@
         <li class="nav-item list-unstyled me-3 d-none d-xl-inline"></li>
       </ul>
       {% else %}
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto mt-3 mt-lg-2">
         <li class="nav-item d-none me-3 d-lg-inline" style="color: white; font-size: 1.4rem; margin-top: 0.5em;">
           <i class="bi bi-search"></i>
         </li>

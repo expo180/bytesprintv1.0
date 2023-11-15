@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from flask_oauthlib.client import OAuth
+from .. import rapi 
 
 oauth = OAuth()
 
@@ -57,7 +58,7 @@ def register():
             email=form.email.data.lower(),
             country=form.country.data,
             age=form.age.data,
-            sexe=form.sexe.data,
+            gender=form.gender.data,
             password_hash=generate_password_hash(form.password2.data)
         )
         db.session.add(user)

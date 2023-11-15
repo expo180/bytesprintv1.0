@@ -188,7 +188,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     age = db.Column(db.String)
     name = db.Column(db.String(64))
-    sexe = db.Column(db.String)
+    gender = db.Column(db.String)
     country = db.Column(db.String)
     bio = db.Column(db.Text())
     position = db.Column(db.String(64))

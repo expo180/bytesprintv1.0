@@ -34,3 +34,5 @@ httpx
 psycopg2-binary
 gunicorn
 Flask-OAuthlib
+Flask-RestCountries
+pycountry

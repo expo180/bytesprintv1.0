@@ -1,9 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from ..models import User
 from markupsafe import Markup
+import pycountry
+
+
+class CountrySelectField(SelectField):
+    def __init__(self, *args, **kwargs):
+        super(CountrySelectField, self).__init__(*args, **kwargs)
+        self.choices = [(country.alpha_2, country.name) for country in pycountry.countries]
 
 class RegistrationForm(FlaskForm):
     email = StringField(
@@ -45,14 +52,50 @@ class RegistrationForm(FlaskForm):
         ]
     )
     age = SelectField(
-     ('Select your age'),
-    choices=[("y", "8-12"), ("a", "12-18"), ("o", "18+")],
-    validators=[DataRequired()]
+        ('Select your age'),
+        choices=[
+            ('None', '-Select your age-'),
+            ("y", "8-12"), 
+            ("a", "12-18"), 
+            ("o", "18+")
+        ],
     )
 
-    country = SelectField(
-         ("Enter your Location"), 
+    country = CountrySelectField(
+        "Enter your current Location",
+        validators=[DataRequired()]
+    )
+
+    areas_of_interest = SelectMultipleField(
+    "Select area(s) that interest(s) you",
+    choices=[
+        ("None", "-Select area(s)-"),
+        ("Healthcare", "Health informatics"),
+        ("Finance", "Algorithmic trading"),
+        ("Education", "EdTech"),
+        ("E-commerce", "Recommender systems"),
+        ("Manufacturing", "Robotics in automation"),
+        ("Entertainment", "Game development"),
+        ("Transportation", "Autonomous vehicles"),
+        ("Agriculture", "Precision farming"),
+        ("Energy", "Smart grids"),
+        ("Telecommunications", "Network optimization"),
+        ("Government", "Data-driven policy-making"),
+        ("Environmental Science", "Data analysis for climate studies"),
+        ("Retail", "Inventory management"),
+        ("Space Exploration", "Data analysis in space missions"),
+        ("Social Services", "Data-driven decision-making for social programs"),
+        ("Legal Services", "Legal analytics"),
+        ("Real Estate", "Property valuation"),
+        ("Human Resources", "HR analytics"),
+        ("Travel and Hospitality", "Personalized recommendations"),
+        ("Non-Profit Organizations", "Data-driven impact assessment"),
+    ],
+    )
+    programming_langages = SelectField(
+         ("Enter your current Location"), 
         choices=[
+            ('None', '-Select your location-'),
             ('AF', 'Africa'),
             ('AN', 'Antarctica'),
             ('AS', 'Asia'),
@@ -63,8 +106,8 @@ class RegistrationForm(FlaskForm):
         ], 
         validators=[DataRequired()]
     )
-    sexe = SelectField(
-        ("Select your gender"), 
+    gender = SelectField(
+        ('None', '-Select your gender-'), 
         choices=[
             ("M", "Male"), 
             ("F", "Female"),
