@@ -58,6 +58,7 @@ def register():
             email=form.email.data.lower(),
             country=form.country.data,
             age=form.age.data,
+            areas_of_interest=form.areas_of_interest.data,
             gender=form.gender.data,
             password_hash=generate_password_hash(form.password2.data)
         )
@@ -77,6 +78,11 @@ def login():
             next = request.args.get('next')
             if not next or not next.startswith('/'):
                 print(current_user.is_administrator())
+                print(current_user.is_instructor())
+                print(current_user.is_technical_writer())
+                print(current_user.is_sales_manager())
+                print(current_user.is_hr_manager())
+                print(current_user.is_accounting_manager())
                 next = url_for('main.home')
             return redirect(next)
         flash('Incorrect password or email address!', 'error')

@@ -190,6 +190,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64))
     gender = db.Column(db.String)
     country = db.Column(db.String)
+    areas_of_interest = db.Column(db.String)
     bio = db.Column(db.Text())
     position = db.Column(db.String(64))
     profile_picture = db.Column(db.Text())
@@ -235,11 +236,26 @@ class User(UserMixin, db.Model):
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
-        if self.role is None:
-            if self.email == current_app.config['BYTESPRINT_ADMIN']:
-                self.role = Role.query.filter_by(name='Administrator').first()
-            if self.role is None:
-                self.role = Role.query.filter_by(default=True).first()
+        if self.email == current_app.config['BYTESPRINT_ADMIN']:
+            self.role = Role.query.filter_by(name='Administrator').first()
+
+        elif self.email == current_app.config['TECHNICAL_WRITER']:
+            self.role = Role.query.filter_by(name='Technical_writer').first()
+
+        elif self.email == current_app.config['SALES_MANAGER']:
+            self.role = Role.query.filter_by(name='Sales_Manager').first()
+
+        elif self.email == current_app.config['HR_MANAGER']:
+            self.role = Role.query.filter_by(name='HR_Manager').first()
+
+        elif self.email == current_app.config['ACCOUNTING_MANAGER']:
+            self.role = Role.query.filter_by(name='Accounting_Manager').first()
+
+        elif self.email in [current_app.config[f'INSTRUCTOR{i:02d}'] for i in range(1, 41)]:
+            self.role = Role.query.filter_by(name='Instructor').first()
+
+        else:
+            self.role = Role.query.filter_by(default=True).first()
 
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)
@@ -349,18 +365,6 @@ class Course(db.Model):
     videos = db.Column(db.String(255))
     pictures = db.Column(db.String(255))
     intros = db.Column(db.Text(), nullable=False)
-    video_ENG = db.Column(db.Text(), nullable=False)
-    video_FR = db.Column(db.Text(), nullable=False)
-    video_CHI = db.Column(db.Text(), nullable=False)
-    video_RUSS = db.Column(db.Text(), nullable=False)
-    video_PORT = db.Column(db.Text(), nullable=False)
-    video_ARB = db.Column(db.Text(), nullable=False)
-    CHI = db.Column(db.Text())
-    ENG = db.Column(db.String(255))
-    FR = db.Column(db.String(255))
-    RUSS = db.Column(db.Text())
-    PORT = db.Column(db.Text())
-    ARB = db.Column(db.Text())
     level = db.Column(db.Enum('Beginner', 'Intermediate', 'Advanced', name='course_levels'))
 
 

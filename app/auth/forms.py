@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, SelectMultipleField
-from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms.validators import InputRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from ..models import User
 from markupsafe import Markup
@@ -8,37 +8,39 @@ import pycountry
 
 
 class CountrySelectField(SelectField):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, default=None, **kwargs):
         super(CountrySelectField, self).__init__(*args, **kwargs)
-        self.choices = [(country.alpha_2, country.name) for country in pycountry.countries]
+        self.choices = [("None", "-Select your current location-")] + [(country.alpha_2, f"{country.name} {country.alpha_2}") for country in pycountry.countries]
+        self.default = default
+
 
 class RegistrationForm(FlaskForm):
     email = StringField(
         ('Email'), 
         validators = [
-            DataRequired(), 
+            InputRequired(), 
             Length(1, 64),
             Email()
         ]
     )
-    last_name = StringField(
+    first_name = StringField(
          ("First name"),
         validators = [
-            DataRequired(),
+            InputRequired(),
             Length(1, 128)
         ]
     )
-    first_name = StringField(
+    last_name = StringField(
          ("Last name"),
         validators = [
-            DataRequired(),
+            InputRequired(),
             Length(1, 64) 
         ]
     )
     password = PasswordField(
          ('Password'),
         validators = [
-            DataRequired(),
+            InputRequired(),
             EqualTo(
                 'password2', 
                 message='Les mots de passe doivent correspondre!'
@@ -48,7 +50,7 @@ class RegistrationForm(FlaskForm):
     password2 = PasswordField(
          ('Confirm Password'),
         validators = [
-            DataRequired()
+            InputRequired()
         ]
     )
     age = SelectField(
@@ -62,64 +64,56 @@ class RegistrationForm(FlaskForm):
     )
 
     country = CountrySelectField(
-        "Enter your current Location",
-        validators=[DataRequired()]
+        "Enter your current location",
+        validators=[InputRequired()]
     )
-
-    areas_of_interest = SelectMultipleField(
-    "Select area(s) that interest(s) you",
-    choices=[
-        ("None", "-Select area(s)-"),
-        ("Healthcare", "Health informatics"),
-        ("Finance", "Algorithmic trading"),
-        ("Education", "EdTech"),
-        ("E-commerce", "Recommender systems"),
-        ("Manufacturing", "Robotics in automation"),
-        ("Entertainment", "Game development"),
-        ("Transportation", "Autonomous vehicles"),
-        ("Agriculture", "Precision farming"),
-        ("Energy", "Smart grids"),
-        ("Telecommunications", "Network optimization"),
-        ("Government", "Data-driven policy-making"),
-        ("Environmental Science", "Data analysis for climate studies"),
-        ("Retail", "Inventory management"),
-        ("Space Exploration", "Data analysis in space missions"),
-        ("Social Services", "Data-driven decision-making for social programs"),
-        ("Legal Services", "Legal analytics"),
-        ("Real Estate", "Property valuation"),
-        ("Human Resources", "HR analytics"),
+    areas = [
+        ("None", "-Select an area-"),
+        ("Health informatics", "Healthcare"),
+        ("Algorithmic trading", "Finance"),
+        ("EdTech", "Education"),
+        ("Recommender systems", "E-commerce"),
+        ("Robotics in automation", "Manufacturing"),
+        ("Game development", "Entertainment"),
+        ("Autonomous vehicles", "Transportation"),
+        ("Precision farming", "Agriculture"),
+        ("Smart grids", "Energy"),
+        ("Network optimization", "Telecommunications"),
+        ("Data-driven policy-making", "Government"),
+        ("Data analysis for climate studies", "Environmental Science"),
+        ("Inventory management", "Retail"),
+        ("Data analysis in space missions", "Space Exploration"),
+        ("Data-driven decision-making for social programs", "Social Services"),
+        ("Legal analytics", "Legal Services"),
+        ("Property valuation", "Real Estate"),
+        ("HR analytics", "Human Resources"),
         ("Travel and Hospitality", "Personalized recommendations"),
         ("Non-Profit Organizations", "Data-driven impact assessment"),
-    ],
+    ]
+    default_choice = areas[0][0]
+
+    areas_of_interest = SelectField(
+        "Select an area that interests you",
+        choices=areas,
+        default=default_choice
     )
-    programming_langages = SelectField(
-         ("Enter your current Location"), 
-        choices=[
-            ('None', '-Select your location-'),
-            ('AF', 'Africa'),
-            ('AN', 'Antarctica'),
-            ('AS', 'Asia'),
-            ('EU', 'Europe'),
-            ('NA', 'North America'),
-            ('OC', 'Oceania'),
-            ('SA', 'South America'),
-        ], 
-        validators=[DataRequired()]
-    )
+
     gender = SelectField(
-        ('None', '-Select your gender-'), 
+        'Select your gender',
         choices=[
+            ('None', '-Select your gender-'), 
             ("M", "Male"), 
             ("F", "Female"),
             ("NB", "Non-Binary"),
             ("PN", "Prefer Not to Say"),
-            ("OTH", "Other")
+            ("OTH", "Other"),
         ], 
-        validators=[DataRequired()]
+        validators=[InputRequired()]
     )
+
     privacy_policy_agreement = BooleanField(
          ("You have read and accepted our <a href=''>Terms and Conditions</a>."),
-        validators=[DataRequired()]
+        validators=[InputRequired()]
     )
     submit = SubmitField( ('Next'))
 
@@ -128,7 +122,7 @@ class LoginForm(FlaskForm):
     email = StringField(
         'Email',
         validators = [
-            DataRequired(),
+            InputRequired(),
             Length(1, 64),
             Email()
         ]
@@ -136,7 +130,7 @@ class LoginForm(FlaskForm):
     password = PasswordField(
         'Mot de passe',
         validators = [
-            DataRequired()
+            InputRequired()
         ]
     )
     remember_me = BooleanField( ('Remember me'))
@@ -146,7 +140,7 @@ class PasswordResetRequestForm(FlaskForm):
     email = StringField(
          ('Email'), 
         validators = [
-            DataRequired(), 
+            InputRequired(), 
             Length(1, 64),
             Email()
         ])
@@ -156,12 +150,12 @@ class ChangePasswordForm(FlaskForm):
     ancien_mot_de_passe = PasswordField(
          ('Old Password'), 
         validators = [
-            DataRequired()
+            InputRequired()
         ])
     password = PasswordField(
          ('New Password'), 
         validators = [
-            DataRequired(), 
+            InputRequired(), 
             EqualTo(
                 'password2', 
                 message = 'Passwords must match'
@@ -171,7 +165,7 @@ class ChangePasswordForm(FlaskForm):
     password2 = PasswordField(
          ('Confirm New Password'),
         validators = [
-            DataRequired()
+            InputRequired()
         ]
     )
     submit = SubmitField( ('Continuer'))
@@ -180,7 +174,7 @@ class PasswordResetForm(FlaskForm):
     password = PasswordField(
          ('New Password'), 
         validators = [
-            DataRequired(), 
+            InputRequired(), 
             EqualTo(
                 'password2', 
                 message='Passwords must match')
@@ -189,7 +183,7 @@ class PasswordResetForm(FlaskForm):
     password2 = PasswordField(
          ('Confirm Password'), 
         validators = [
-            DataRequired()
+            InputRequired()
         ]
     )
     submit = SubmitField( ('Next'))
@@ -199,7 +193,7 @@ class ChangeEmailForm(FlaskForm):
     email = StringField(
          ('New Email Adress'), 
         validators = [
-            DataRequired(), 
+            InputRequired(), 
             Length(1, 64),
             Email()
         ]
@@ -207,7 +201,7 @@ class ChangeEmailForm(FlaskForm):
     password = PasswordField(
         'Mot de Passe', 
         validators = [
-            DataRequired()
+            InputRequired()
         ]
     )
     submit = SubmitField( ('Next'))
