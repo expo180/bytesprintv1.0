@@ -79,7 +79,6 @@ def login():
             if not next or not next.startswith('/'):
                 print(current_user.is_administrator())
                 print(current_user.is_instructor())
-                print(current_user.is_technical_writer())
                 print(current_user.is_sales_manager())
                 print(current_user.is_hr_manager())
                 print(current_user.is_accounting_manager())

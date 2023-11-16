@@ -10,7 +10,7 @@ import pycountry
 class CountrySelectField(SelectField):
     def __init__(self, *args, default=None, **kwargs):
         super(CountrySelectField, self).__init__(*args, **kwargs)
-        self.choices = [("None", "-Select your current location-")] + [(country.alpha_2, f"{country.name} {country.alpha_2}") for country in pycountry.countries]
+        self.choices = [("None", "-Select your current location-")] + [(country.alpha_2, f"{country.name}") for country in pycountry.countries]
         self.default = default
 
 
@@ -27,14 +27,14 @@ class RegistrationForm(FlaskForm):
          ("First name"),
         validators = [
             InputRequired(),
-            Length(1, 128)
+            Length(1, 64)
         ]
     )
     last_name = StringField(
          ("Last name"),
         validators = [
             InputRequired(),
-            Length(1, 64) 
+            Length(1, 128) 
         ]
     )
     password = PasswordField(

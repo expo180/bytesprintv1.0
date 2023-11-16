@@ -238,8 +238,12 @@ class User(UserMixin, db.Model):
         super(User, self).__init__(**kwargs)
         if self.email == current_app.config['BYTESPRINT_ADMIN']:
             self.role = Role.query.filter_by(name='Administrator').first()
+            print(f"User email: {self.email}")
+            print(f"TECHNICAL_WRITER config value: {current_app.config['TECHNICAL_WRITER']}")
+
 
         elif self.email == current_app.config['TECHNICAL_WRITER']:
+            print("Assigning role: Technical Writer")
             self.role = Role.query.filter_by(name='Technical_writer').first()
 
         elif self.email == current_app.config['SALES_MANAGER']:

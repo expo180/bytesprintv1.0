@@ -153,13 +153,13 @@
 						<div class="step" id="step-1">
 							<h2 class="text-secondary my-4">Personal informations</h2>
 							{{  form.hidden_tag() }}
-							{{ form.last_name.label }}
-							{{ form.last_name(class='form-control mt-2', placeholder='Max', id='last_name') }}
+							{{ form.first_name.label }}
+							{{ form.first_name(class='form-control mt-2', placeholder='Max', id='last_name') }}
 							<small class="name-error-msg text-danger my-4">
 								<i class="bi bi-exclamation-circle"></i> A First name should contain letters only, digits and special characters are not allowed.
 							</small>
-							{{ form.first_name.label }}
-							{{ form.first_name(class='form-control mt-2', placeholder='Stevens Cooper', id='first_name') }}
+							{{ form.last_name.label }}
+							{{ form.last_name(class='form-control mt-2', placeholder='Stevens Cooper', id='first_name') }}
 							<small class="prename-error-msg text-danger my-4">
 								<i class="bi bi-exclamation-circle"></i> A Last name should contain letters only, digits and special characters are not allowed.
 							</small>
