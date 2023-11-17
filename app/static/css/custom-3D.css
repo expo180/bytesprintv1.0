@@ -6,3 +6,6 @@ strong{
 	color:rgb(1,16,89);
 	text-decoration:none;
 }
+.dropdown-toggle::after {
+  display: none;
+}

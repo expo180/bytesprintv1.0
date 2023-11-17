@@ -18,10 +18,8 @@ quotes_with_authors = [
     {"quote": "All of science is nothing more than the refinement of everyday thinking.", "author": "Albert Einstein"},
     {"quote": "The engineer has been, and is, a maker of history.", "author": "James Kip Finch"},
     {"quote": "Technology is a word that describes something that doesn’t work yet.", "author": "Douglas Adams"},
-    {"quote": "The ideal engineer is a composite... He is not a scientist, he is not a mathematician, he is not a sociologist or a writer, but he may use the knowledge and techniques of any or all of these disciplines in solving engineering problems.", "author": "Nathan W. Dougherty"},
     {"quote": "The scientist only imposes two things, namely truth and sincerity, imposes them upon himself and upon other scientists.", "author": "Erwin Schrödinger"},
     {"quote": "The engineer's first problem in any design situation is to discover what the problem really is.", "author": "Unknown"},
-    {"quote": "Engineering stimulates the mind. Kids get bored easily. They have got to get out and get their hands dirty: make things, dismantle things, fix things. When the schools can offer that, you’ll have an engineer for life.", "author": "Bruce Dickinson"},
 ]
 @main.route("/courses&trainings/pricing")
 def pricing():
@@ -122,9 +120,13 @@ def boutique():
 def map3D():
     return render_template('3D/map.html')
 
-@main.route("/user/<id>/settings/")
-def settings(id):
+@main.route("/user/settings/")
+def preferences():
     return render_template('user/settings.html')
+
+@main.route("/user/profile/")
+def profile():
+    return render_template('user/profile.html')
 
 @login_required
 @main.route("/courses/list/")

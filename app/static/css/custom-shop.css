@@ -59,9 +59,12 @@ h1,h4{
     padding:10em 5em;
 }
 .pattern{
-    background-image:url("Sans titre 110_20230804184040.png");
-    background-position:center;
-    background-repeat: no-repeat;
-    background-size:cover;
-    padding:10em 5em;
+  background-image:url("Sans titre 110_20230804184040.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  padding:10em 5em;
+}
+.dropdown-toggle::after {
+  display: none;
 }

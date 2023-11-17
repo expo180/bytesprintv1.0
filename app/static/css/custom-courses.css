@@ -72,3 +72,6 @@ strong
   background-size:cover;
   padding:10em 5em;
 }
+.dropdown-toggle::after {
+  display: none;
+}

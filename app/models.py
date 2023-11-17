@@ -7,6 +7,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import Serializer
 from . import db
 from . import login_manager
+from .instructors import INSTRUCTORS
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -255,7 +256,7 @@ class User(UserMixin, db.Model):
         elif self.email == current_app.config['ACCOUNTING_MANAGER']:
             self.role = Role.query.filter_by(name='Accounting_Manager').first()
 
-        elif self.email in [current_app.config[f'INSTRUCTOR{i:02d}'] for i in range(1, 41)]:
+        elif self.email == INSTRUCTORS[INSTRUCTORS.index(self.email)] :
             self.role = Role.query.filter_by(name='Instructor').first()
 
         else:
@@ -355,22 +356,66 @@ enrollments = db.Table('enrollments',
 class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text(), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text(), nullable=False)
     main_course = db.Column(db.Text(), nullable=False)
-    quizzes = db.Column(db.Text(), nullable=False)
+    quizz = db.Column(db.Text(), nullable=False)
     exercises = db.Column(db.Text(), nullable=False)
     projects = db.Column(db.Text(), nullable=False)
-    price = db.Column(db.Float(15, 9), index=True, default=2.0)
-    author = db.Column(db.String(255), nullable=False)
-    specialization = db.Column(db.String(255), nullable=False)
+    authors = db.Column(db.String(255), nullable=False)
     company = db.Column(db.String(155))
-    intros = db.Column(db.String(255))
-    videos = db.Column(db.String(255))
-    pictures = db.Column(db.String(255))
-    intros = db.Column(db.Text(), nullable=False)
+    video = db.Column(db.String(255))
+    picture = db.Column(db.String(255))
+    intro = db.Column(db.Text(), nullable=False)
     level = db.Column(db.Enum('Beginner', 'Intermediate', 'Advanced', name='course_levels'))
 
+
+class Curriculum(db.Model):
+    __tablename__ = 'curricula'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), index=True)
+    price = db.Column(db.Float(15, 9), index=True, default=2.0)
+    overview = db.Column(db.Text())
+    skill01 = db.Column(db.Text())
+    skill02 = db.Column(db.Text())
+    skill03 = db.Column(db.Text())
+    skill04 = db.Column(db.Text())
+    icon = db.Column(db.String(255))  # Add an icon field
+    links = db.relationship('Link', back_populates='curriculum')
+    # Establishing a many-to-many relationship with the Skill table
+    skills = db.relationship('Skill', secondary='curriculum_skills', back_populates='curricula')
+
+
+class Skill(db.Model):
+    __tablename__ = 'skills'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), index=True, unique=True)
+
+    # Establishing a many-to-many relationship with the Curriculum table
+    curricula = db.relationship('Curriculum', secondary='curriculum_skills', back_populates='skills')
+
+# Association table for the many-to-many relationship
+class CurriculumSkills(db.Model):
+    __tablename__ = 'curriculum_skills'
+    id = db.Column(db.Integer, primary_key=True)
+    curriculum_id = db.Column(db.Integer, db.ForeignKey('curricula.id'))
+    skill_id = db.Column(db.Integer, db.ForeignKey('skills.id'))
+
+class Link(db.Model):
+    __tablename__ = 'links'
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(255), index=True)
+    mask_text = db.Column(db.String(50))  # Text to mask the link
+    link_type = db.Column(db.String(20))  # Type of link (GitHub, Guide, etc.)
+
+    # Establishing a many-to-one relationship with the Curriculum model
+    curriculum_id = db.Column(db.Integer, db.ForeignKey('curricula.id'))
+    curriculum = db.relationship('Curriculum', back_populates='links')
+
+
+
+
+        
 
 # Defines the products table for the shop
 class Products(db.Model):

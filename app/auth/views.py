@@ -77,11 +77,7 @@ def login():
             login_user(user, form.remember_me.data)
             next = request.args.get('next')
             if not next or not next.startswith('/'):
-                print(current_user.is_administrator())
                 print(current_user.is_instructor())
-                print(current_user.is_sales_manager())
-                print(current_user.is_hr_manager())
-                print(current_user.is_accounting_manager())
                 next = url_for('main.home')
             return redirect(next)
         flash('Incorrect password or email address!', 'error')
