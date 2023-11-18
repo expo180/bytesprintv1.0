@@ -108,10 +108,46 @@ class CreateCourseForm(FlaskForm):
             Email()
         ]
     )
-    company_name = StringField('Company Name', validators=[Optional()])
-    course_title = StringField('Course Title', validators=[InputRequired()])
-    short_description = TextAreaField('Short Description', validators=[InputRequired()])
-    number_of_headings = IntegerField('Number of Headings', validators=[InputRequired(), NumberRange(min=1)])
-    have_videos = BooleanField('Do you have videos for the course?')
-    video_links = TextAreaField('Video Links (separated by commas)', validators=[Optional()])
-    videos_free_to_use = BooleanField('Are the videos free to use?')
+    company_name = StringField(
+        'Company Name', 
+        validators=[
+            Optional()
+        ]
+    )
+    job_title = StringField(
+        'Job Title', 
+        validators=[
+            InputRequired()
+        ]
+    )
+    course_title = StringField(
+        'Course Title', 
+        validators=[
+            InputRequired()
+        ]
+    )
+    short_description = TextAreaField(
+        'Short Description', 
+        validators=[
+            InputRequired()
+        ]
+    )
+    number_of_headings = IntegerField(
+        'Number of Headings', 
+        validators=[
+            InputRequired(), 
+            NumberRange(min=3)
+        ]
+    )
+    have_videos = BooleanField(
+        'Do you have videos for the course?'
+    )
+    video_links = TextAreaField(
+        'Video Links (separated by commas)', 
+        validators=[
+            Optional()
+        ]
+    )
+    videos_free_to_use = BooleanField(
+        'Are the videos free to use?'
+    )

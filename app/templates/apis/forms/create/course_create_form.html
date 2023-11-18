@@ -44,62 +44,95 @@
 	</div>
 	<div class="pattern"></div>
 	<div class="container mt-5">
-	    <h2 class="display-1 text-primary">Create Your Course</h2>
+	    <h2 class="display-1 text-primary">Basic Informations</h2>
+	    <small class="text-body-secondary">
+			Fields marked with a red asterisk <span class="text-danger">(*)</span>
+			are mandatory fields. Therefore, you must complete them to proceed.
+		</small>
 	    <div class="py-3"></div>
 	    <form method="post" action="">
 	        {{ form.hidden_tag() }}
 	        <div class="form-group mb-4">
-	            {{ form.author_name.label(class="form-control-label") }}
+	            {{ form.author_name.label(class="form-control-label") }}<span class="text-danger">*</span>
 	            {{ form.author_name(class="form-control", placeholder='Clark Eddy') }}
 	        </div>
 
 	        <div class="form-group mb-4">
 	            {{ form.email.label(class="form-control-label") }}
-	            {{ form.email(class="form-control") }}
+	            {{ form.email(class="form-control", placeholder='example@gmail.com') }}
 	        </div>
 
 	        <div class="form-group mb-4">
-	        	<label>Are you currently working for a company?</label>
+	        	<label>Are you currently working for a company?<span class="text-danger">*</span></label>
 	        	<div class="d-flex gap-2 mt-3">
 	        	  	<div class="form-check">
-				  		<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-				  		<label class="form-check-label" for="flexRadioDefault1">
+				  		<input class="form-check-input" type="radio" name="working_for_company" id="working_for_company_yes" value="1" onclick="toggleCompanyNameField(true)">
+				  		<label class="form-check-label" for="working_for_company_yes">
 				   			Yes
 				  		</label>
 					</div>
 					<div class="form-check">
-				  		<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-				  		<label class="form-check-label" for="flexRadioDefault2">
+				  		<input class="form-check-input" type="radio" name="working_for_company" id="working_for_company_no" value="0" checked onclick="toggleCompanyNameField(false)">
+				  		<label class="form-check-label" for="working_for_company_no">
 				   			No
 				  		</label>
 					</div>
 	        	</div>	
 	        </div>
 
-	        <div class="form-group mb-4">
+	        <div class="form-group mb-4 companyFields" style="display: none;">
 	            {{ form.company_name.label(class="form-control-label") }}
-	            {{ form.company_name(class="form-control") }}
+	            {{ form.company_name(class="form-control", placeholder='Tesla Motors') }}
 	        </div>
 
 	        <div class="form-group mb-4">
-	            {{ form.course_title.label(class="form-control-label") }}
-	            {{ form.course_title(class="form-control") }}
+	        	{{ form.job_title.label(class="form-control-label") }}<span class="text-danger">*</span>
+	        	{{ form.job_title(class="form-control", placeholder='Embedded Software Engineer') }}
 	        </div>
 
 	        <div class="form-group mb-4">
-	            {{ form.short_description.label(class="form-control-label") }}
-	            {{ form.short_description(class="form-control") }}
+	            {{ form.course_title.label(class="form-control-label") }}<span class="text-danger">*</span> 
+	            {{ form.course_title(class="form-control", placeholder="Machine Learning with TensorFlow") }}
 	        </div>
 
 	        <div class="form-group mb-4">
-	            {{ form.number_of_headings.label(class="form-control-label") }}
-	            {{ form.number_of_headings(class="form-control") }}
+	            {{ form.short_description.label(class="form-control-label") }}<span class="text-danger">*</span>
+	            {{ form.short_description(class="form-control", placeholder='Explore the world of cryptocurrency development. In this course you will Learn to create and manage your own cryptocurrencies and blockchain applications using the best technologies') }}
+	            <div class="mt-3">
+	            	<small>
+		            	<i class="bi bi-smile"></i> 
+		            	<span class="get-Inpired fs-italic">Note</span><br>
+		            	<span class="fs-italic">
+		            		Give a nice and short description that will make people engaged in your course.
+		            	</span>
+	            	</small>
+	            </div>
 	        </div>
 
 	        <div class="form-group mb-4">
-	            {{ form.have_videos.label(class="form-check-label") }}
-	            {{ form.have_videos(class="form-check-input") }}
+	        	<label>Do you have a video for this course?<span class="text-danger">*</span></label>
+	        	<div class="d-flex gap-2 mt-3">
+	        	  	<div class="form-check">
+				  		<input class="form-check-input" type="radio" name="have_videos" id="have_videos_yes" value="1" onclick="toggleHaveVideosField(true)">
+				  		<label class="form-check-label" for="have_videos_yes">
+				   			Yes
+				  		</label>
+					</div>
+					<div class="form-check">
+				  		<input class="form-check-input" type="radio" name="have_videos" id="have_videos_no" value="0" checked onclick="toggleHaveVideosField(false)">
+				  		<label class="form-check-label" for="have_videos_no">
+				   			No
+				  		</label>
+					</div>
+	        	</div>	
 	        </div>
+
+	        <div class="input-group mb-5">
+			  	<input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+			  	<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+			  		Upload
+			  	</button>
+			</div>
 
 	        <div class="form-group mb-4">
 	            {{ form.video_links.label(class="form-control-label") }}
@@ -110,13 +143,27 @@
 	            {{ form.videos_free_to_use.label(class="form-check-label") }}
 	            {{ form.videos_free_to_use(class="form-check-input") }}
 	        </div>
-	        <button type="submit" class="btn btn-outline-primary">Continue</button>
-	        <button type="button" class="btn btn-secondary">Save</button>
-	        <button type="submit" class="btn btn-primary">Submit</button>
+	        <div class="d-flex justify-content-end gap-2">
+	        	<button type="submit" class="btn btn-outline-primary">Continue</button>
+		        <button type="button" class="btn btn-secondary">Save</button>
+		        <button type="submit" class="btn btn-primary">Submit</button>
+	        </div>
 	    </form>
 	</div>
+	<div class="py-3"></div>
+	{% include 'footers/footer-instructor.html' %}
 	<div class="py-5"></div>
 	{% include 'footers/footer.html' %}
 	<script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+	<script>
+    function toggleCompanyNameField(isWorkingForCompany) {
+        var companyFields = document.querySelector('.companyFields');
+        companyFields.style.display = isWorkingForCompany ? 'block' : 'none';
+    }
+    function toggleHaveVideosField(hasVideos) {
+        var videoNumberField = document.querySelector('.videoFields');
+        videoNumberField.style.display = hasVideos ? 'block' : 'none';
+    }
+	</script>
 </body>
 </html>
