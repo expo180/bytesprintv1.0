@@ -19,6 +19,7 @@
 	<link rel="icon" href="{{url_for('static', filename='media/favicons/favicon-32x32.png')}}" sizes="32x32" type="image/png">
 	<link rel="icon" href="{{url_for('static', filename='media/favicons/favicon-16x16.png')}}" sizes="16x16" type="image/png">
 	<link rel="icon" href="{{url_for('static', filename='media/favicons/favicon.png')}}" type="image/png">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/courses/instructor.css') }}">
 	<!--bootstrap style-->
 	<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
 	<!--text animation style-->
@@ -41,8 +42,15 @@
 </head>
 <body>
 {% include 'headers/header-index.html' %}
+<div class="py-5"></div>
+{% include 'apis/instructor-hero.html' %}
 <div class="pattern"></div>
+<div class="py-5"></div>
+{% include 'apis/instructor-statement.html' %}
+<div class="py-5"></div>
+<div class="py-4 py-lg-2 py-xxl-4"></div>
 {% include 'footers/footer.html' %}
 <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/instructors/instructor-page-statement.js')  }}"></script>
 </body>
 </html>

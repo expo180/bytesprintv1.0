@@ -1,8 +1,8 @@
 # apis forms.py
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, SelectField, SubmitField, RadioField, BooleanField
-from wtforms.validators import InputRequired, Email, Length
+from wtforms import StringField, EmailField, SelectField, SubmitField, RadioField, BooleanField, TextAreaField, IntegerField 
+from wtforms.validators import InputRequired, Email, Length, Optional, NumberRange
 
 class CheckoutForm(FlaskForm):
     first_name = StringField(
@@ -95,15 +95,23 @@ class CheckoutForm(FlaskForm):
         ])
 
 class CreateCourseForm(FlaskForm):
-    title = StringField(
-        'Course Title', 
+    author_name = StringField(
+        'Author Name', 
         validators=[
-            InputRequired(),
-            Length(
-                max=255,
-                min=125
-            )
-
+            InputRequired()
         ]
-
     )
+    email = StringField(
+        'Email', 
+        validators=[
+            InputRequired(), 
+            Email()
+        ]
+    )
+    company_name = StringField('Company Name', validators=[Optional()])
+    course_title = StringField('Course Title', validators=[InputRequired()])
+    short_description = TextAreaField('Short Description', validators=[InputRequired()])
+    number_of_headings = IntegerField('Number of Headings', validators=[InputRequired(), NumberRange(min=1)])
+    have_videos = BooleanField('Do you have videos for the course?')
+    video_links = TextAreaField('Video Links (separated by commas)', validators=[Optional()])
+    videos_free_to_use = BooleanField('Are the videos free to use?')

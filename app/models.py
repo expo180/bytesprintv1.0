@@ -180,6 +180,8 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role %r>' % self.name
 
+db.Table('roles', db.Model.metadata, extend_existing=True)
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -346,29 +348,22 @@ class AnonymousUser(AnonymousUserMixin):
 login_manager.anonymous_user = AnonymousUser
 
 
-# Defines the enrollments table for the many-to-many relationship between users and courses
-enrollments = db.Table('enrollments',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True)
-)
 
-# Defines the courses table
 class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text(), nullable=False)
-    main_course = db.Column(db.Text(), nullable=False)
-    quizz = db.Column(db.Text(), nullable=False)
-    exercises = db.Column(db.Text(), nullable=False)
-    projects = db.Column(db.Text(), nullable=False)
     authors = db.Column(db.String(255), nullable=False)
     company = db.Column(db.String(155))
-    video = db.Column(db.String(255))
-    picture = db.Column(db.String(255))
-    intro = db.Column(db.Text(), nullable=False)
+    intro = db.Column(db.String(155), nullable=False)
     level = db.Column(db.Enum('Beginner', 'Intermediate', 'Advanced', name='course_levels'))
 
+# Defines the enrollments table for the many-to-many relationship between users and courses
+enrollments = db.Table('enrollments',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True)
+)
 
 class Curriculum(db.Model):
     __tablename__ = 'curricula'
@@ -384,7 +379,6 @@ class Curriculum(db.Model):
     links = db.relationship('Link', back_populates='curriculum')
     # Establishing a many-to-many relationship with the Skill table
     skills = db.relationship('Skill', secondary='curriculum_skills', back_populates='curricula')
-
 
 class Skill(db.Model):
     __tablename__ = 'skills'

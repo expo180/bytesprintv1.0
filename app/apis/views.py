@@ -5,7 +5,7 @@ from ..decorators import admin_required, permission_required
 from ..models import Permission
 from .. import db
 import random
-from .forms import CheckoutForm
+from .forms import CheckoutForm, CreateCourseForm
 from .. import rapi
 
 @api.route("/courses/enrollment/checkout/",  methods=['GET', 'POST'])
@@ -24,10 +24,24 @@ def enroll():
 def financial_aid():
     return render_template('finances/financial_aid_form.html', form=form)
 
-@api.route('/courses/add/', methods=['GET', 'POST'])
-def add_new_course():
-    return render_template('apis/create_course.html')
+@api.route('/courses/add/?', methods=['GET', 'POST'])
+@login_required
+def instructor():
+    return render_template('apis/instructor.html')
+
+@api.route('/course/add/create_new', methods=['GET', 'POST'])
+@login_required
+def course_create_form():
+	form = CreateCourseForm()
+	return render_template('apis/forms/create/course_create_form.html', form=form)
+
+@api.route('/curriculum/add/create_new', methods=['GET', 'POST'])
+@login_required
+def curriculum_create_form():
+    return render_template('apis/forms/create/curriculum_create_form.html')
+
 
 @api.route('/products/add/', methods=['GET', 'POST'])
+@login_required
 def add_new_topic():
 	return render_template('apis/create_topic.html')
