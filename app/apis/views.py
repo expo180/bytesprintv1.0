@@ -5,7 +5,7 @@ from ..decorators import admin_required, permission_required
 from ..models import Permission
 from .. import db
 import random
-from .forms import CheckoutForm, CreateCourseForm
+from .forms import CheckoutForm, BasicCourseInfoForm, CourseDetailsForm
 from .. import rapi
 
 @api.route("/courses/enrollment/checkout/",  methods=['GET', 'POST'])
@@ -31,17 +31,59 @@ def instructor():
 
 @api.route('/course/add/create_new', methods=['GET', 'POST'])
 @login_required
-def course_create_form():
-	form = CreateCourseForm()
-	return render_template('apis/forms/create/course_create_form.html', form=form)
+def create_course_step1():
+	form = BasicCourseInfoForm()
+	if request.method == 'POST' and form.validate_on_submit():
+		session['basic_info'] = {
+			'author_name': form.author_name.data,
+            'email': form.email.data,
+            'working_for_company': form.working_for_company.data,
+            'company_name': form.company_name.data,
+            'job_title': form.job_title.data,
+            'course_title': form.course_title.data,
+            'short_description': form.short_description.data,
+            'video': form.video.data,
+            'video_links': form.video_links.data
+		}
+		return redirect(url_for('api.create_course_step2'))
+	return render_template('apis/forms/create/courses/course_create_form_step1.html', form=form)
+
+@api.route('/create_course/step2', methods=['GET', 'POST'])
+@login_required
+def create_course_step2():
+    form = CourseDetailsForm()
+    
+    
+    if request.method == 'POST' and form.validate_on_submit():
+        basic_info = session.get('basic_info', {})
+        
+        session['basic_info'] = basic_info
+        return redirect(url_for('create_course_final'))
+    return render_template('apis/forms/create/courses/course_create_form_step2.html', form=form)
+
+@api.route('/create_course/final', methods=['GET', 'POST'])
+@login_required
+def create_course_final():
+    basic_info = session.get('basic_info', {})
+    # Clear the session after form submission
+    if form.image.data:
+    	image_filename = secure_filename(form.image.data.filename)
+    	form.image.data.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+    	print(f'Image saved: {image_filename}')
+
+    if form.video.data:
+    	video_filename = secure_filename(form.video.data.filename)
+    	form.video.data.save(os.path.join(app.config['UPLOAD_FOLDER'], video_filename))
+    	print(f'Video saved: {video_filename}')
+    	form.category.data = ''
+    	form.heading.data = ''
+    	form.paragraph.data = ''
+    session.pop('basic_info', None)
+    return render_template('create_course_final.html', basic_info=basic_info)
+
 
 @api.route('/curriculum/add/create_new', methods=['GET', 'POST'])
 @login_required
 def curriculum_create_form():
-    return render_template('apis/forms/create/curriculum_create_form.html')
+    return render_template('apis/forms/create/curriculum/curriculum_create_form.html')
 
-
-@api.route('/products/add/', methods=['GET', 'POST'])
-@login_required
-def add_new_topic():
-	return render_template('apis/create_topic.html')

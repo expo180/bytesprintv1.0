@@ -258,7 +258,7 @@ class User(UserMixin, db.Model):
         elif self.email == current_app.config['ACCOUNTING_MANAGER']:
             self.role = Role.query.filter_by(name='Accounting_Manager').first()
 
-        elif self.email == INSTRUCTORS[INSTRUCTORS.index(self.email)] :
+        elif self.email in INSTRUCTORS:
             self.role = Role.query.filter_by(name='Instructor').first()
 
         else:

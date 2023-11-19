@@ -1,0 +1,124 @@
+{% extends 'apis/forms/create/courses/create-course-base.html' %}
+{% block content %}
+	<div class="container mt-5">
+		<h2 class="display-1 text-primary">Basic Informations</h2>
+		<small class="text-body-secondary">
+		    Welcome, <strong>{{ current_user.first_name }}</strong> ! <br>We are thrilled to have you as part of our instructor community. If you're busy, don't worry. You can <strong>save</strong> your work by clicking the <strong>save button</strong>. Feel free to explore the platform, create engaging courses, and contribute to the world of tech education.
+		   <hr>
+		   <strong>
+				Fields marked with a red asterisk <span class="text-danger">(*)</span>
+				are mandatory fields. Therefore, you must complete them to proceed.
+			</strong>
+		</small>
+		<div class="py-3"></div>
+		<form method="post" action="">
+		    {{ form.hidden_tag() }}
+		    <div class="form-group mb-4">
+		    	{{ form.author_name.label(class="form-control-label") }}<span class="text-danger">*</span>
+		            {{ form.author_name(class="form-control", placeholder='Clark Eddy') }}
+		    </div>
+
+		    <div class="form-group mb-4">
+		        {{ form.email.label(class="form-control-label") }}
+		        {{ form.email(class="form-control", placeholder='example@gmail.com') }}
+		    </div>
+
+		    <div class="form-group mb-4">
+		       	<label>Are you currently working for a company?<span class="text-danger">*</span></label>
+		        <div class="d-flex gap-2 mt-3">
+		        	<div class="form-check">
+					  	<input class="form-check-input" type="radio" name="working_for_company" id="working_for_company_yes" value="1" onclick="toggleCompanyNameField(true)">
+					  	<label class="form-check-label" for="working_for_company_yes">
+					   		Yes
+					  	</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="working_for_company" id="working_for_company_no" value="0" checked onclick="toggleCompanyNameField(false)">
+					  	<label class="form-check-label" for="working_for_company_no">
+					   		No
+					  	</label>
+					</div>
+		        </div>	
+		    </div>
+
+		    <div class="form-group mb-4 companyFields" style="display: none;">
+		        {{ form.company_name.label(class="form-control-label") }}
+		        {{ form.company_name(class="form-control", placeholder='Tesla Motors') }}
+		    </div>
+
+		    <div class="form-group mb-4">
+		        {{ form.job_title.label(class="form-control-label") }}<span class="text-danger">*</span>
+		        {{ form.job_title(class="form-control", placeholder='Embedded Software Engineer') }}
+		    </div>
+
+		    <div class="form-group mb-4">
+		        {{ form.course_title.label(class="form-control-label") }}<span class="text-danger">*</span> 
+		        {{ form.course_title(class="form-control", placeholder="Machine Learning with Tensorflow") }}
+		    </div>
+
+		    <div class="form-group mb-4">
+		        {{ form.short_description.label(class="form-control-label") }}<span class="text-danger">*</span>
+		        {{ form.short_description(class="form-control", placeholder='Explore the world of cryptocurrency development. In this course you will Learn to create and manage your own cryptocurrencies and blockchain applications using the best technologies') }}
+		       	<div class="mt-3">
+		          	<small>
+			           	<i class="bi bi-smile"></i> 
+			            <span class="get-Inpired fs-italic">Note</span><br>
+			            <span class="fs-italic">
+			            	Give a nice and short description that will make people engaged in your course.
+			            </span>
+		            </small>
+		        </div>
+		    </div>
+
+		    <div class="form-group mb-4">
+		       	<label>Do you have a video for this course?<span class="text-danger">*</span></label>
+		        <div class="d-flex gap-2 mt-3">
+		        	<div class="form-check">
+					  	<input class="form-check-input" type="radio" name="have_videos" id="have_videos_yes" value="1" onclick="toggleHaveVideosField(true)">
+					  	<label class="form-check-label" for="have_videos_yes">
+					   		Yes
+					  	</label>
+					</div>
+					<div class="form-check">
+					  	<input class="form-check-input" type="radio" name="have_videos" id="have_videos_no" value="0" checked onclick="toggleHaveVideosField(false)">
+					  	<label class="form-check-label" for="have_videos_no">
+					   		No
+					  	</label>
+					</div>
+		        </div>	
+		    </div>
+
+		    <div class="input-group mb-5" id="videosField" style="display: none;">
+		    	<small class="mb-5">
+		    		<strong>Video Size Requirements</strong>:<br>
+					bytesprint, as the best tech platform, ensures an immersive learning experience through high-quality videos. To provide the best viewing experience for our users, we recommend video resolutions of <strong>720p</strong> or <strong>higher</strong>. <strong>Optimal bitrates (between 2,500 and 4,000 kbps for 720p)</strong> and <strong>efficient compression</strong> techniques balance <strong>video quality</strong> and streaming performance. This approach guarantees smooth playback across devices and varying internet speeds, offering an unparalleled tech education experience.
+		    	</small>
+		    	{{ form.video(class="form-control") }}
+				<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+				  	Upload
+				</button>
+			</div>
+
+		    <div class="form-group mb-4" id="videoLinksField">
+		       	<small class="text-body-secondary">
+		        	As you've entered <strong>No</strong> to the previous question, please provide any free to use video's link you know on the internet that talks about the same subject.
+		        </small>
+		        <br>
+		    	<div class="mt-3">
+		        	{{ form.video_links.label(class="form-control-label") }}
+		         	{{ form.video_links(class="form-control") }}
+		        </div>
+		    </div>
+		    <div class="d-flex justify-content-end gap-2 me-3">
+				<a href="" class="btn btn-secondary">
+				    <i class="bi bi-cloud-arrow-up-fill"></i>
+				    Save
+				</a>
+				<a href="{{ url_for('api.create_course_step2') }}" id="continueButton" class="btn btn-primary" disabled="disabled">
+				    Continue
+				    <i class="bi bi-arrow-right-circle"></i>
+				</a>
+			</div>
+		</form>
+	</div>
+{% endblock %}

@@ -7,3 +7,9 @@ label
 	text-decoration:underline;
 	text-decoration-color:cyan;
 }
+.related-skills{
+	font-size:1.5rem;
+}
+li > button{
+	border:none;
+}

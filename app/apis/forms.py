@@ -1,8 +1,9 @@
 # apis forms.py
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, SelectField, SubmitField, RadioField, BooleanField, TextAreaField, IntegerField 
+from wtforms import StringField, EmailField, SelectField, SubmitField, RadioField, BooleanField, TextAreaField, IntegerField, FileField 
 from wtforms.validators import InputRequired, Email, Length, Optional, NumberRange
+from flask_wtf.file import FileAllowed, FileRequired
 
 class CheckoutForm(FlaskForm):
     first_name = StringField(
@@ -94,7 +95,7 @@ class CheckoutForm(FlaskForm):
             Length(max=4)
         ])
 
-class CreateCourseForm(FlaskForm):
+class BasicCourseInfoForm(FlaskForm):
     author_name = StringField(
         'Author Name', 
         validators=[
@@ -132,22 +133,41 @@ class CreateCourseForm(FlaskForm):
             InputRequired()
         ]
     )
-    number_of_headings = IntegerField(
-        'Number of Headings', 
+
+    video = FileField(
+        'Video (Max size: 500 MB)', 
         validators=[
-            InputRequired(), 
-            NumberRange(min=3)
+            Optional(),
+            FileAllowed(
+                ['mp4', 'avi'], 
+                'Only MP4 and AVI formats are allowed.'
+            )
         ]
     )
-    have_videos = BooleanField(
-        'Do you have videos for the course?'
-    )
+
     video_links = TextAreaField(
         'Video Links (separated by commas)', 
         validators=[
             Optional()
         ]
     )
-    videos_free_to_use = BooleanField(
-        'Are the videos free to use?'
+
+class CourseDetailsForm(FlaskForm):
+    tech_field = SelectField(
+        'Course Category', 
+        choices=[
+            ('None', '- Select a category -'),
+            ('AI', 'Artificial Intelligence'),
+            ('Robotics', 'Robotics'),
+            ('Web_Dev', 'Web Development'),
+            ('DevOps', 'DevOps'),
+            ('Crypto', 'Cryptocurrency'),
+            ('Data_Science', 'Data Science'),
+            ('Game_Dev', 'Game Development'),
+            ('App_Dev', 'App Development'),
+            ('Cybersecurity', 'Cybersecurity')
+        ], 
+        validators=[InputRequired()]
     )
+
+

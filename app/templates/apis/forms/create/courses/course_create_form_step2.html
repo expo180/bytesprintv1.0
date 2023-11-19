@@ -1,0 +1,52 @@
+{% extends 'apis/forms/create/courses/create-course-base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="display-1 text-primary">Course Details</h2>
+  <small class="text-body-secondary">
+    We believe in a <strong>revolutionary approach</strong> to education that transcends the <strong>traditional classroom model</strong>. Our courses are not structured around conventional subject matter like HTML, CSS, or JavaScript; instead, we <strong>immerse</strong> our students in <strong>real-world</strong> projects that serve as the <strong>backbone</strong> of their learning experience. Picture this: our instructors guide students through the creation of a <strong>management web application</strong> for a <strong>school</strong>, tackling <strong>challenges</strong> related to outdated <strong>average calculators</strong> and <strong>pitfalls</strong> in handling <strong>complex data</strong>. We don't start with the <strong>technology</strong>; we start with the <strong>problem</strong>. By introducing students to the inherent <strong>issues</strong> and <strong>inefficiencies</strong> in <strong>existing systems</strong>, we empower them to <strong>envision solutions</strong>. Only then do we delve into the world of <strong>web development or app</strong>, presenting a <strong>fully-fledged</strong>, <strong>feature-rich</strong> application that addresses the <strong>complexities</strong> of <strong>educational management</strong>. This unique philosophy ensures that our students not only master the <strong>technical skills</strong> required but, more importantly, develop a keen understanding of the problems they aim to solve. Our instructors play a pivotal role in guiding students to <strong>identify</strong>, <strong>comprehend</strong>, and <strong>ultimately overcome challenges</strong>, fostering a mindset that goes beyond <strong>coding</strong> to create impactful solutions in the <strong>real world</strong>. Explore these <a href="">course templates</a> to get inspired.
+    <br>
+    <hr>
+    <strong>
+      Fields marked with a red asterisk <span class="text-danger">(*)</span>
+      are mandatory fields. Therefore, you must complete them to proceed.
+    </strong>
+  </small>
+  <div class="py-3"></div>
+  <form method="post" action="/" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="form-group mr-2">
+      {{ form.tech_field.label(class="mr-2 form-label") }}<span class="text-danger">*</span>
+      {{ form.tech_field(class="mr-2 form-select", id="techField") }}
+    </div>
+    <div class="mt-4" id="relatedSkillsContainer">
+      <small>skills</small>
+      <ul class="list-inline mt-3" id="relatedSkillsList">
+        <!-- Related skills will be dynamically added here -->
+      </ul>
+    </div>
+    <div class="form-group mb-4">
+      <label class="form-label" for="NumberOfHeadings">How Many Sections For this Course</label><span class="text-danger">*</span>
+      <input class="form-control" type="number" name="NumberOfHeadings" value="3" id="NumberOfHeadings">
+    </div>
+    <div id="dynamicFieldsContainer">
+    <!-- Dynamic input fields will be added here -->
+    </div>
+    <div class="d-flex justify-content-end gap-2 me-3">
+      <a href="" class="btn btn-secondary">
+        <i class="bi bi-cloud-arrow-up-fill"></i>
+        Save
+      </a>
+      <a href="{{ url_for('api.create_course_step1') }}" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left-circle"></i>
+        Previous
+      </a>
+      <a href="{{ url_for('api.create_course_final') }}" class="btn btn-primary">
+        Continue
+        <i class="bi bi-arrow-right-circle"></i>
+      </a>
+    </div>
+  </form>
+</div>
+<script src="{{ url_for('static', filename='js/instructor-tools/Heading&ContentFieldLoader.js') }}"></script>
+<script src="{{ url_for('static', filename='js/instructor-tools/CourserelatedSkillLoader.js') }}"></script>
+{% endblock %}
