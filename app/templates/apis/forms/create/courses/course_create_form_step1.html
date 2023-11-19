@@ -16,11 +16,13 @@
 		    <div class="form-group mb-4">
 		    	{{ form.author_name.label(class="form-control-label") }}<span class="text-danger">*</span>
 		            {{ form.author_name(class="form-control", placeholder='Clark Eddy') }}
+                <div id="authorNameError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
 		        {{ form.email.label(class="form-control-label") }}
 		        {{ form.email(class="form-control", placeholder='example@gmail.com') }}
+                <div id="emailError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
@@ -42,24 +44,31 @@
 		    </div>
 
 		    <div class="form-group mb-4 companyFields" style="display: none;">
-		        {{ form.company_name.label(class="form-control-label") }}
+                <div class="text-body-secondary mb-3">
+                    As you've entered <strong>Yes</strong> to the previous question, please give us the name of the company you are working for.
+                </div>
+		        {{ form.company_name.label(class="form-control-label") }}<span class="text-danger">*</span>
 		        {{ form.company_name(class="form-control", placeholder='Tesla Motors') }}
+                <div id="companyNameError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
 		        {{ form.job_title.label(class="form-control-label") }}<span class="text-danger">*</span>
 		        {{ form.job_title(class="form-control", placeholder='Embedded Software Engineer') }}
+                <div id="jobTitleError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
 		        {{ form.course_title.label(class="form-control-label") }}<span class="text-danger">*</span> 
 		        {{ form.course_title(class="form-control", placeholder="Machine Learning with Tensorflow") }}
+                <div id="courseTitleError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
 		        {{ form.short_description.label(class="form-control-label") }}<span class="text-danger">*</span>
 		        {{ form.short_description(class="form-control", placeholder='Explore the world of cryptocurrency development. In this course you will Learn to create and manage your own cryptocurrencies and blockchain applications using the best technologies') }}
-		       	<div class="mt-3">
+		       	<div id="descriptionError" class="invalid-feedback"></div>
+                <div class="mt-3">
 		          	<small>
 			           	<i class="bi bi-smile"></i> 
 			            <span class="get-Inpired fs-italic">Note</span><br>
@@ -95,8 +104,10 @@
 		    	</small>
 		    	{{ form.video(class="form-control") }}
 				<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
-				  	Upload
+				  	<i class="bi bi-trash"></i>
+                    Remove
 				</button>
+                <div id="videoError" class="invalid-feedback"></div>
 			</div>
 
 		    <div class="form-group mb-4" id="videoLinksField">
@@ -105,8 +116,9 @@
 		        </small>
 		        <br>
 		    	<div class="mt-3">
-		        	{{ form.video_links.label(class="form-control-label") }}
+		        	{{ form.video_links.label(class="form-control-label") }}<span class="text-danger">*</span>
 		         	{{ form.video_links(class="form-control") }}
+                    <div id="videoLinksError" class="invalid-feedback"></div>
 		        </div>
 		    </div>
 		    <div class="d-flex justify-content-end gap-2 me-3">
