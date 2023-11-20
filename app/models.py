@@ -352,12 +352,14 @@ login_manager.anonymous_user = AnonymousUser
 class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text(), nullable=False)
-    authors = db.Column(db.String(255), nullable=False)
-    company = db.Column(db.String(155))
-    intro = db.Column(db.String(155), nullable=False)
-    level = db.Column(db.Enum('Beginner', 'Intermediate', 'Advanced', name='course_levels'))
+    author_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    company_name = db.Column(db.String(155))
+    job_title = db.Column(db.String(255))
+    course_title = db.Column(db.String(255), nullable=False)
+    short_description = db.Column(db.String(265), nullable=False)
+    video_url = db.Column(db.String(255), nullable=False)
+    video_links = db.Column(db.Text())
 
 # Defines the enrollments table for the many-to-many relationship between users and courses
 enrollments = db.Table('enrollments',

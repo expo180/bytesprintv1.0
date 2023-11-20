@@ -7,6 +7,13 @@ from .. import db
 import random
 from .forms import CheckoutForm, BasicCourseInfoForm, CourseDetailsForm
 from .. import rapi
+from werkzeug.utils import secure_filename
+import os
+import firebase_admin
+from firebase_admin import credentials, storage
+
+cred = credentials.Certificate("../firebase/bytesprintv0-firebase-adminsdk-uvr39-00da07a953.json")
+firebase_admin.initialize_app(cred, {'storageBucket':'gs://bytesprintv0.appspot.com'})
 
 @api.route("/courses/enrollment/checkout/",  methods=['GET', 'POST'])
 @login_required
@@ -34,7 +41,18 @@ def instructor():
 def create_course_step1():
 	form = BasicCourseInfoForm()
 	if request.method == 'POST' and form.validate_on_submit():
-		session['basic_info'] = {
+
+		# Handle video upload to Firebase Storage
+		video = form.video.data
+		video_filename = secure_filename(video.filename)
+		video_blob = storage.bucket().blob(f"videos/{video_filename}")
+		video_blob.upload_from_file(video)
+
+
+		# Get the download URL for the uploaded video
+		video_url = video_blob.public_url
+
+		session['basic_info']={
 			'author_name': form.author_name.data,
             'email': form.email.data,
             'working_for_company': form.working_for_company.data,
@@ -42,9 +60,10 @@ def create_course_step1():
             'job_title': form.job_title.data,
             'course_title': form.course_title.data,
             'short_description': form.short_description.data,
-            'video': form.video.data,
+            'video_url': video_url,
             'video_links': form.video_links.data
 		}
+
 		return redirect(url_for('api.create_course_step2'))
 	return render_template('apis/forms/create/courses/course_create_form_step1.html', form=form)
 

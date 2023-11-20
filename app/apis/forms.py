@@ -151,6 +151,9 @@ class BasicCourseInfoForm(FlaskForm):
             Optional()
         ]
     )
+    submit = SubmitField(
+        'Continue'
+    )
 
 class CourseDetailsForm(FlaskForm):
     tech_field = SelectField(

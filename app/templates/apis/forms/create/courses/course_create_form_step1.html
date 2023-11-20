@@ -102,7 +102,7 @@
 		    		<strong>Video Size Requirements</strong>:<br>
 					bytesprint, as the best tech platform, ensures an immersive learning experience through high-quality videos. To provide the best viewing experience for our users, we recommend video resolutions of <strong>720p</strong> or <strong>higher</strong>. <strong>Optimal bitrates (between 2,500 and 4,000 kbps for 720p)</strong> and <strong>efficient compression</strong> techniques balance <strong>video quality</strong> and streaming performance. This approach guarantees smooth playback across devices and varying internet speeds, offering an unparalleled tech education experience.
 		    	</small>
-		    	{{ form.video(class="form-control") }}
+		    	{{ form.video(class="form-control", id="video") }}
 				<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
 				  	<i class="bi bi-trash"></i>
                     Remove
@@ -122,14 +122,7 @@
 		        </div>
 		    </div>
 		    <div class="d-flex justify-content-end gap-2 me-3">
-				<a href="" class="btn btn-secondary">
-				    <i class="bi bi-cloud-arrow-up-fill"></i>
-				    Save
-				</a>
-				<a href="{{ url_for('api.create_course_step2') }}" id="continueButton" class="btn btn-primary" disabled="disabled">
-				    Continue
-				    <i class="bi bi-arrow-right-circle"></i>
-				</a>
+                {{ form.submit(id="continueButton", class="btn btn-primary") }}
 			</div>
 		</form>
 	</div>

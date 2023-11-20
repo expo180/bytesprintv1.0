@@ -112,7 +112,7 @@ class RegistrationForm(FlaskForm):
     )
 
     privacy_policy_agreement = BooleanField(
-         ("You have read and accepted our <a href=''>Terms and Conditions</a>."),
+        ("You have read and accepted our <a href=''>Terms and Conditions</a>."),
         validators=[InputRequired()]
     )
     submit = SubmitField( ('Next'))

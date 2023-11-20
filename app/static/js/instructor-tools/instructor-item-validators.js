@@ -103,19 +103,35 @@ $(document).ready(function() {
         updateContinueButton();
     });
 
-    // Validate video size
+    // Video requirements
+
     $('#video').on('change', function() {
         var videoField = $(this);
+        var fileName = videoField.val();
+        var allowedFormats = ['avi', 'mp4'];
         var maxSizeInBytes = 500 * 1024 * 1024; // 500 MB
         var errorElement = $('#videoError');
-        if (this.files.length === 0 || this.files[0].size <= maxSizeInBytes) {
+
+        // Check video size and format
+        if ((this.files.length === 0 || this.files[0].size <= maxSizeInBytes) &&
+            (!fileName || allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) !== -1)) {
             showSuccess(videoField);
             errorElement.text('');
         } else {
-            showError(videoField, 'Video size must not exceed 500 MB', errorElement);
+            // Check for size error
+            if (this.files.length !== 0 && this.files[0].size > maxSizeInBytes) {
+                showError(videoField, 'Video size must not exceed 500 MB', errorElement);
+            }
+            // Check for format error
+            else if (fileName && allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) === -1) {
+                showError(videoField, 'Invalid video format. Please upload an AVI or MP4 file.', errorElement);
+            }
         }
+
         updateContinueButton();
     });
+
+
 
     // Validate company name
     $('#company_name').on('input', function() {
