@@ -11,7 +11,7 @@
 			</strong>
 		</small>
 		<div class="py-3"></div>
-		<form method="post" action="">
+		<form method="POST" action="{{ url_for('api.create_course_step1') }}" enctype="multipart/form-data">
 		    {{ form.hidden_tag() }}
 		    <div class="form-group mb-4">
 		    	{{ form.author_name.label(class="form-control-label") }}<span class="text-danger">*</span>
@@ -22,6 +22,9 @@
 		    <div class="form-group mb-4">
 		        {{ form.email.label(class="form-control-label") }}
 		        {{ form.email(class="form-control", placeholder='example@gmail.com') }}
+		        <div class="text-body-secondary my-2">
+		    		The email you provide here is only for contact purpose, students or some companies can contact you if they need some information.
+		    	</div>
                 <div id="emailError" class="invalid-feedback"></div>
 		    </div>
 
@@ -60,7 +63,7 @@
 
 		    <div class="form-group mb-4">
 		        {{ form.course_title.label(class="form-control-label") }}<span class="text-danger">*</span> 
-		        {{ form.course_title(class="form-control", placeholder="Machine Learning with Tensorflow") }}
+		        {{ form.course_title(class="form-control", placeholder="Power of data in the decision making process") }}
                 <div id="courseTitleError" class="invalid-feedback"></div>
 		    </div>
 

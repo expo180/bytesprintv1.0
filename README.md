@@ -27,7 +27,7 @@ bytesprint leverages a variety of technologies to deliver an exceptional user ex
 - Backend: Python, Flask, ORM (SQLAlchemy)
 - Database: PostgreSQL, SQLite
 - Version Control: Git, GitHub
-- Deployment: Heroku, Netlify
+- Deployment: Heroku, Netlify, Firebase
 
 ## Getting Started
 

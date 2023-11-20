@@ -1,26 +1,31 @@
+import { skillsDict } from './SkillsDictionary.js';
 $(document).ready(function() {
-    var skillsDict = {
-    'AI': [
-        'Machine Learning', 
-        'Deep Learning', 
-        'Natural Language Processing',
-        'Neural Network',
-        'Tensorflow',
-        'Python'
-    ],
-    'Robotics': ['Robot Programming', 'Computer Vision', 'Kinematics'],
-    'Web_Dev': ['HTML', 'CSS', 'JavaScript', 'Backend Frameworks'],
-    'DevOps': ['Continuous Integration', 'Containerization', 'Orchestration'],
-    'Crypto': ['Blockchain', 'Smart Contracts', 'Cryptography'],
-    'Data_Science': ['Data Analysis', 'Statistical Modeling', 'Data Visualization'],
-    'Game_Dev': ['Game Design', 'Unity3D', 'Game Programming'],
-    'App_Dev': ['Mobile App Development', 'iOS', 'Android'],
-    'Cybersecurity': ['Network Security', 'Penetration Testing', 'Security Protocols']
-    };
+    
+      var selectedSkills = [];  // Array to store selected skills
+
     $('#techField').change(function() {
         var selectedTech = $(this).val();
         updateRelatedSkills(selectedTech);
     });
+
+    $(document).on('click', '.related-skills', function() {
+        var clickedSkill = $(this).text()
+        // Toggle selection
+        if (selectedSkills.includes(clickedSkill)) {
+            // Skill is already selected, remove it
+            selectedSkills = selectedSkills.filter(skill => skill !== clickedSkill);
+        } else {
+            // Skill is not selected, add it
+            selectedSkills.push(clickedSkill);
+        }
+
+        // Update button style based on selection
+        $(this).toggleClass('selected-skill');
+
+        // You can display the selected skills in a separate container if needed
+        displaySelectedSkills();
+    });
+
     function updateRelatedSkills(techField) {
         var relatedSkillsList = $('#relatedSkillsList');
         relatedSkillsList.empty();
@@ -35,4 +40,25 @@ $(document).ready(function() {
             relatedSkillsList.append('<li class="list-inline-item text-danger">No related skills found.</li>');
         }
     }
+
+    function displaySelectedSkills() {
+        // Display the selected skills, you can customize this based on your needs
+        console.log('Selected Skills:', selectedSkills);
+    }
+
+    // Add a button or event listener to save the selected skills to the database
+    $('#saveSkillsButton').click(function() {
+        // Assuming you have an endpoint to handle saving skills on the server
+        $.ajax({
+            url: '/save_skills',  // Update with your server endpoint
+            type: 'POST',
+            data: { skills: selectedSkills },
+            success: function(response) {
+                console.log('Skills saved successfully');
+            },
+            error: function(error) {
+                console.log('Error saving skills:', error);
+            }
+        });
+    });
 });

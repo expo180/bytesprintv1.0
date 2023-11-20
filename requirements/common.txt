@@ -36,3 +36,4 @@ gunicorn
 Flask-OAuthlib
 Flask-RestCountries
 pycountry
+firebase-admin

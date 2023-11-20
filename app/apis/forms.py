@@ -105,7 +105,6 @@ class BasicCourseInfoForm(FlaskForm):
     email = StringField(
         'Email', 
         validators=[
-            InputRequired(), 
             Email()
         ]
     )
@@ -152,7 +151,7 @@ class BasicCourseInfoForm(FlaskForm):
         ]
     )
     submit = SubmitField(
-        'Continue'
+        'Sumit'
     )
 
 class CourseDetailsForm(FlaskForm):
