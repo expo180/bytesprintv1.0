@@ -37,16 +37,26 @@ def financial_aid():
 @login_required
 def create_course_step1():
     form = BasicCourseInfoForm()
+
     if request.method == 'POST':
-        # Get file data from the request
+
+    	# Get file data from the request
         thumbnail = request.files['thumbnail']
         video = request.files['video']
+
+        # Check if 'thumbnail' and 'video' keys exist in request.files
+        if 'thumbnail' not in request.files or 'video' not in request.files:
+            return jsonify({'error': 'Thumbnail and video are required.'}), 400
+
+        # Check if thumbnail and video files are empty
+        if thumbnail.filename == '' or video.filename == '':
+            return jsonify({'error': 'Thumbnail and video are empty.'}), 400
 
         # Upload thumbnail to storage
         thumbnail_filename = secure_filename(thumbnail.filename)
         thumbnail_blob = storage.bucket().blob(f"thumbnails/{thumbnail_filename}")
         thumbnail_blob.upload_from_file(thumbnail)
-        thumbnail_url = thumbnl_blob.public_url
+        thumbnail_url = thumbnail_blob.public_url
 
         # Upload video to storage
         video_filename = secure_filename(video.filename)

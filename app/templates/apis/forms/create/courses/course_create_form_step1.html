@@ -13,7 +13,7 @@
 		</small>
 		</div>
 		<div class="py-3"></div>
-		<form method="POST" action="{{ url_for('api.create_course_step1') }}" enctype="multipart/form-data">
+		<form method="POST" action="{{ url_for('api.create_course_step1') }}" enctype="multipart/form-data" id="CreateCourseStep1">
 		    {{ form.hidden_tag() }}
 		    <div class="form-group mb-4">
 		    	{{ form.author_name.label(class="form-control-label") }}<span class="text-danger">*</span>
@@ -212,8 +212,8 @@
 		    			<label class="form-control-label" for="NumberOfVideos">How many videos you know?</label>
 		    			<input type="number" class="form-control" placeholder="2" id="NumberOfVideos">
 		    		</div>
-		        	<div id="videoInputsContainer my-3"></div>
 		        </div>
+                <div id="videoInputsContainer"></div>
 		    </div>
 		    <div class="form-group mb-5">
 		    	<div class="mb-3">
