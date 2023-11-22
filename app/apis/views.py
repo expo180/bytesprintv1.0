@@ -65,6 +65,16 @@ def create_course_step1():
         video_url = video_blob.public_url
 
         # Save other form data to session
+        print(request.form['author_name'])
+        print(request.form['email'])
+        print(request.form['company_name'])
+        print(request.form['university_name'])
+        print(request.form['core_specialization'])
+        print(request.form['course_title'])
+        print(request.form['short_description'])
+        print(video_url)
+        print(thumbnail_url)
+
         session['basic_info'] = {
             'author_name': request.form['author_name'],
             'email': request.form['email'],

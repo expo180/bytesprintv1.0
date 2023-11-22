@@ -497,7 +497,7 @@ $(document).ready(function() {
     }
 
     function displaySelectedSkills() {
-         // Get the target div
+        // Get the target div
         var selectedSkillsDiv = $('.SelectedSkillsList');
 
         // Clear existing content
@@ -524,9 +524,8 @@ $(document).ready(function() {
     });
     // Button to clear selected skills
     $('#clearSkillsButton').click(function() {
-        // Clear the selected skills array
-        selectedSkills = [];
-
+      // Clear the selected skills array
+      selectedSkills = [];
         // Clear the style and display
         $('.related-skills').removeClass('selected-skill');
         displaySelectedSkills();

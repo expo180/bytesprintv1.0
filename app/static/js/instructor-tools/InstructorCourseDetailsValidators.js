@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    
     // Function to show error message and update field styles
     function showError(field, message, errorElement) {
         field.removeClass('is-valid').addClass('is-invalid');
@@ -13,7 +14,30 @@ $(document).ready(function() {
     // Function to enable/disable the Continue button based on validation
     function updateContinueButton() {
         var isValid = $('.form-control.is-invalid').length === 0;
-        $('#continueButton').toggleClass('disabled', !isValid);
+        var isQuestionsAnswered = areQuestionsAnswered();
+        $('#continueButton').prop('disabled', !isValid || !isQuestionsAnswered);
+    }
+
+    // Function to check if all questions are answered
+    function areQuestionsAnswered() {
+        var haveVideos = $('input[name="have_videos"]:checked').val();
+        var workingForCompany = $('input[name="working_for_company"]:checked').val();
+        var studentOrProfessor = $('input[name="student_or_professor"]:checked').val();
+        var scientificPaper = $('input[name="scientific_paper"]:checked').val();
+
+        return haveVideos !== undefined && workingForCompany !== undefined &&
+            studentOrProfessor !== undefined && scientificPaper !== undefined;
+    }
+
+
+    // Function to display a SweetAlert confirmation dialog
+    function showIncompleteFormAlert() {
+        Swal.fire({
+            title: 'Incomplete Form',
+            text: 'Please fill in all required fields before continuing.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
     }
 
     // Validate email format
@@ -100,8 +124,8 @@ $(document).ready(function() {
         updateContinueButton();
     });
 
-    // Video requirements
-     $('#video').on('change', function() {
+    // Validate video requirements
+    $('#video').on('change', function () {
         var videoField = $(this);
         var fileName = videoField.val();
         var allowedFormats = ['avi', 'mp4'];
@@ -123,11 +147,12 @@ $(document).ready(function() {
                 showError(videoField, 'Invalid video format. Please upload an AVI or MP4 file.', errorElement);
             }
         }
+
         updateContinueButton();
     });
 
-    // Thumbnail Requirements
-    $('#thumbnail').on('change', function() {
+    // Validate thumbnail requirements
+    $('#thumbnail').on('change', function () {
         var thumbnailField = $(this);
         var fileName = thumbnailField.val();
         var allowedFormats = ['jpeg', 'png', 'jpg'];
@@ -165,85 +190,102 @@ $(document).ready(function() {
         }
         updateContinueButton();
     });
-    // AJAX 
-    $('#continueButton').click(function() {
-        var CourseBasicData = new FormData();
 
-        // Function to check if a file is selected
-        function isFileSelected(fileInput) {
-            return fileInput[0].files.length > 0;
-        }
-
-        // Append form data
-        CourseBasicData.append('author_name', $("#author_name").val());
-        CourseBasicData.append('email', $("#email").val());
-        CourseBasicData.append('company_name', $("#company_name").val());
-        CourseBasicData.append('university_name', $("#university_name").val());
-        CourseBasicData.append('core_specialization', $("#core_specialization").val());
-        CourseBasicData.append('course_title', $("#course_title").val());
-        CourseBasicData.append('short_description', $("#short_description").val());
-
-        // Check if thumbnail is selected
-        if (isFileSelected($("#thumbnail"))) {
-            CourseBasicData.append('thumbnail', $("#thumbnail")[0].files[0]);
-        } else {
-            // Display an error message or handle the case where thumbnail is not selected
-            alert("Thumbnail is required!");
-            return; // Stop further processing
-        }
-
-        // Check if video is selected
-        if (isFileSelected($("#video"))) {
-            CourseBasicData.append('video', $("#video")[0].files[0]);
-        }
-
-        // Append paper data
-        var numberOfPapers = $('#NumberOfPapers').val();
-        for (var i = 0; i < numberOfPapers; i++) {
-            var paperTitleValue = $('input[name="paperTitle' + i + '"]').val();
-            var paperLinkValue = $('input[name="paperLink' + i + '"]').val();
-
-            // Check if values are not empty before appending
-            if (paperTitleValue !== "") {
-                CourseBasicData.append('paperTitle' + i, paperTitleValue);
-            }
-
-            if (paperLinkValue !== "") {
-                CourseBasicData.append('paperLink' + i, paperLinkValue);
-            }
-        }
-
-        // Append video data
-        var numberOfVideos = $('#NumberOfVideos').val();
-        for (var i = 0; i < numberOfVideos; i++) {
-            var videoTitleValue = $('input[name="videoTitle' + i + '"]').val();
-            var videoLinkValue = $('input[name="videoLink' + i + '"]').val();
-
-            // Check if values are not empty before appending
-            if (videoTitleValue !== "") {
-                CourseBasicData.append('videoTitle' + i, videoTitleValue);
-            }
-
-            if (videoLinkValue !== "") {
-                CourseBasicData.append('videoLink' + i, videoLinkValue);
-            }
-        }
-
-        // Make the AJAX request only if required files are selected
-        $.ajax({
-            url: '/api/v1/course/add/create_new/step1/',
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            data: CourseBasicData,
-            success: function(response) {
-                window.location.href = '/api/v1/create_course/step2/';
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
+    // Handle radio button changes for questions
+    $('input[name="have_videos"], input[name="working_for_company"], input[name="student_or_professor"], input[name="scientific_paper"]').on('change', function () {
+        updateContinueButton();
     });
 
+    // AJAX 
+    $('#continueButton').click(function() {
+        var isValid = $('.form-control.is-invalid').length === 0;
+        var isQuestionsAnswered = areQuestionsAnswered();
+        var isRequiredSectionsComplete =
+            $('#author_name').val().trim() !== '' &&
+            $('#course_title').val().trim() !== '' &&
+            $('#short_description').val().trim() !== '' &&
+            $('#core_specialization').val().trim() !== '';
 
+         if (!isValid || !isQuestionsAnswered) {
+            showIncompleteFormAlert();
+        } 
+        else{
+            var CourseBasicData = new FormData();
+            // Function to check if a file is selected
+            function isFileSelected(fileInput) {
+                return fileInput[0].files.length > 0;
+            }
+
+            // Append form data
+            CourseBasicData.append('author_name', $("#author_name").val());
+            CourseBasicData.append('email', $("#email").val());
+            CourseBasicData.append('company_name', $("#company_name").val());
+            CourseBasicData.append('university_name', $("#university_name").val());
+            CourseBasicData.append('core_specialization', $("#core_specialization").val());
+            CourseBasicData.append('course_title', $("#course_title").val());
+            CourseBasicData.append('short_description', $("#short_description").val());
+
+            // Check if thumbnail is selected
+            if (isFileSelected($("#thumbnail"))) {
+                CourseBasicData.append('thumbnail', $("#thumbnail")[0].files[0]);
+            } else {
+                // Display an error message or handle the case where thumbnail is not selected
+                alert("Thumbnail is required!");
+                return; // Stop further processing
+            }
+
+            // Check if video is selected
+            if (isFileSelected($("#video"))) {
+                CourseBasicData.append('video', $("#video")[0].files[0]);
+            }
+
+            // Append paper data
+            var numberOfPapers = $('#NumberOfPapers').val();
+            for (var i = 0; i < numberOfPapers; i++) {
+                var paperTitleValue = $('input[name="paperTitle' + i + '"]').val();
+                var paperLinkValue = $('input[name="paperLink' + i + '"]').val();
+
+                // Check if values are not empty before appending
+                if (paperTitleValue !== "") {
+                    CourseBasicData.append('paperTitle' + i, paperTitleValue);
+                }
+
+                if (paperLinkValue !== "") {
+                    CourseBasicData.append('paperLink' + i, paperLinkValue);
+                }
+            }
+
+            // Append video data
+            var numberOfVideos = $('#NumberOfVideos').val();
+            for (var i = 0; i < numberOfVideos; i++) {
+                var videoTitleValue = $('input[name="videoTitle' + i + '"]').val();
+                var videoLinkValue = $('input[name="videoLink' + i + '"]').val();
+
+                // Check if values are not empty before appending
+                if (videoTitleValue !== "") {
+                    CourseBasicData.append('videoTitle' + i, videoTitleValue);
+                }
+
+                if (videoLinkValue !== "") {
+                    CourseBasicData.append('videoLink' + i, videoLinkValue);
+                }
+            }
+
+            // Make the AJAX request only if required files are selected
+           $.ajax({
+                url: '/api/v1/course/add/create_new/step1/',
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: CourseBasicData,
+                success: function (response) {
+                    window.location.href = '/api/v1/create_course/step2/';
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });            
+        }
+    });
 });
+
