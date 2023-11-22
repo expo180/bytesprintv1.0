@@ -1,4 +1,17 @@
 $(document).ready(function() {
+
+    // Video && Thumbnail field clearer
+    $('.remove-file').on('click', function () {
+        var inputId = $(this).data('input-id');
+        var inputFile = $('#' + inputId);
+        var errorElement = $('#' + inputId + 'Error');
+
+        // Clear the file input
+        inputFile.val('');
+
+        // Clear any previous error message
+        errorElement.text('');
+    });
     
     // Function to show error message and update field styles
     function showError(field, message, errorElement) {
@@ -27,6 +40,17 @@ $(document).ready(function() {
 
         return haveVideos !== undefined && workingForCompany !== undefined &&
             studentOrProfessor !== undefined && scientificPaper !== undefined;
+    }
+
+
+    // Function to display a SweetAlert success dialog
+    function showSuccessAlert() {
+        Swal.fire({
+            title: 'Good Job!',
+            text: 'You have successfully completed the form. Click OK to continue.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
     }
 
 
@@ -198,6 +222,9 @@ $(document).ready(function() {
 
     // AJAX 
     $('#continueButton').click(function() {
+        $('#continueButton').prop('disabled', true);
+        $('#continueButton .spinner-border').show();
+        $('#arrow-next').hide();
         var isValid = $('.form-control.is-invalid').length === 0;
         var isQuestionsAnswered = areQuestionsAnswered();
         var isRequiredSectionsComplete =
@@ -206,7 +233,7 @@ $(document).ready(function() {
             $('#short_description').val().trim() !== '' &&
             $('#core_specialization').val().trim() !== '';
 
-         if (!isValid || !isQuestionsAnswered) {
+        if (!isValid || !isQuestionsAnswered) {
             showIncompleteFormAlert();
         } 
         else{
@@ -230,7 +257,7 @@ $(document).ready(function() {
                 CourseBasicData.append('thumbnail', $("#thumbnail")[0].files[0]);
             } else {
                 // Display an error message or handle the case where thumbnail is not selected
-                alert("Thumbnail is required!");
+                showIncompleteFormAlert();
                 return; // Stop further processing
             }
 
@@ -272,16 +299,27 @@ $(document).ready(function() {
             }
 
             // Make the AJAX request only if required files are selected
-           $.ajax({
+            $.ajax({
                 url: '/api/v1/course/add/create_new/step1/',
                 type: 'POST',
                 processData: false,
                 contentType: false,
                 data: CourseBasicData,
                 success: function (response) {
+                    $('#continueButton').prop('disabled', false);
+                    $('#continueButton .spinner-border').hide();
+                    showSuccessAlert();
                     window.location.href = '/api/v1/create_course/step2/';
                 },
                 error: function (error) {
+                    $('#continueButton').prop('disabled', false);
+                    $('#continueButton .spinner-border').hide();
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "Something went wrong!",
+                      footer: '<a href="#">Why do I have this issue?</a>'
+                    });
                     console.log(error);
                 }
             });            

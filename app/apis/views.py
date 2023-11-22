@@ -33,24 +33,26 @@ def enroll():
 def financial_aid():
     return render_template('finances/financial_aid_form.html', form=form)
 
+
 @api.route('/course/add/create_new/step1/', methods=['GET', 'POST'])
 @login_required
 def create_course_step1():
     form = BasicCourseInfoForm()
 
     if request.method == 'POST':
-
-    	# Get file data from the request
+        # Get file data from the request
         thumbnail = request.files['thumbnail']
-        video = request.files['video']
+        video = request.files.get('video')  # Use get() to handle the case where video is not provided
 
-        # Check if 'thumbnail' and 'video' keys exist in request.files
-        if 'thumbnail' not in request.files or 'video' not in request.files:
-            return jsonify({'error': 'Thumbnail and video are required.'}), 400
+        # Initialize video_url to None, it will be set if video is provided
+        video_url = None
 
-        # Check if thumbnail and video files are empty
-        if thumbnail.filename == '' or video.filename == '':
-            return jsonify({'error': 'Thumbnail and video are empty.'}), 400
+        if video:
+            # Upload video to storage
+            video_filename = secure_filename(video.filename)
+            video_blob = storage.bucket().blob(f"videos/{video_filename}")
+            video_blob.upload_from_file(video)
+            video_url = video_blob.public_url
 
         # Upload thumbnail to storage
         thumbnail_filename = secure_filename(thumbnail.filename)
@@ -58,23 +60,7 @@ def create_course_step1():
         thumbnail_blob.upload_from_file(thumbnail)
         thumbnail_url = thumbnail_blob.public_url
 
-        # Upload video to storage
-        video_filename = secure_filename(video.filename)
-        video_blob = storage.bucket().blob(f"videos/{video_filename}")
-        video_blob.upload_from_file(video)
-        video_url = video_blob.public_url
-
         # Save other form data to session
-        print(request.form['author_name'])
-        print(request.form['email'])
-        print(request.form['company_name'])
-        print(request.form['university_name'])
-        print(request.form['core_specialization'])
-        print(request.form['course_title'])
-        print(request.form['short_description'])
-        print(video_url)
-        print(thumbnail_url)
-
         session['basic_info'] = {
             'author_name': request.form['author_name'],
             'email': request.form['email'],
@@ -86,6 +72,7 @@ def create_course_step1():
             'video_url': video_url,
             'thumbnail_url': thumbnail_url
         }
+
 
         return redirect(url_for('api.create_course_step2'))
 

@@ -157,7 +157,7 @@ class BasicCourseInfoForm(FlaskForm):
         ]
     )
     thumbnail = FileField(
-        'Thumbnail (Max Size: 5MB)',
+        'Please upload a nice thumbnail for your course',
         validators = [
         InputRequired(),
         FileAllowed(

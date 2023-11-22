@@ -194,7 +194,7 @@
 				</div>
 				<div class="input-group">
 					{{ form.video(class="form-control", id="video") }}
-					<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+					<button class="btn btn-outline-secondary remove-file" type="button" id="inputGroupFileAddon04">
 						<i class="bi bi-trash"></i>
 		                Remove
 					</button>
@@ -216,7 +216,18 @@
                 <div id="videoInputsContainer"></div>
 		    </div>
 		    <div class="form-group mb-5">
-		    	<div class="mb-3">
+		    	<div class="my-3">
+		    		{{ form.thumbnail.label(class="form-control-label") }}<span class="text-danger">*</span>
+		    	</div>
+				<div class="input-group">
+					{{ form.thumbnail(class="form-control", id="thumbnail") }}
+					<button class="btn btn-outline-secondary remove-file" type="button" id="inputGroupFileAddon04">
+						<i class="bi bi-trash"></i>
+		                Remove
+					</button>
+					<div id="thumbnailError" class="invalid-feedback"></div>
+				</div>
+				<div class="my-3">
 				    <strong>Thumbnail requirements</strong>:<br>
 				    To enhance the visual appeal of your course, please follow these thumbnail requirements:
 				    <ul>
@@ -228,19 +239,12 @@
 				    <span class="get-Inpired"><strong>Note</strong></span><br>
 				    A <strong>well-crafted</strong> thumbnail contributes to the <strong>attractiveness</strong> of your course and helps learners <strong>identify</strong> and engage with the <strong>content</strong>.
 				</div>
-				<div class="input-group">
-					{{ form.thumbnail(class="form-control", id="thumbnail") }}
-					<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
-						<i class="bi bi-trash"></i>
-		                Remove
-					</button>
-					<div id="thumbnailError" class="invalid-feedback"></div>
-				</div>
 			</div>
 		    <div class="d-flex justify-content-end gap-2 me-3">
 		    	<button type="button" disabled="disabled" id="continueButton" class="btn btn-primary">
+		    		<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="display: none;"></span>
 		    		Continue
-		    		<i class="bi bi-arrow-right-circle"></i>
+		    		<i class="bi bi-arrow-right-circle" id="arrow-next"></i>
 		    	</button>
 			</div>
 		</form>
