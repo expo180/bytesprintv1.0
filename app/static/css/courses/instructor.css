@@ -13,3 +13,6 @@ label
 li > button{
 	border:none;
 }
+.form-check-label{
+	font-family:'Telegraf-Regular', sans-serif;
+}

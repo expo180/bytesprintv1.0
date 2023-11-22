@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, abort
+from flask import Blueprint, render_template, request, redirect, url_for, session, abort, jsonify
 from flask_login import login_required, current_user
 from . import api
 from ..decorators import admin_required, permission_required
@@ -33,37 +33,31 @@ def enroll():
 def financial_aid():
     return render_template('finances/financial_aid_form.html', form=form)
 
-@api.route('/courses/add/?/', methods=['GET', 'POST'])
-@login_required
-def instructor():
-    return render_template('apis/instructor.html')
 
-@api.route('/course/add/create_new/step1', methods=['GET', 'POST'])
+@api.route('/course/add/create_new/step1/', methods=['GET', 'POST'])
 @login_required
 def create_course_step1():
 	form = BasicCourseInfoForm()
-	if form.validate_on_submit():
-
-		# Handle video upload to Firebase Storage
+	if request.method == 'POST':
+		thumbnail = form.thumbnail.data
+		thumbnail_filename = secure_filename(thumbnail.filename)
+		thumbnail_blob = storage.bucket().blob(f"thumbnails/{thumbnail_filename}")
+		thumbnail_blob.upload_from_file(thumbnail)
+		thumbnail_url = thumbnail_blob.public_url
 		video = form.video.data
 		video_filename = secure_filename(video.filename)
 		video_blob = storage.bucket().blob(f"videos/{video_filename}")
 		video_blob.upload_from_file(video)
-
-
-		# Get the download URL for the uploaded video
 		video_url = video_blob.public_url
-		print(video_url)
-
 		session['basic_info']={
 			'author_name': form.author_name.data,
             'email': form.email.data,
             'company_name': form.company_name.data,
-            'job_title': form.job_title.data,
+            'core_specialization': form.core_specialization.data,
             'course_title': form.course_title.data,
             'short_description': form.short_description.data,
             'video_url': video_url,
-            'video_links': form.video_links.data
+            'thumbnail_url': thumbnail_url
 		}
 
 		return redirect(url_for('api.create_course_step2'))

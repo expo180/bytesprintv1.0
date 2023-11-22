@@ -1,17 +1,19 @@
 {% extends 'apis/forms/create/courses/create-course-base.html' %}
 {% block content %}
 	<div class="container mt-5">
-		<h2 class="display-1 text-primary">Basic Informations</h2>
-		<small class="text-body-secondary">
-		    Welcome, <strong>{{ current_user.first_name }}</strong> ! <br>We are thrilled to have you as part of our instructor community. If you're busy, don't worry. You can <strong>save</strong> your work by clicking the <strong>save button</strong>. Feel free to explore the platform, create engaging courses, and contribute to the world of tech education.
+		<h2 class="display-1 text-light py-2 px-4 bg-primary">Course Basic Informations <strong>.</strong></h2>
+		<div class="mt-5">
+			<small class="text-body-secondary">
+		    Welcome, <strong>{{ current_user.first_name }}</strong> ! We are thrilled to have you as part of our instructor community. If you're busy, don't worry. You can <strong>save</strong> your work by clicking the <strong>save button</strong>. Feel free to explore the platform, create engaging courses, and contribute to the world of tech education.
 		   <hr>
 		   <strong>
 				Fields marked with a red asterisk <span class="text-danger">(*)</span>
 				are mandatory fields. Therefore, you must complete them to proceed.
 			</strong>
 		</small>
+		</div>
 		<div class="py-3"></div>
-		<form method="POST" action="{{ url_for('api.create_course_step1') }}" enctype="multipart/form-data">
+		<form method="POST" action="{{ url_for('api.create_course_step1') }}" enctype="multipart/form-data" id="dynamicForm">
 		    {{ form.hidden_tag() }}
 		    <div class="form-group mb-4">
 		    	{{ form.author_name.label(class="form-control-label") }}<span class="text-danger">*</span>
@@ -56,15 +58,92 @@
 		    </div>
 
 		    <div class="form-group mb-4">
-		        {{ form.job_title.label(class="form-control-label") }}<span class="text-danger">*</span>
-		        {{ form.job_title(class="form-control", placeholder='Embedded Software Engineer') }}
-                <div id="jobTitleError" class="invalid-feedback"></div>
+		       	<label>Are you a student or a Professor/Researcher?<span class="text-danger">*</span></label>
+		        <div class="d-flex gap-2 mt-3">
+		        	<div class="form-check">
+					  	<input class="form-check-input" type="radio" name="student_or_professor" id="student_or_professor_yes" value="1" onclick="toggleUniversityNameField(true)">
+					  	<label class="form-check-label" for="student_or_professor_yes">
+					   		Yes
+					  	</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="student_or_professor" id="student_or_professor_no" value="0" checked onclick="toggleUniversityNameField(false)">
+					  	<label class="form-check-label" for="student_or_professor_no">
+					   		No
+					  	</label>
+					</div>
+		        </div>	
+		    </div>
+
+			<div class="form-group mb-4 SchoolFields" style="display: none;">
+                <div class="text-body-secondary mb-3">
+                    As you've entered <strong>Yes</strong> to the previous question, please give us the name of your <strong>Institution</strong>.
+                </div>
+                <div class="my-2">
+                	<small class="text-body-secondary">
+                		<strong class="get-Inpired">Note</strong><br>
+                		Please enter the full name of your institution.
+                	</small>
+                </div>
+		        {{ form.university_name.label(class="form-control-label") }}<span class="text-danger">*</span>
+		        {{ form.university_name(class="form-control", placeholder='Massachussets Institute of Technology') }}
+                <div id="SchoolNameError" class="invalid-feedback"></div>
+                <div class="form-group my-4">
+				    <label>Have you published any scientific paper or invention?<span class="text-danger">*</span></label>
+				    <div class="d-flex gap-2 mt-3">
+				       	<div class="form-check">
+							<input class="form-check-input" type="radio" name="scientific_paper" id="scientific_paper_yes" value="1" onclick="toggleScientificPaper(true)">
+							<label class="form-check-label" for="scientific_paper_yes">
+							   	Yes
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="scientific_paper" id="scientific_paper_no" value="0" checked onclick="toggleScientificPaper(false)">
+							<label class="form-check-label" for="scientific_paper_no">
+							   	No
+							</label>
+						</div>
+				    </div>
+				    <div class="my-3 ScientificPaperFields">
+				    	<div class="text-body-secondary mb-3">
+                    		We celebrate scientific researches and provide <strong>loans</strong>, <strong>prizes</strong>, <strong>scholarships</strong>, and <strong>investments</strong> to <strong>scientists</strong>, <strong>inventors</strong>, and <strong>entrepreneurs</strong> in various fields, including <strong>agriculture</strong>, <strong>neuroscience</strong>, and more. Your <strong>contributions</strong> are <strong>invaluable</strong>, and we encourage you to share your discoveries with us.
+						</div>
+		                <div class="my-2">
+		                	<small class="text-body-secondary">
+		                		<strong class="get-Inpired">Note</strong><br>
+		                		If you have any concerns about our <strong>intellectual property policy</strong>, please refer to our <a href="">Discoveries and Inventions Privacy Policy Guide</a>.
+    						</small>
+		                	</small>
+		                </div>
+		                <div class="form-group">
+		                	<label class="form-control-label">Number of Papers/Inventions published</label>
+		                	<input class="form-control" placeholder="1" type="number" id="NumberOfPapers">
+		                </div>
+
+		                <div id="paperInputsContainer"></div>
+				    </div>
+			    </div>
+		    </div>
+
+		    <div class="form-group mb-4">
+		        {{ form.core_specialization.label(class="form-control-label") }}<span class="text-danger">*</span>
+		        {{ form.core_specialization(class="form-control", placeholder='Embedded Software Engineer') }}
+                <div id="CoreSpecializationError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
 		        {{ form.course_title.label(class="form-control-label") }}<span class="text-danger">*</span> 
 		        {{ form.course_title(class="form-control", placeholder="Power of data in the decision making process") }}
                 <div id="courseTitleError" class="invalid-feedback"></div>
+                <div class="mt-3">
+		          	<small>
+			           	<i class="bi bi-smile"></i> 
+			            <span class="get-Inpired"><strong>Note</strong></span><br>
+			            <span class="fs-italic">
+			            	Add <strong class="text-primary">vol.01</strong> or <strong class="text-primary">vol.02</strong> in case it is the <strong>next part</strong> of an <strong>existing course</strong>. 
+			            </span>
+		            </small>
+		        </div>
 		    </div>
 
 		    <div class="form-group mb-4">
@@ -74,9 +153,9 @@
                 <div class="mt-3">
 		          	<small>
 			           	<i class="bi bi-smile"></i> 
-			            <span class="get-Inpired fs-italic">Note</span><br>
+			            <span class="get-Inpired"><strong>Note</strong></span><br>
 			            <span class="fs-italic">
-			            	Give a nice and short description that will make people engaged in your course.
+			            	Give a <strong>nice</strong> and <strong>short description</strong> that will make people <strong>engaged</strong> in your <strong>course</strong>.
 			            </span>
 		            </small>
 		        </div>
@@ -100,32 +179,70 @@
 		        </div>	
 		    </div>
 
-		    <div class="input-group mb-5" id="videosField" style="display: none;">
-		    	<small class="mb-5">
-		    		<strong>Video Size Requirements</strong>:<br>
-					bytesprint, as the best tech platform, ensures an immersive learning experience through high-quality videos. To provide the best viewing experience for our users, we recommend video resolutions of <strong>720p</strong> or <strong>higher</strong>. <strong>Optimal bitrates (between 2,500 and 4,000 kbps for 720p)</strong> and <strong>efficient compression</strong> techniques balance <strong>video quality</strong> and streaming performance. This approach guarantees smooth playback across devices and varying internet speeds, offering an unparalleled tech education experience.
-		    	</small>
-		    	{{ form.video(class="form-control", id="video") }}
-				<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
-				  	<i class="bi bi-trash"></i>
-                    Remove
-				</button>
-                <div id="videoError" class="invalid-feedback"></div>
+		    <div class="form-group mb-5" id="videosField" style="display: none;">
+		    	<div class="mb-3">
+				    <strong>Video requirements</strong>:<br>
+				    To ensure optimal video playback and learning experience, please adhere to the following video guidelines:
+				    <ul>
+				        <li>Video formats: <strong class="text-primary">MP4</strong> and <strong class="text-primary">AVI</strong></li>
+				        <li>Resolution: <strong class="text-primary">720p</strong> or higher</li>
+				        <li>Bitrate: <strong class="text-primary">Between 2,500 and 4,000 kbps for 720p</strong></li>
+				        <li>Codec: <strong class="text-primary">H.264</strong></li>
+				        <li>File size: <strong class="text-primary">No more than 500 MB</strong></li>
+				    </ul>
+				    <span class="get-Inpired"><strong>Note</strong></span><br>
+				    These specifications ensure <strong>compatibility</strong>, <strong>quality</strong>, and efficient <strong>streaming</strong> across various <strong>devices</strong> and <strong>internet speeds</strong>.
+				</div>
+				<div class="input-group">
+					{{ form.video(class="form-control", id="video") }}
+					<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+						<i class="bi bi-trash"></i>
+		                Remove
+					</button>
+					<div id="videoError" class="invalid-feedback"></div>
+				</div>
 			</div>
 
-		    <div class="form-group mb-4" id="videoLinksField">
+		    <div class="form-group mb-4">
 		       	<small class="text-body-secondary">
-		        	As you've entered <strong>No</strong> to the previous question, please provide any free to use video's link you know on the internet that talks about the same subject.
+		        	As you've entered <strong>No</strong> to the previous question, please provide any <strong>free to use video's link</strong> you know on the internet talking about the <strong>same subject</strong>.
 		        </small>
 		        <br>
 		    	<div class="mt-3">
-		        	{{ form.video_links.label(class="form-control-label") }}<span class="text-danger">*</span>
-		         	{{ form.video_links(class="form-control") }}
-                    <div id="videoLinksError" class="invalid-feedback"></div>
+		    		<div class="form-group">
+		    			<label class="form-control-label" for="NumberOfVideos">How many videos you know?</label>
+		    			<input type="number" class="form-control" placeholder="2" id="NumberOfVideos">
+		    		</div>
+		        	<div id="videoInputsContainer"></div>
 		        </div>
 		    </div>
+		    <div class="form-group mb-5">
+		    	<div class="mb-3">
+				    <strong>Thumbnail requirements</strong>:<br>
+				    To enhance the visual appeal of your course, please follow these thumbnail requirements:
+				    <ul>
+				        <li>Image format: <strong class="text-primary">JPEG</strong>, <strong class="text-primary">PNG</strong>, <strong class="text-primary">JPG</strong></li>
+				        <li>Resolution: <strong class="text-primary">1280x720 pixels</strong> or higher</li>
+				        <li>Aspect ratio: <strong class="text-primary">16:9</strong></li>
+				        <li>File size: <strong class="text-primary">5 MB</strong> or less</li>
+				    </ul>
+				    <span class="get-Inpired"><strong>Note</strong></span><br>
+				    A <strong>well-crafted</strong> thumbnail contributes to the <strong>attractiveness</strong> of your course and helps learners <strong>identify</strong> and engage with the <strong>content</strong>.
+				</div>
+				<div class="input-group">
+					{{ form.thumbnail(class="form-control", id="thumbnail") }}
+					<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+						<i class="bi bi-trash"></i>
+		                Remove
+					</button>
+					<div id="thumbnailError" class="invalid-feedback"></div>
+				</div>
+			</div>
 		    <div class="d-flex justify-content-end gap-2 me-3">
-                {{ form.submit(id="continueButton", class="btn btn-primary") }}
+		    	<button type="submit" id="continueButton" class="btn btn-primary">
+		    		Continue
+		    		<i class="bi bi-arrow-right-circle"></i>
+		    	</button>
 			</div>
 		</form>
 	</div>

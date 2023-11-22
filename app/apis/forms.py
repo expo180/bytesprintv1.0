@@ -114,8 +114,14 @@ class BasicCourseInfoForm(FlaskForm):
             Optional()
         ]
     )
-    job_title = StringField(
-        'Job Title', 
+    university_name = company_name = StringField(
+        'Institution Name', 
+        validators=[
+            Optional()
+        ]
+    )
+    core_specialization = StringField(
+        'Core Specialization Field', 
         validators=[
             InputRequired()
         ]
@@ -150,8 +156,18 @@ class BasicCourseInfoForm(FlaskForm):
             Optional()
         ]
     )
-    submit = SubmitField(
-        'Sumit'
+    thumbnail = FileField(
+        'Thumbnail (Max Size: 5MB)',
+        validators = [
+        InputRequired(),
+        FileAllowed(
+            ['jpeg', 'png', 'jpg'],
+            'Only jpeg, png, jpg formats are allowed.'
+        )
+
+
+        ]
+
     )
 
 class CourseDetailsForm(FlaskForm):

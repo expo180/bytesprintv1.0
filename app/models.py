@@ -353,13 +353,55 @@ class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
     author_name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255))
     company_name = db.Column(db.String(155))
-    job_title = db.Column(db.String(255))
+    university_name = db.Column(db.String(155))
+    core_specialization = db.Column(db.String(100))
     course_title = db.Column(db.String(255), nullable=False)
     short_description = db.Column(db.String(265), nullable=False)
     video_url = db.Column(db.String(255), nullable=False)
-    video_links = db.Column(db.Text())
+    video_links = db.relationship('CourseVideoLinks', secondary='course_video_links', backref='courses')
+    skills = db.relationship('CourseSkillsList', secondary='course_skills_list', backref='courses') 
+    instructor_works = db.relationship('InstructorContributions', secondary='instructor_contributions_list', backref='courses')
+
+class InstructorContributions(db.Model):
+    __tablename__ = 'instructor_contributions'
+    id = db.Column(db.Integer, primary_key=True)
+    scientific_paper_title = db.Column(db.String(255))
+    scientific_paper_link = db.Column(db.String(255))
+
+
+class CourseVideoLinks(db.Model):
+    __tablename__ = 'video_links'
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String(255))
+    mask_text = db.Column(db.String(255))
+
+class CourseSkillsList(db.Model):
+    __tablename__ = 'course_skills'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+
+# Defines the relationship between instructor contributions and courses
+instructor_contributions_list = db.Table(
+    'instructor_contributions_list',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('instructor_contributions_id', db.Integer, db.ForeignKey('instructor_contributions.id'))
+)
+
+# Defines the relationship between courses and skills
+course_skills_list = db.Table(
+    'course_skills_list',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('skill_id', db.Integer, db.ForeignKey('course_skills.id'), primary_key=True)
+)
+
+# Defines the relationship between courses and video links.
+course_video_links = db.Table(
+    'course_video_links',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('link_id', db.Integer, db.ForeignKey('video_links.id'), primary_key=True)
+)
 
 # Defines the enrollments table for the many-to-many relationship between users and courses
 enrollments = db.Table('enrollments',

@@ -46,23 +46,20 @@ $(document).ready(function() {
         }
         updateContinueButton();
     });
-
-    // Other validations for job title, course title, description, and video size...
-
-    // Validate job title length
-    $('#job_title').on('input', function() {
+    // Validate core specialization length
+    $('#core_specialization').on('input', function() {
         var jobTitleField = $(this);
         var jobTitle = jobTitleField.val();
-        var errorElement = $('#jobTitleError');
+        var errorElement = $('#CoreSpecializationError');
         if(jobTitle.length == 0){
-            showError(jobTitleField, 'Job title must not be empty', errorElement);
+            showError(jobTitleField, 'Core Specialization must not be empty', errorElement);
         }
         else if (jobTitle.length <= 100) {
             showSuccess(jobTitleField);
             errorElement.text('');
         }
         else {
-            showError(jobTitleField, 'Job title must not exceed 100 characters', errorElement);
+            showError(jobTitleField, 'Core SpecializationError must not exceed 100 characters', errorElement);
         }
         updateContinueButton();
     });
@@ -104,8 +101,7 @@ $(document).ready(function() {
     });
 
     // Video requirements
-
-    $('#video').on('change', function() {
+     $('#video').on('change', function() {
         var videoField = $(this);
         var fileName = videoField.val();
         var allowedFormats = ['avi', 'mp4'];
@@ -113,7 +109,7 @@ $(document).ready(function() {
         var errorElement = $('#videoError');
 
         // Check video size and format
-        if ((this.files.length === 0 || this.files[0].size <= maxSizeInBytes) &&
+        if ((this.files.length === 0 && this.files[0].size <= maxSizeInBytes) &&
             (!fileName || allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) !== -1)) {
             showSuccess(videoField);
             errorElement.text('');
@@ -127,12 +123,35 @@ $(document).ready(function() {
                 showError(videoField, 'Invalid video format. Please upload an AVI or MP4 file.', errorElement);
             }
         }
-
         updateContinueButton();
     });
 
+    // Thumbnail Requirements
+    $('#thumbnail').on('change', function() {
+        var thumbnailField = $(this);
+        var fileName = thumbnailField.val();
+        var allowedFormats = ['jpeg', 'png', 'jpg'];
+        var maxSizeInBytes = 5 * 1024 * 1024; // 5 MB
+        var errorElement = $('#thumbnailError');
 
+        // Check thumbnail size and format
+        if ((this.files.length === 0 || this.files[0].size <= maxSizeInBytes) &&
+            (!fileName || allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) !== -1)) {
+            showSuccess(thumbnailField);
+            errorElement.text('');
+        } else {
+            // Check for size error
+            if (this.files.length !== 0 && this.files[0].size > maxSizeInBytes) {
+                showError(thumbnailField, 'Thumbnail size must not exceed 5 MB', errorElement);
+            }
+            // Check for format error
+            else if (fileName && allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) === -1) {
+                showError(thumbnailField, 'Invalid thumbnail format. Please upload a JPEG, PNG, or JPG file.', errorElement);
+            }
+        }
 
+        updateContinueButton();
+    });
     // Validate company name
     $('#company_name').on('input', function() {
         var companyNameField = $(this);
@@ -147,17 +166,35 @@ $(document).ready(function() {
         updateContinueButton();
     });
 
-    // Validate video links
-    $('#video_links').on('input', function() {
-        var videoLinksField = $(this);
-        var videoLinks = videoLinksField.val();
-        var errorElement = $('#videoLinksError');
-        if (videoLinks === '') {
-            showError(videoLinksField, 'Empty video links are not allowed', errorElement);
-        } else {
-            showSuccess(videoLinksField);
-            errorElement.text('');
-        }
-        updateContinueButton();
+    // validate all the forms then submit using AJAX
+    $('#continueButton').click(function() {
+        // Collect and send data to the server using AJAX
+        var formData = $('#dynamicForm').serialize();
+
+        $.ajax({
+                url: '/course/add/create_new/step1/',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                author_name: 'John Doe',
+                email: 'john.doe@example.com',
+                thumbnail: {
+                    filename: 'thumbnail.jpg',
+                    data: 'base64encodedstring'
+                },
+                video: {
+                    filename: 'video.mp4',
+                    data: 'base64encodedstring'
+                }
+            }),
+            success: function(response) {
+                console.log(response);
+                // Handle success (e.g., redirect to the next step)
+            },
+            error: function(error) {
+                console.error(error);
+                // Handle error
+            }
+        });
     });
 });
