@@ -33,35 +33,45 @@ def enroll():
 def financial_aid():
     return render_template('finances/financial_aid_form.html', form=form)
 
-
 @api.route('/course/add/create_new/step1/', methods=['GET', 'POST'])
 @login_required
 def create_course_step1():
-	form = BasicCourseInfoForm()
-	if request.method == 'POST':
-		thumbnail = form.thumbnail.data
-		thumbnail_filename = secure_filename(thumbnail.filename)
-		thumbnail_blob = storage.bucket().blob(f"thumbnails/{thumbnail_filename}")
-		thumbnail_blob.upload_from_file(thumbnail)
-		thumbnail_url = thumbnail_blob.public_url
-		video = form.video.data
-		video_filename = secure_filename(video.filename)
-		video_blob = storage.bucket().blob(f"videos/{video_filename}")
-		video_blob.upload_from_file(video)
-		video_url = video_blob.public_url
-		session['basic_info']={
-			'author_name': form.author_name.data,
-            'email': form.email.data,
-            'company_name': form.company_name.data,
-            'core_specialization': form.core_specialization.data,
-            'course_title': form.course_title.data,
-            'short_description': form.short_description.data,
+    form = BasicCourseInfoForm()
+    if request.method == 'POST':
+        # Get file data from the request
+        thumbnail = request.files['thumbnail']
+        video = request.files['video']
+
+        # Upload thumbnail to storage
+        thumbnail_filename = secure_filename(thumbnail.filename)
+        thumbnail_blob = storage.bucket().blob(f"thumbnails/{thumbnail_filename}")
+        thumbnail_blob.upload_from_file(thumbnail)
+        thumbnail_url = thumbnl_blob.public_url
+
+        # Upload video to storage
+        video_filename = secure_filename(video.filename)
+        video_blob = storage.bucket().blob(f"videos/{video_filename}")
+        video_blob.upload_from_file(video)
+        video_url = video_blob.public_url
+
+        # Save other form data to session
+        session['basic_info'] = {
+            'author_name': request.form['author_name'],
+            'email': request.form['email'],
+            'company_name': request.form['company_name'],
+            'university_name': request.form['university_name'],
+            'core_specialization': request.form['core_specialization'],
+            'course_title': request.form['course_title'],
+            'short_description': request.form['short_description'],
             'video_url': video_url,
             'thumbnail_url': thumbnail_url
-		}
+        }
 
-		return redirect(url_for('api.create_course_step2'))
-	return render_template('apis/forms/create/courses/course_create_form_step1.html', form=form)
+        return redirect(url_for('api.create_course_step2'))
+
+    return render_template('apis/forms/create/courses/course_create_form_step1.html', form=form)
+
+
 
 @api.route('/create_course/step2/', methods=['GET', 'POST'])
 @login_required

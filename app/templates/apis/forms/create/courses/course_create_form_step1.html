@@ -13,17 +13,17 @@
 		</small>
 		</div>
 		<div class="py-3"></div>
-		<form method="POST" action="{{ url_for('api.create_course_step1') }}" enctype="multipart/form-data" id="dynamicForm">
+		<form method="POST" action="{{ url_for('api.create_course_step1') }}" enctype="multipart/form-data">
 		    {{ form.hidden_tag() }}
 		    <div class="form-group mb-4">
 		    	{{ form.author_name.label(class="form-control-label") }}<span class="text-danger">*</span>
-		            {{ form.author_name(class="form-control", placeholder='Clark Eddy') }}
+		            {{ form.author_name(class="form-control", placeholder='Clark Eddy', id="author_name") }}
                 <div id="authorNameError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
 		        {{ form.email.label(class="form-control-label") }}
-		        {{ form.email(class="form-control", placeholder='example@gmail.com') }}
+		        {{ form.email(class="form-control", placeholder='example@gmail.com', id="email") }}
 		        <div class="text-body-secondary my-2">
 		    		The email you provide here is only for contact purpose, students or some companies can contact you if they need some information.
 		    	</div>
@@ -53,7 +53,7 @@
                     As you've entered <strong>Yes</strong> to the previous question, please give us the name of the company you are working for.
                 </div>
 		        {{ form.company_name.label(class="form-control-label") }}<span class="text-danger">*</span>
-		        {{ form.company_name(class="form-control", placeholder='Tesla Motors') }}
+		        {{ form.company_name(class="form-control", placeholder='Tesla Motors', id="company_name") }}
                 <div id="companyNameError" class="invalid-feedback"></div>
 		    </div>
 
@@ -86,7 +86,7 @@
                 	</small>
                 </div>
 		        {{ form.university_name.label(class="form-control-label") }}<span class="text-danger">*</span>
-		        {{ form.university_name(class="form-control", placeholder='Massachussets Institute of Technology') }}
+		        {{ form.university_name(class="form-control", placeholder='Massachussets Institute of Technology', id="university_name") }}
                 <div id="SchoolNameError" class="invalid-feedback"></div>
                 <div class="form-group my-4">
 				    <label>Have you published any scientific paper or invention?<span class="text-danger">*</span></label>
@@ -119,7 +119,6 @@
 		                	<label class="form-control-label">Number of Papers/Inventions published</label>
 		                	<input class="form-control" placeholder="1" type="number" id="NumberOfPapers">
 		                </div>
-
 		                <div id="paperInputsContainer"></div>
 				    </div>
 			    </div>
@@ -127,13 +126,13 @@
 
 		    <div class="form-group mb-4">
 		        {{ form.core_specialization.label(class="form-control-label") }}<span class="text-danger">*</span>
-		        {{ form.core_specialization(class="form-control", placeholder='Embedded Software Engineer') }}
+		        {{ form.core_specialization(class="form-control", placeholder='Embedded Software Engineer', id='core_specialization') }}
                 <div id="CoreSpecializationError" class="invalid-feedback"></div>
 		    </div>
 
 		    <div class="form-group mb-4">
 		        {{ form.course_title.label(class="form-control-label") }}<span class="text-danger">*</span> 
-		        {{ form.course_title(class="form-control", placeholder="Power of data in the decision making process") }}
+		        {{ form.course_title(class="form-control", placeholder="Power of data in the decision making process", id='course_title') }}
                 <div id="courseTitleError" class="invalid-feedback"></div>
                 <div class="mt-3">
 		          	<small>
@@ -148,7 +147,7 @@
 
 		    <div class="form-group mb-4">
 		        {{ form.short_description.label(class="form-control-label") }}<span class="text-danger">*</span>
-		        {{ form.short_description(class="form-control", placeholder='Explore the world of cryptocurrency development. In this course you will Learn to create and manage your own cryptocurrencies and blockchain applications using the best technologies') }}
+		        {{ form.short_description(class="form-control", placeholder='Explore the world of cryptocurrency development. In this course you will Learn to create and manage your own cryptocurrencies and blockchain applications using the best technologies', id='short_description') }}
 		       	<div id="descriptionError" class="invalid-feedback"></div>
                 <div class="mt-3">
 		          	<small>
@@ -203,7 +202,7 @@
 				</div>
 			</div>
 
-		    <div class="form-group mb-4">
+		    <div class="form-group mb-4" id="VideoTextLinks">
 		       	<small class="text-body-secondary">
 		        	As you've entered <strong>No</strong> to the previous question, please provide any <strong>free to use video's link</strong> you know on the internet talking about the <strong>same subject</strong>.
 		        </small>
@@ -213,7 +212,7 @@
 		    			<label class="form-control-label" for="NumberOfVideos">How many videos you know?</label>
 		    			<input type="number" class="form-control" placeholder="2" id="NumberOfVideos">
 		    		</div>
-		        	<div id="videoInputsContainer"></div>
+		        	<div id="videoInputsContainer my-3"></div>
 		        </div>
 		    </div>
 		    <div class="form-group mb-5">
@@ -239,7 +238,7 @@
 				</div>
 			</div>
 		    <div class="d-flex justify-content-end gap-2 me-3">
-		    	<button type="submit" id="continueButton" class="btn btn-primary">
+		    	<button type="button" id="continueButton" class="btn btn-primary">
 		    		Continue
 		    		<i class="bi bi-arrow-right-circle"></i>
 		    	</button>

@@ -61,10 +61,13 @@
     }
     function toggleHaveVideosField(hasVideos) {
     var videosField = document.getElementById('videosField');
+    var videoTextLinks = document.getElementById('VideoTextLinks');
 	    if (hasVideos) {
 	        videosField.style.display = 'block';
+	        videoTextLinks.style.display = 'none';
 	    } else {
 	        videosField.style.display = 'none';
+	        videoTextLinks.style.display = 'block';
 	    }
 	}
 	</script>

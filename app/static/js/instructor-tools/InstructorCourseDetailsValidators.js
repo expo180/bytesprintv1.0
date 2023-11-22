@@ -165,36 +165,62 @@ $(document).ready(function() {
         }
         updateContinueButton();
     });
-
-    // validate all the forms then submit using AJAX
+    // AJAX 
     $('#continueButton').click(function() {
-        // Collect and send data to the server using AJAX
-        var formData = $('#dynamicForm').serialize();
+    var CourseBasicData = new FormData();
+    console.log($("#author_name").val())
+    console.log($("#email").val())
+    console.log($("#company_name").val())
+    console.log($("#university_name").val())
+    console.log($("#core_specialization").val())
+    console.log($("#course_title").val())
+    console.log($("#video")[0].files[0])
+    console.log($("#thumbnail")[0].files[0])
 
-        $.ajax({
-                url: '/course/add/create_new/step1/',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                author_name: 'John Doe',
-                email: 'john.doe@example.com',
-                thumbnail: {
-                    filename: 'thumbnail.jpg',
-                    data: 'base64encodedstring'
-                },
-                video: {
-                    filename: 'video.mp4',
-                    data: 'base64encodedstring'
-                }
-            }),
-            success: function(response) {
-                console.log(response);
-                // Handle success (e.g., redirect to the next step)
-            },
-            error: function(error) {
-                console.error(error);
-                // Handle error
-            }
-        });
+
+    // Append form data
+    CourseBasicData.append('author_name', $("#author_name").val());
+    CourseBasicData.append('email', $("#email").val());
+    CourseBasicData.append('company_name', $("#company_name").val());
+    CourseBasicData.append('university_name', $("#university_name").val());
+    CourseBasicData.append('core_specialization', $("#core_specialization").val());
+    CourseBasicData.append('course_title', $("#course_title").val());
+    CourseBasicData.append('short_description', $("#short_description").val());
+
+    // Append thumbnail and video files
+    CourseBasicData.append('thumbnail', $("#thumbnail")[0].files[0]);
+    CourseBasicData.append('video', $("#video")[0].files[0]);
+
+    // Append paper data
+    var numberOfPapers = $('#NumberOfPapers').val();
+    for (var i = 0; i < numberOfPapers; i++) {
+        CourseBasicData.append('paperTitle' + i, $('input[name="paperTitle' + i + '"]').val());
+        CourseBasicData.append('paperLink' + i, $('input[name="paperLink' + i + '"]').val());
+    }
+
+    // Append video data
+    var numberOfVideos = $('#NumberOfVideos').val();
+    for (var i = 0; i < numberOfVideos; i++) {
+        CourseBasicData.append('videoTitle' + i, $('input[name="videoTitle' + i + '"]').val());
+        CourseBasicData.append('videoLink' + i, $('input[name="videoLink' + i + '"]').val());
+    }
+
+
+    $.ajax({
+        url: '/course/add/create_new/step1/',
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data: CourseBasicData,
+        success: function(response) {
+            console.log(response);
+            // Handle success (e.g., redirect to the next step)
+        },
+        error: function(error) {
+            console.error(error);
+            // Handle error
+        }
     });
+});
+
 });
