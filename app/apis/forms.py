@@ -114,7 +114,7 @@ class BasicCourseInfoForm(FlaskForm):
             Optional()
         ]
     )
-    university_name = company_name = StringField(
+    university_name = StringField(
         'Institution Name', 
         validators=[
             Optional()

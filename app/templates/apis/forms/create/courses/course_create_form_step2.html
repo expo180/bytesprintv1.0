@@ -1,28 +1,21 @@
 {% extends 'apis/forms/create/courses/create-course-base.html' %}
 {% block content %}
 <div class="container mt-5">
-  <h2 class="display-1 text-light py-2 px-4 bg-primary">Course Sections Design <strong>.</strong></h2>
+  <h2 class="display-1 text-primary">Course Sections Design</h2>
   <div class="mt-5">
     <small class="text-body-secondary">
-    We believe in a <strong>revolutionary approach</strong> to education that transcends the <strong>traditional classroom model</strong>. Our courses are not structured around conventional subject matter like HTML, CSS, or JavaScript; instead, we <strong>immerse</strong> our students in <strong>real-world</strong> projects that serve as the <strong>backbone</strong> of their learning experience. Picture this: our instructors guide students through the creation of a <strong>management web application</strong> for a <strong>school</strong>, tackling <strong>challenges</strong> related to outdated <strong>average calculators</strong> and <strong>pitfalls</strong> in handling <strong>complex data</strong>. We don't start with the <strong>technology</strong>; we start with the <strong>problem</strong>. By introducing students to the inherent <strong>issues</strong> and <strong>inefficiencies</strong> in <strong>existing systems</strong>, we empower them to <strong>envision solutions</strong>. Only then do we delve into the world of <strong>web development or app</strong>, presenting a <strong>fully-fledged</strong>, <strong>feature-rich</strong> application that addresses the <strong>complexities</strong> of <strong>educational management</strong>. This unique philosophy ensures that our students not only master the <strong>technical skills</strong> required but, more importantly, develop a keen understanding of the problems they aim to solve. Our instructors play a pivotal role in guiding students to <strong>identify</strong>, <strong>comprehend</strong>, and <strong>ultimately overcome challenges</strong>, fostering a mindset that goes beyond <strong>coding</strong> to create impactful solutions in the <strong>real world</strong>. Explore these <a href="">course templates</a> to get inspired.
-    <br>
-    <hr>
-    <strong>
-      Fields marked with a red asterisk <span class="text-danger">(*)</span>
-      are mandatory fields. Therefore, you must complete them to proceed.
-    </strong>
-  </small>
+      We believe in a <strong>revolutionary approach</strong> to education that transcends the <strong>traditional classroom model</strong>. Our courses are not structured around conventional subject matter like HTML, CSS, or JavaScript; instead, we <strong>immerse</strong> our students in <strong>real-world</strong> projects that serve as the <strong>backbone</strong> of their learning experience. Picture this: our instructors guide students through the creation of a <strong>management web application</strong> for a <strong>school</strong>, tackling <strong>challenges</strong> related to outdated <strong>average calculators</strong> and <strong>pitfalls</strong> in handling <strong>complex data</strong>. We don't start with the <strong>technology</strong>; we start with the <strong>problem</strong>. By introducing students to the inherent <strong>issues</strong> and <strong>inefficiencies</strong> in <strong>existing systems</strong>, we empower them to <strong>envision solutions</strong>. Only then do we delve into the world of <strong>web development or app</strong>, presenting a <strong>fully-fledged</strong>, <strong>feature-rich</strong> application that addresses the <strong>complexities</strong> of <strong>educational management</strong>. This unique philosophy ensures that our students not only master the <strong>technical skills</strong> required but, more importantly, develop a keen understanding of the problems they aim to solve. Our instructors play a pivotal role in guiding students to <strong>identify</strong>, <strong>comprehend</strong>, and <strong>ultimately overcome challenges</strong>, fostering a mindset that goes beyond <strong>coding</strong> to create impactful solutions in the <strong>real world</strong>. Explore these <a href="{{ url_for('api.course_templates') }}">course templates</a> to <strong>get inspired</strong>.
+      <br>
+      <hr>
+      <strong>
+        Fields marked with a red asterisk <span class="text-danger">(*)</span>
+        are mandatory fields. Therefore, you must complete them to proceed.
+      </strong>
+    </small>
   </div>
   <div class="py-3"></div>
   <form method="post" action="/" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    <div class="form-group">
-      <label for="instructorStory" class="form-label">Share Your Story:</label>
-      <textarea id="instructorStory" class="form-control" readonly>
-        Once upon a time, in the world of technology and education, there was an instructor with a unique perspective. This instructor believed in...
-        (Add more prompts or instructions for the instructor to share their story)
-      </textarea>
-    </div>
     <div class="form-group mr-2">
       {{ form.tech_field.label(class="mr-2 form-label") }}<span class="text-danger">*</span>
       {{ form.tech_field(class="mr-2 form-select", id="techField") }}
@@ -47,12 +40,12 @@
         <label class="form-check-label" for="codeSnippets">Code Snippets</label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="FileArchitecture" id="fileArchitecture">
-        <label class="form-check-label" for="fileArchitecture">File Architecture</label>
+        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="Image" id="Image">
+        <label class="form-check-label" for="Image">Images</label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="contentTypes[]" value="ElectronicCircuit" id="electronicCircuit">
-        <label class="form-check-label" for="electronicCircuit">Electronic Circuit</label>
+        <label class="form-check-label" for="electronicCircuit">Electronic Circuit Designs</label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="contentTypes[]" value="Complex3D" id="Complex3D">
@@ -82,7 +75,4 @@
     </div>
   </form>
 </div>
-<script src="{{ url_for('static', filename='js/instructor-tools/Heading&ContentFieldLoader.js') }}"></script>
-<script src="{{ url_for('static', filename='js/instructor-tools/CourserelatedSkillLoader.js') }}"></script>
-<script src="{{ url_for('static', filename='js/instructor-tools/WritingFunctions.js') }}"></script>
 {% endblock %}

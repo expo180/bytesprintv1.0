@@ -489,45 +489,74 @@ $(document).ready(function() {
 
         if (skills.length > 0) {
             $.each(skills, function(index, skill) {
-                relatedSkillsList.append('<li class="list-inline-item"><button type="button" class="badge related-skills selected-skill text-primary-emphasis bg-primary-subtle rounded-pill">' + skill + '</button></li>');
+              relatedSkillsList.append('<li class="list-inline-item mb-3"><span class="badge related-skills selected-skill text-primary border border-primary  rounded-pill">' + skill + '</span></li>');
             });
         } else {
-            relatedSkillsList.append('<li class="list-inline-item text-danger">No related skills found.</li>');
+            relatedSkillsList.append('<li class="list-inline-item text-body-secondary">No related skills found.</li>');
         }
     }
 
     function displaySelectedSkills() {
         // Get the target div
         var selectedSkillsDiv = $('.SelectedSkillsList');
-
         // Clear existing content
         selectedSkillsDiv.empty();
-
         // Display the selected skills inside the div
         $.each(selectedSkills, function(index, skill) {
-            selectedSkillsDiv.append('<li class="list-inline-item"><span class="badge bg-primary">' + skill + '</li></span>');
+          selectedSkillsDiv.append('<li class="list-inline-item"><span class="badge bg-primary">' + skill + '<span class="remove-skill" data-skill="' + skill + '"> &#x2716;</span></span></li>');
+        });
+        //click event to the remove-skill span
+        $('.remove-skill').click(function() {
+          var skillToRemove = $(this).data('skill');
+          // Remove the skill from the selectedSkills array
+          selectedSkills = selectedSkills.filter(skill => skill !== skillToRemove);
+          // Remove the corresponding badge from the display
+          $(this).parent().remove();
+          // Update the style of the related-skills button
+          $('.related-skills:contains(' + skillToRemove + ')').removeClass('selected-skill');
         });
     }
-    // Button to save skills to the database
+    // Button to save skills to the session
     $('#saveSkillsButton').click(function() {
-        $.ajax({
-            url: '/save_skills',
-            type: 'POST',
-            data: { skills: selectedSkills },
-            success: function(response) {
-                console.log('Skills saved successfully');
-            },
-            error: function(error) {
-                console.log('Error saving skills:', error);
-            }
-        });
-    });
+      $.ajax({
+        url: 'http://127.0.0.1:5000/api/v1/save_skills',
+        type: 'POST',
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify({ skills: selectedSkills }),
+        success: function(response) {
+        if (response.success) {
+          // Show success message using SweetAlert
+          Swal.fire({
+            icon: 'success',
+            title: 'Skills Saved!',
+            text: response.message,
+          });
+        } else {
+            // Show error message using SweetAlert
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+            });
+          }
+        },
+        error: function(error) {
+          // Show error message using SweetAlert
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Failed to save skills. Please try again.',
+          });
+        }
+      });
+  });
+
     // Button to clear selected skills
     $('#clearSkillsButton').click(function() {
       // Clear the selected skills array
       selectedSkills = [];
-        // Clear the style and display
-        $('.related-skills').removeClass('selected-skill');
-        displaySelectedSkills();
+      // Clear the style and display
+      $('.related-skills').removeClass('selected-skill');
+      displaySelectedSkills();
     });
 });

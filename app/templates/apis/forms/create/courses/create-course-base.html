@@ -38,16 +38,18 @@
 <body>
 	{% include 'headers/header-index.html' %}
 	<div class="py-4"></div>
-	<div class="pattern"></div>
+	<div class="pattern shadow-lg"></div>
 	<div class="py-3"></div>
 	{% block content %}{% endblock %}
 	<div class="py-3"></div>
 	{% include 'footers/footer-instructor.html' %}
 	<div class="py-5"></div>
+	<div class="pattern shadow-lg"></div>
 	{% include 'footers/footer.html' %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseDetailsValidators.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/instructor-tools/InstructorValidators&TogglesCoursesBasicInfos.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseValidators.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseToggles.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/instructor-tools/CourserelatedSkillLoader.js') }}"></script>
     <script type="text/javascript">
     function toggleCompanyNameField(isWorkingForCompany) {
         var companyFields = document.querySelector('.companyFields');

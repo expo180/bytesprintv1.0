@@ -42,9 +42,8 @@ def create_course_step1():
     if request.method == 'POST':
         # Get file data from the request
         thumbnail = request.files['thumbnail']
-        video = request.files.get('video')  # Use get() to handle the case where video is not provided
+        video = request.files.get('video')
 
-        # Initialize video_url to None, it will be set if video is provided
         video_url = None
 
         if video:
@@ -53,6 +52,7 @@ def create_course_step1():
             video_blob = storage.bucket().blob(f"videos/{video_filename}")
             video_blob.upload_from_file(video)
             video_url = video_blob.public_url
+
 
         # Upload thumbnail to storage
         thumbnail_filename = secure_filename(thumbnail.filename)
@@ -91,6 +91,18 @@ def create_course_step2():
         return redirect(url_for('create_course_final'))
     return render_template('apis/forms/create/courses/course_create_form_step2.html', form=form)
 
+
+# Route to save the skills asynchronously  
+@api.route('/save_skills', methods=['GET', 'POST'])
+@login_required
+def save_skills():
+    try:
+        selected_skills = request.json.get('skills', [])
+        session['selected_skills'] = selected_skills
+        return jsonify({'success': True, 'message': 'Skills saved successfully'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error saving skills: {str(e)}'})
+
 @api.route('/create_course/final', methods=['GET', 'POST'])
 @login_required
 def create_course_final():
@@ -116,4 +128,10 @@ def create_course_final():
 @login_required
 def curriculum_create_form():
     return render_template('apis/forms/create/curriculum/curriculum_create_form.html')
+
+
+@api.route("/intructors/courses/templates/how_design/?")
+@login_required
+def course_templates():
+    return render_template('apis/forms/create/courses/FAQs/course_templates.html')
 

@@ -1,17 +1,176 @@
 $(document).ready(function() {
 
+
+    // Function to check if a file is selected
+    function isFileSelected(fileInput) {
+        return fileInput[0].files.length > 0;
+    }
+
+    // Validate the number of videos when the user selects "No" to the question
+    $('input[name="have_videos"]').on('change', function() {
+        var haveVideosValue = $(this).val();
+        var numberOfVideosField = $('#NumberOfVideos');
+        var numberOfVideos = numberOfVideosField.val();
+        var errorElement = $('#NumberOfVideosError');
+
+        // If the user selects "No"
+        if (haveVideosValue === '0') {
+            if (numberOfVideos === '') {
+                // Show an error message if the field is empty
+                showError(numberOfVideosField, 'Please enter the number of videos you know', errorElement);
+            } else if (parseInt(numberOfVideos) <= 0) {
+                // Show an error message if the entered value is not valid (less than or equal to 0)
+                showError(numberOfVideosField, 'Please enter a valid number', errorElement);
+            } else {
+                // Hide the error message if the input is valid
+                showSuccess(numberOfVideosField);
+                errorElement.text('');
+            }
+        } else {
+            // If the user selects "Yes", clear any previous error message
+            numberOfVideosField.removeClass('is-invalid').removeClass('is-valid');
+            errorElement.text('');
+        }
+
+        updateContinueButton();
+    });
+
+    // Validate the number of videos input
+    $('#NumberOfVideos').on('input', function() {
+        var haveVideosValue = $('input[name="have_videos"]:checked').val();
+        var numberOfVideosField = $(this);
+        var numberOfVideos = numberOfVideosField.val();
+        var errorElement = $('#NumberOfVideosError');
+
+        // If the user selects "No"
+        if (haveVideosValue === '0') {
+            if (numberOfVideos === '') {
+                // Show an error message if the field is empty
+                showError(numberOfVideosField, 'Please enter the number of videos you know', errorElement);
+            } else if (parseInt(numberOfVideos) <= 0) {
+                // Show an error message if the entered value is not valid (less than or equal to 0)
+                showError(numberOfVideosField, 'Please enter a valid number', errorElement);
+            } else {
+                // Hide the error message if the input is valid
+                showSuccess(numberOfVideosField);
+                errorElement.text('');
+            }
+        }
+
+        updateContinueButton();
+    });
+
+    // Function to check if at least one video link and title are provided
+    function validateVideoInputs() {
+        var videoInputsContainer = $('#videoInputsContainer');
+        var videoTitleInputs = videoInputsContainer.find('input[name^="videoTitle"]');
+        var videoLinkInputs = videoInputsContainer.find('input[name^="videoLink"]');
+        var errorElement = $('#videoInputsError');
+
+        var atLeastOneValid = false;
+
+        // Check if at least one video link and title are provided
+        videoTitleInputs.each(function(index) {
+            var titleInput = $(this);
+            var linkInput = videoLinkInputs.eq(index);
+
+            if (titleInput.val().trim() !== '' && linkInput.val().trim() !== '') {
+                atLeastOneValid = true;
+                return false; // Exit the loop early if at least one valid pair is found
+            }
+        });
+
+        // Show error message if no valid pair is found
+        if (!atLeastOneValid) {
+            showError(videoInputsContainer, 'Please provide at least one video title and link', errorElement);
+        } else {
+            showSuccess(videoInputsContainer);
+            errorElement.text('');
+        }
+
+        return atLeastOneValid;
+    }
+
+    // Event listener for video title and link inputs
+    $('#videoInputsContainer').on('input', 'input[name^="videoTitle"], input[name^="videoLink"]', function() {
+        validateVideoInputs();
+        updateContinueButton();
+    });
+
+    // Function to check if the user has provided a video when selecting "Yes"
+    function validateUserHasVideo() {
+        var haveVideosValue = $('input[name="have_videos"]:checked').val();
+        var videoInputField = $('#video');
+        var errorElement = $('#videoError');
+
+        // If the user selects "Yes"
+        if (haveVideosValue === '1') {
+            if (videoInputField.val().trim() === '') {
+                // Show an error message if the video input is empty
+                showError(videoInputField, 'Please provide a video for this course', errorElement);
+            } else {
+                // Hide the error message if the input is valid
+                showSuccess(videoInputField);
+                errorElement.text('');
+            }
+        } else {
+            // If the user selects "No", clear any previous error message
+            videoInputField.removeClass('is-invalid').removeClass('is-valid');
+            errorElement.text('');
+        }
+
+        updateContinueButton();
+    }
+
+    // Event listener for the "have_videos" radio buttons
+    $('input[name="have_videos"]').on('change', function() {
+        validateUserHasVideo();
+    });
+
+
+
     // Video && Thumbnail field clearer
     $('.remove-file').on('click', function () {
+        console.log("hello world")
         var inputId = $(this).data('input-id');
         var inputFile = $('#' + inputId);
         var errorElement = $('#' + inputId + 'Error');
-
         // Clear the file input
         inputFile.val('');
-
         // Clear any previous error message
         errorElement.text('');
     });
+
+    // Function to check if at least one video is provided
+    function isAtLeastOneVideoProvided() {
+        var numberOfVideos = $('#NumberOfVideos').val();
+        for (var i = 0; i < numberOfVideos; i++) {
+            var videoLinkValue = $('input[name="videoLink' + i + '"]').val();
+            if (videoLinkValue.trim() !== "") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Function to validate video link fields
+    function validateVideoLinks() {
+        var haveVideos = $('input[name="have_videos"]:checked').val();
+        if (haveVideos === '0' && !isAtLeastOneVideoProvided()) {
+            // User answered "No" to having videos but did not provide any video links
+            $(".spinner-border").hide();
+            $("#arrow-next").show();
+            Swal.fire({
+                title: 'Incomplete Form',
+                text: 'Please provide at least one video link.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return false;
+        }
+
+        return true;
+    }
     
     // Function to show error message and update field styles
     function showError(field, message, errorElement) {
@@ -24,13 +183,6 @@ $(document).ready(function() {
         field.removeClass('is-invalid').addClass('is-valid');
     }
 
-    // Function to enable/disable the Continue button based on validation
-    function updateContinueButton() {
-        var isValid = $('.form-control.is-invalid').length === 0;
-        var isQuestionsAnswered = areQuestionsAnswered();
-        $('#continueButton').prop('disabled', !isValid || !isQuestionsAnswered);
-    }
-
     // Function to check if all questions are answered
     function areQuestionsAnswered() {
         var haveVideos = $('input[name="have_videos"]:checked').val();
@@ -41,13 +193,19 @@ $(document).ready(function() {
         return haveVideos !== undefined && workingForCompany !== undefined &&
             studentOrProfessor !== undefined && scientificPaper !== undefined;
     }
+    // Function to enable/disable the Continue button based on validation
+    function updateContinueButton() {
+        var isValid = $('.form-control.is-invalid').length === 0;
+        var isQuestionsAnswered = areQuestionsAnswered();
+        $('#continueButton').prop('disabled', !isValid || !isQuestionsAnswered);
+    }
 
 
     // Function to display a SweetAlert success dialog
     function showSuccessAlert() {
         Swal.fire({
             title: 'Good Job!',
-            text: 'You have successfully completed the form. Click OK to continue.',
+            text: 'You have successfully completed the first step. Click OK to continue.',
             icon: 'success',
             confirmButtonText: 'OK'
         });
@@ -63,6 +221,8 @@ $(document).ready(function() {
             confirmButtonText: 'OK'
         });
     }
+
+
 
     // Validate email format
     $('#email').on('input', function() {
@@ -156,24 +316,29 @@ $(document).ready(function() {
         var maxSizeInBytes = 500 * 1024 * 1024; // 500 MB
         var errorElement = $('#videoError');
 
-        // Check video size and format
-        if ((this.files.length === 0 || this.files[0].size <= maxSizeInBytes) &&
-            (!fileName || allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) !== -1)) {
+        var haveVideos = $('input[name="have_videos"]:checked').val();
+
+        // Check video size and format only if the user has selected "Yes" to having their own video
+        if (haveVideos === '1') {
+            if (!isFileSelected(videoField)) {
+                showError(videoField, 'Please select a video file', errorElement);
+            } else if (isFileSelected(videoField) && this.files[0].size > maxSizeInBytes) {
+                showError(videoField, 'Video size must not exceed 500 MB', errorElement);
+            } else if (fileName && allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) === -1) {
+                showError(videoField, 'Invalid video format. Please upload an AVI or MP4 file.', errorElement);
+            } else {
+                showSuccess(videoField);
+                errorElement.text('');
+            }
+        } else {
+            // If the user has videos, return true without further validation
             showSuccess(videoField);
             errorElement.text('');
-        } else {
-            // Check for size error
-            if (this.files.length !== 0 && this.files[0].size > maxSizeInBytes) {
-                showError(videoField, 'Video size must not exceed 500 MB', errorElement);
-            }
-            // Check for format error
-            else if (fileName && allowedFormats.indexOf(fileName.split('.').pop().toLowerCase()) === -1) {
-                showError(videoField, 'Invalid video format. Please upload an AVI or MP4 file.', errorElement);
-            }
         }
 
         updateContinueButton();
     });
+
 
     // Validate thumbnail requirements
     $('#thumbnail').on('change', function () {
@@ -222,6 +387,35 @@ $(document).ready(function() {
 
     // AJAX 
     $('#continueButton').click(function() {
+        var isWorkingForCompany = $('input[name="working_for_company"]:checked').val() === '1';
+        var companyName = $('#company_name').val().trim();
+
+        if (isWorkingForCompany && companyName === '') {
+           Swal.fire({
+                title: 'Incomplete Form',
+                text: 'Please provide the name of your company ',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+
+
+        var isStudentOrProfessor = $('input[name="student_or_professor"]:checked').val() === '1';
+        var universityName = $('#university_name').val().trim();
+
+        if (isStudentOrProfessor && universityName === '') {
+            Swal.fire({
+                title: 'Incomplete Form',
+                text: 'Please provide the name of your institution.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+
         $('#continueButton').prop('disabled', true);
         $('#continueButton .spinner-border').show();
         $('#arrow-next').hide();
@@ -237,12 +431,9 @@ $(document).ready(function() {
             showIncompleteFormAlert();
         } 
         else{
-            var CourseBasicData = new FormData();
-            // Function to check if a file is selected
-            function isFileSelected(fileInput) {
-                return fileInput[0].files.length > 0;
-            }
 
+            var CourseBasicData = new FormData();
+        
             // Append form data
             CourseBasicData.append('author_name', $("#author_name").val());
             CourseBasicData.append('email', $("#email").val());
@@ -256,9 +447,20 @@ $(document).ready(function() {
             if (isFileSelected($("#thumbnail"))) {
                 CourseBasicData.append('thumbnail', $("#thumbnail")[0].files[0]);
             } else {
-                // Display an error message or handle the case where thumbnail is not selected
-                showIncompleteFormAlert();
+                // Display an error message case where thumbnail is not selected
+                $('#continueButton .spinner-border').hide();
+                $('#arrow-next').show();
+                Swal.fire({
+                    title: 'Incomplete Form',
+                    text: 'Please provide a thumbnail for your course.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
                 return; // Stop further processing
+            }
+
+            if (!validateVideoLinks()) {
+                return;
             }
 
             // Check if video is selected
@@ -308,8 +510,8 @@ $(document).ready(function() {
                 success: function (response) {
                     $('#continueButton').prop('disabled', false);
                     $('#continueButton .spinner-border').hide();
-                    showSuccessAlert();
                     window.location.href = '/api/v1/create_course/step2/';
+
                 },
                 error: function (error) {
                     $('#continueButton').prop('disabled', false);

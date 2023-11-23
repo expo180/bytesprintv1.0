@@ -10,8 +10,8 @@ label
 .related-skills{
 	font-size:1.5rem;
 }
-li > button{
-	border:none;
+li > span:hover{
+	cursor:pointer;
 }
 .form-check-label{
 	font-family:'Telegraf-Regular', sans-serif;

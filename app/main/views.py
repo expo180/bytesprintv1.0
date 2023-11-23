@@ -148,3 +148,5 @@ def for_admins_only():
 @permission_required(Permission.MODERATE)
 def for_moderators_only():
     return "Accès réservé aux moderateurs!"
+
+
