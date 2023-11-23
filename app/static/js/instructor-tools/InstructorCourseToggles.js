@@ -26,7 +26,13 @@ $(document).ready(function() {
                     '<textarea class="form-control" name="codeEditor' + i + '" id="codeEditor' + i + '"></textarea>' :
                     '') +
 
-                // Check if File Architecture checkbox is selected
+                // Check if Image checkbox is selected
+                ($('#Image').is(':checked') ?
+                    '<label class="form-label mt-2" for="Image' + i + '">Image ' + (i + 1) + '</label>' +
+                    '<input class="form-control" type="file" name="Image' + i + '" id="Image' + i + '">' :
+                    '') +
+
+                // Check if Image checkbox is selected
                 ($('#fileArchitecture').is(':checked') ?
                     '<label class="form-label mt-2" for="fileArchitecture' + i + '">File Architecture ' + (i + 1) + '</label>' +
                     '<input class="form-control" type="file" name="fileArchitecture' + i + '" id="fileArchitecture' + i + '">' :
@@ -43,11 +49,30 @@ $(document).ready(function() {
                     '<label class="form-label mt-2" for="complex3D' + i + '">Complex 3D ' + (i + 1) + '</label>' +
                     '<input class="form-control" type="file" name="complex3D' + i + '" id="complex3D' + i + '">' :
                     '') +
-
+                
                 '<label class="form-label mt-2" for="paragraph' + i + '">Paragraph ' + (i + 1) + '</label>' +
-                '<textarea class="form-control" name="paragraph' + i + '" id="paragraph' + i + '"></textarea>' +
+                '<div id="quillEditor' + i + '"></div>' + // Quill container
+
+                '<button class="btn btn-outline-secondary mt-2" id="copyText' + i + '">' +
+                '<i class="bi bi-clipboard"></i> Copy' +
+                '</button>' +
+
                 '</div>'
             );
+            var quill = new Quill('#quillEditor' + i, {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'bullet' }],
+                        ['link'],
+                        ['clean']
+                    ]
+                }
+            });
+            $('#copyText' + i).click(function() {
+                var quillText = quill.getText();
+            });
         }
     }
 
