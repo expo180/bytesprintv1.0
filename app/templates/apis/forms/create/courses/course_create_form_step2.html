@@ -21,7 +21,9 @@
       <p class="mb-3 text-body-secondary">
         What is the primary challenge you aim to teach your students to overcome? Whether it's a business dilemma, an optimization puzzle, or a connectivity issue, please visit <a href="{{ url_for('api.course_templates') }}">this page</a> for a clearer understanding of the problem in <strong>this particular context</strong>.
       </p>
-      <textarea class="form-control" required="required"></textarea>
+      <textarea class="form-control" id="main_problem" required="required" placeholder="'The Cheery Bistro', a beloved Elm Street restaurant, known for its delectable dishes, faces challenges in dinner order management. Owned by Mrs. Amelia Green, who personally handles customer relationships, the restaurant relies on phone orders, creating a bustling yet occasionally frustrating experience for customers. This popularity, while contributing to revenue, poses potential losses due to order difficulties. Mrs. Green seeks ways to enhance the ordering process, preserving personal connections while ensuring a delightful experience for valued customers."></textarea>
+      <small class="text-body-secondary">Min 600, Max 1000 characters</small>
+      <div class="text-danger" id="mainProblemError"></div>
     </div>
     <div class="form-group mb-4">
       <label class="form-control-label">Key Aspects<span class="text-danger">*</span></label>
@@ -29,7 +31,10 @@
         Now, provide a brief overview of the situation by outlining <strong>key aspects</strong>. This will help individuals <strong>grasp</strong> the <strong>essential elements</strong> of the problem, enabling them to devise <strong>solutions</strong> more <strong>effectively</strong>.
       </p>
       <label class="form-control-label">How many key aspects will you define?</label>
-      <input class="form-control" type="number" name="NumberOfKeyAspects" required="required" min="2" max="20">
+      <input class="form-control" type="number" id="NumberOfKeyAspects" name="NumberOfKeyAspects" required="required" min="2" max="20">
+      <small class="text-body-secondary">Min 2, Max 20</small>
+      <div class="text-danger" id="NumberOfKeyAspectsError"></div>
+      <div id="keyAspectsContainer" class="my-3"></div>
     </div>
     <div class="form-group mr-2">
       {{ form.tech_field.label(class="mr-2 form-label") }}<span class="text-danger">*</span>
@@ -40,7 +45,9 @@
       <p class="mb-3 text-body-secondary">
         Briefly outline the suitable solutions to address the <strong>challenges</strong> you previously listed, considering the <strong>specific tech field</strong> you've selected. This will provide a <strong>targeted</strong> approach to resolving the <strong>identified issues</strong>.
       </p>
-      <textarea class="form-control" required="required"></textarea>
+      <textarea class="form-control" id="strategy" required="required" placeholder="As web developers, we propose a holistic tech solution for 'The Cheery Bistro.' Our approach involves crafting an intuitive website and mobile app to facilitate seamless online orders and reservations. Implementing an automated communication system will keep customers informed, while a CRM system ensures personalized interactions based on preferences. To efficiently manage peak hours, we suggest integrating a digital queue system and robust tech support. Leveraging data analytics will provide actionable insights, contributing to informed decision-making. Our solutions are designed to elevate customer experience, optimize operations, and maintain the restaurant's unique charm in the digital landscape."></textarea>
+      <small class="text-body-secondary">Min 600, Max 1000 characters</small>
+      <div class="text-danger" id="strategyError"></div>
     </div>
     <div class="mt-4" id="relatedSkillsContainer">
       <strong>Now, choose relevant skills that you will employ to address the challenges presented by the earlier-described problem<span class="text-danger">*</span>.
@@ -56,14 +63,17 @@
       <button type="button" class="btn btn-light text-primary" id="clearSkillsButton"><i class="bi bi-trash"></i> Remove</button>
     </div>
     <div class="form-group my-4">
-      <label class="form-control-label mb-3">List your steps to solve this problem based on your course category<span class="text-danger">*</span></label>
+      <label class="form-control-label mb-3">Outline the <strong>steps</strong> you would take to solve this <strong>problem</strong> within the context of your selected course <strong>category</strong><span class="text-danger">*</span>.</label>
       <div class="form-group">
-        <label class="form-control-label">Number of steps involved in</label>
-        <input class="form-control" type="number" name="NumberOfSteps" required="required" max="10" min="2">
+        <label class="form-control-label">Enter the number of steps</label>
+        <input class="form-control" type="number" id="NumberOfSteps" name="NumberOfSteps" required="required" max="10" min="2">
+        <div class="text-danger" id="NumberOfStepsError"></div>
+        <small class="text-body-secondary">Min 2, Max 10</small>
+        <div id="stepsContainer" class="my-3"></div>
       </div>
     </div>
     <div class="form-group mb-4">
-      <label class="form-label">What kind of content will you be using for this course apart raw text and the video you've uploaded earlier?</label><span class="text-danger">*</span><br>
+      <label class="form-label">What types of <strong>content</strong>, beyond <strong>raw text</strong> and the previously <strong>uploaded video</strong>, will you <strong>incorporate</strong> into this <strong>course</strong>?</label><span class="text-danger">*</span><br>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="contentTypes[]" value="CodeSnippets" id="codeSnippets">
         <label class="form-check-label" for="codeSnippets">Code Snippets</label>
@@ -81,30 +91,32 @@
         <label class="form-check-label" for="electronicCircuit">Electronic Circuit Designs</label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="Complex3D" id="Complex3D">
-        <label class="form-check-label" for="Complex3D">Complex 3D</label>
+        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="" id="complex3D">
+        <label class="form-check-label" for="complex3D">Complex 3D</label>
       </div>
     </div>
     <div class="form-group mb-4">
       <label class="form-label" for="NumberOfHeadings">How Many Sections For this Course?</label><span class="text-danger">*</span>
-      <input class="form-control" type="number" name="NumberOfHeadings" placeholder="0" id="NumberOfHeadings">
+      <input class="form-control" type="number" name="NumberOfHeadings" placeholder="0" id="NumberOfHeadings" min="3" max="20">
+      <small class="text-body-secondary">Min 3, Max 20</small>
     </div>
     <div id="dynamicFieldsContainer">
     <!-- Dynamic input fields will be added here -->
     </div>
     <div class="d-flex justify-content-end gap-2 me-3">
-      <a href="" class="btn btn-secondary">
+      <button type="button" id="SaveToCloud" class="btn btn-secondary">
         <i class="bi bi-cloud-arrow-up-fill"></i>
         Save
-      </a>
+      </button>
       <a href="{{ url_for('api.create_course_step1') }}" class="btn btn-outline-primary">
         <i class="bi bi-arrow-left-circle"></i>
         Previous
       </a>
-      <a href="{{ url_for('api.create_course_final') }}" class="btn btn-primary">
+      <button type="button" disabled="disabled" id="continueButtonStep2" class="btn btn-primary">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="display: none;"></span>
         Continue
-        <i class="bi bi-arrow-right-circle"></i>
-      </a>
+        <i class="bi bi-arrow-right-circle" id="arrow-next"></i>
+      </button>
     </div>
   </form>
 </div>

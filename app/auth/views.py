@@ -128,6 +128,7 @@ def google_login():
 
 @auth.route('/google/login/authorized/')
 def google_login_authorized():
+    form = LoginForm()
     response = google.authorized_response()
     if response is None or response.get('access_token') is None:
         return 'Access denied: reason={} error={}'.format(
@@ -175,7 +176,7 @@ def google_signup_authorized():
     )
     db.session.add(user)
     db.session.commit()
-    flash('You have successfully logged into your account', 'success')
+    login_user(user)
     return redirect(url_for('main.home'))
 
 @auth.route('/facebook/sign_up/')

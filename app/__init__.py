@@ -18,6 +18,7 @@ moment = Moment()
 oauth = OAuth()
 rapi = CountriesAPI()
 
+
 def create_app(development=True):
     app = Flask(__name__)
     app.config.from_object(config['development'])

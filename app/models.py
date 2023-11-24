@@ -347,28 +347,54 @@ class AnonymousUser(AnonymousUserMixin):
 
 login_manager.anonymous_user = AnonymousUser
 
-
-
 class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
     author_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(255))
     company_name = db.Column(db.String(155))
+    problem = db.Column(db.String(1000), nullable=False)
+    strategy = db.Column(db.String(1000), nullable=False)
     university_name = db.Column(db.String(155))
     core_specialization = db.Column(db.String(100))
-    course_title = db.Column(db.String(255), nullable=False)
+    course_title = db.Column(db.String(100), nullable=False)
     short_description = db.Column(db.String(265), nullable=False)
     video_url = db.Column(db.String(255), nullable=False)
+    quizzes = db.relationship('Quiz', backref='course', lazy='dynamic')
+    projects = db.relationship('Project', backref='course', lazy='dynamic')
+    visual_3d_complex = db.relationship('Visual3DComplex', secondary='course_visual_3d_complex_association', backref='courses')
+    file_architecture = db.relationship('FileArchitecture', secondary='course_file_architecture_association', backref='courses')
+    electronic_circuit_designs = db.relationship('ElectronicCircuitDesigns', secondary='course_electronic_circuit_association', backref='courses')
+    headings = db.relationship('Heading', secondary='course_heading_association', backref='courses')
+    paragraphs = db.relationship('Paragraph', secondary='course_paragraph_association', backref='courses')
+    images = db.relationship('Images', secondary='course_images_association', backref='courses')
+    keys = db.relationship('KeyAspects', secondary='problem_key_aspects', backref='courses')
     video_links = db.relationship('CourseVideoLinks', secondary='course_video_links', backref='courses')
     skills = db.relationship('CourseSkillsList', secondary='course_skills_list', backref='courses') 
     instructor_works = db.relationship('InstructorContributions', secondary='instructor_contributions_list', backref='courses')
+    code_snippets = db.relationship('CodeSnippets', secondary='code_course_association', backref='courses')
+
+class CodeSnippets(db.Model):
+    __tablename__ = 'code_snippets'
+    id = db.Column(db.Integer, primary_key=True)
+    code_snippet = db.Column(db.Text())
+
+class Images(db.Model):
+    __tablename__ = 'images'
+    id = db.Column(db.Integer, primary_key=True)
+    image_url = db.Column(db.String(255))
+    image_caption = db.Column(db.String(255))
 
 class InstructorContributions(db.Model):
     __tablename__ = 'instructor_contributions'
     id = db.Column(db.Integer, primary_key=True)
     scientific_paper_title = db.Column(db.String(255))
     scientific_paper_link = db.Column(db.String(255))
+
+class KeyAspects(db.Model):
+    __tablename__ = 'key_aspects'
+    id = db.Column(db.Integer, primary_key=True)
+    aspect = db.Column(db.String(255), nullable=False)
 
 
 class CourseVideoLinks(db.Model):
@@ -381,6 +407,95 @@ class CourseSkillsList(db.Model):
     __tablename__ = 'course_skills'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+
+class Visual3DComplex(db.Model):
+    __tablename__ = 'visual_3d_complex'
+    id = db.Column(db.Integer, primary_key=True)
+    visual_url = db.Column(db.String(255))
+
+
+class FileArchitecture(db.Model):
+    __tablename__ = 'file_architecture'
+    id = db.Column(db.Integer, primary_key=True)
+    filesys = db.Column(db.Text())
+
+
+class ElectronicCircuitDesigns(db.Model):
+    __tablename__ = 'electronic_circuit_designs'
+    id = db.Column(db.Integer, primary_key=True)
+    design_url = db.Column(db.String(255))
+
+
+class Heading(db.Model):
+    __tablename__ = 'headings'
+    id = db.Column(db.Integer, primary_key=True)
+    heading = db.Column(db.String(100), nullable=False)
+
+
+class Paragraph(db.Model):
+    __tablename__ = 'paragraphs'
+    id = db.Column(db.Integer, primary_key=True)
+    paragraph = db.Column(db.Text(), nullable=False)
+
+class Quiz(db.Model):
+    __tablename__ = 'quizzes'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text(), nullable=False)
+    questions = db.relationship('Question', backref='quiz', lazy='dynamic')
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    questions = db.relationship('Question', backref='quiz', lazy='dynamic', cascade='all, delete-orphan')
+
+class Question(db.Model):
+    __tablename__ = 'questions'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text(), nullable=False)
+    options = db.relationship('Option', backref='question', lazy='dynamic')
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+
+class Option(db.Model):
+    __tablename__ = 'options'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text(), nullable=False)
+    is_correct = db.Column(db.Boolean, default=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
+
+class Project(db.Model):
+    __tablename__ = 'projects'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text(), nullable=False)
+    submissions = db.relationship('ProjectSubmission', backref='project', lazy='dynamic')
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+
+class ProjectSubmission(db.Model):
+    __tablename__ = 'project_submissions'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text(), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))    
+
+# Defines the relationship between code snippets and courses
+code_course_association = db.Table(
+    'code_course_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('code_snippet', db.Integer, db.ForeignKey('code_snippets'))
+
+)
+
+# Defines the relationship between images and courses
+course_images_association = db.Table(
+    'course_images_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('image_id', db.Integer, db.ForeignKey('images.id'))
+)
+
+# Defines the relationship between key_aspects  and courses
+problem_key_aspects = db.Table(
+    'problem_key_aspects',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('aspect_id', db.Integer, db.ForeignKey('key_aspects.id'))
+)
 
 # Defines the relationship between instructor contributions and courses
 instructor_contributions_list = db.Table(
@@ -403,82 +518,40 @@ course_video_links = db.Table(
     db.Column('link_id', db.Integer, db.ForeignKey('video_links.id'), primary_key=True)
 )
 
-# Defines the enrollments table for the many-to-many relationship between users and courses
+course_visual_3d_complex_association = db.Table(
+    'course_visual_3d_complex_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('visual_3d_complex_id', db.Integer, db.ForeignKey('visual_3d_complex.id'))
+)
+
+course_file_architecture_association = db.Table(
+    'course_file_architecture_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('file_architecture_id', db.Integer, db.ForeignKey('file_architecture.id'))
+)
+
+course_electronic_circuit_association = db.Table(
+    'course_electronic_circuit_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('electronic_circuit_designs_id', db.Integer, db.ForeignKey('electronic_circuit_designs.id'))
+)
+
+course_heading_association = db.Table(
+    'course_heading_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('heading_id', db.Integer, db.ForeignKey('headings.id'))
+)
+
+course_paragraph_association = db.Table(
+    'course_paragraph_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('paragraph_id', db.Integer, db.ForeignKey('paragraphs.id'))
+)
+        
 enrollments = db.Table('enrollments',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
     db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True)
 )
-
-class Curriculum(db.Model):
-    __tablename__ = 'curricula'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), index=True)
-    price = db.Column(db.Float(15, 9), index=True, default=2.0)
-    overview = db.Column(db.Text())
-    skill01 = db.Column(db.Text())
-    skill02 = db.Column(db.Text())
-    skill03 = db.Column(db.Text())
-    skill04 = db.Column(db.Text())
-    icon = db.Column(db.String(255))  # Add an icon field
-    links = db.relationship('Link', back_populates='curriculum')
-    # Establishing a many-to-many relationship with the Skill table
-    skills = db.relationship('Skill', secondary='curriculum_skills', back_populates='curricula')
-
-class Skill(db.Model):
-    __tablename__ = 'skills'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), index=True, unique=True)
-
-    # Establishing a many-to-many relationship with the Curriculum table
-    curricula = db.relationship('Curriculum', secondary='curriculum_skills', back_populates='skills')
-
-# Association table for the many-to-many relationship
-class CurriculumSkills(db.Model):
-    __tablename__ = 'curriculum_skills'
-    id = db.Column(db.Integer, primary_key=True)
-    curriculum_id = db.Column(db.Integer, db.ForeignKey('curricula.id'))
-    skill_id = db.Column(db.Integer, db.ForeignKey('skills.id'))
-
-class Link(db.Model):
-    __tablename__ = 'links'
-    id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(255), index=True)
-    mask_text = db.Column(db.String(50))  # Text to mask the link
-    link_type = db.Column(db.String(20))  # Type of link (GitHub, Guide, etc.)
-
-    # Establishing a many-to-one relationship with the Curriculum model
-    curriculum_id = db.Column(db.Integer, db.ForeignKey('curricula.id'))
-    curriculum = db.relationship('Curriculum', back_populates='links')
-
-
-
-
-        
-
-# Defines the products table for the shop
-class Products(db.Model):
-    __tablename__ = 'products'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text(), nullable=False)
-    description = db.Column(db.Text(), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    left = db.Column(db.Integer, nullable=False)
-    pictures = db.Column(db.String(255), nullable=False)
-
-
-# Defines the applications table for instructors and prospective employees
-class Applications(db.Model):
-    __tablename__ = 'applications'
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(64), index=True, nullable=False)
-    last_name = db.Column(db.String(64), index=True, nullable=False)
-    email = db.Column(db.String(64), index=True, nullable=False)
-    github = db.Column(db.Text())
-    essay_one = db.Column(db.Text(), nullable=False)
-    essay_two = db.Column(db.Text(), nullable=False)
-    essay_three = db.Column(db.Text(), nullable=False)
-    resume = db.Column(db.String(255), nullable=False)
-
 
 class Article(db.Model):
     __tablename__=  'articles'
@@ -488,22 +561,27 @@ class Article(db.Model):
     article = db.Column(db.Text(), nullable=False)
     pictures = db.Column(db.Text(), nullable=False)
     article_date_posted = db.Column(db.DateTime(), default=datetime.utcnow)
-    article_authors = db.Table(
-        'article_authors',
-        db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-        db.Column('article_id', db.Integer, db.ForeignKey('articles.id'), primary_key=True)
-    )
-    comment_authors = db.Table(
-        'comment_authors',
-        db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-        db.Column('comment_id', db.Integer, db.ForeignKey('comments.id'), primary_key=True)
-    )
+    
 
+article_authors = db.Table(
+    'article_authors',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('article_id', db.Integer, db.ForeignKey('articles.id'), primary_key=True)
+)
+
+
+comment_authors = db.Table(
+    'comment_authors',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('comment_id', db.Integer, db.ForeignKey('comments.id'), primary_key=True)
+)
 
 class Comments(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
     comment  = db.Column(db.Text())
     date = db.Column(db.DateTime(), default=datetime.utcnow)
+
+
 
 

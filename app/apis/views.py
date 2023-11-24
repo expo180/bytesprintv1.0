@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from flask_login import login_required, current_user
 from . import api
 from ..decorators import admin_required, permission_required
-from ..models import Permission
+from ..models import Permission, Course
 from .. import db
 import random
 from .forms import CheckoutForm, BasicCourseInfoForm, CourseDetailsForm
@@ -79,6 +79,44 @@ def create_course_step1():
     return render_template('apis/forms/create/courses/course_create_form_step1.html', form=form)
 
 
+@api.route('/save_to_database/', methods=['POST'])
+@login_required
+def save_to_database():
+    basic_info = session.get('basic_info', {})
+    
+    # Get additional course details from the request
+    additional_info = {
+        'problem': request.form.get('problem'),
+        'strategy': request.form.get('strategy'),
+        # Add more fields as needed
+    }
+
+    # Merge basic_info and additional_info
+    course_details = {**basic_info, **additional_info}
+
+    # Save course_details to the database
+    # Example:
+    # new_course = Course(
+    #     author_name=course_details['author_name'],
+    #     email=course_details['email'],
+    #     company_name=course_details['company_name'],
+    #     university_name=course_details['university_name'],
+    #     core_specialization=course_details['core_specialization'],
+    #     course_title=course_details['course_title'],
+    #     short_description=course_details['short_description'],
+    #     video_url=course_details['video_url'],
+    #     thumbnail_url=course_details['thumbnail_url'],
+    #     problem=course_details['problem'],
+    #     strategy=course_details['strategy'],
+    #     # Add more fields as needed
+    # )
+    # db.session.add(new_course)
+    # db.session.commit()
+
+    # Clear the session data after saving to the database
+    session.pop('basic_info', None)
+
+    return jsonify({'message': 'Data saved to the database successfully'})
 
 @api.route('/create_course/step2/', methods=['GET', 'POST'])
 @login_required
@@ -86,14 +124,13 @@ def create_course_step2():
     form = CourseDetailsForm()    
     if 	form.validate_on_submit():
         basic_info = session.get('basic_info', {})
-        
         session['basic_info'] = basic_info
         return redirect(url_for('create_course_final'))
     return render_template('apis/forms/create/courses/course_create_form_step2.html', form=form)
 
 
 # Route to save the skills asynchronously  
-@api.route('/save_skills', methods=['GET', 'POST'])
+@api.route('/save_skills', methods=['GET','POST'])
 @login_required
 def save_skills():
     try:

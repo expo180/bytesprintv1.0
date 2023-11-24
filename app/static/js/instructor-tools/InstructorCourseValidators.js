@@ -6,6 +6,77 @@ $(document).ready(function() {
         return fileInput[0].files.length > 0;
     }
 
+    $('#main_problem').on('input', function() {
+        var mainProblemField = $(this);
+        var mainProblem = mainProblemField.val();
+        var errorElement = $('#mainProblemError');
+
+        // Set the character limit
+        var minCharacters = 600;
+        var maxCharacters = 1000;
+
+        if (mainProblem.trim() === '') {
+            showError(mainProblemField, 'This field cannot be empty', errorElement);
+        } else if (mainProblem.length < minCharacters || mainProblem.length > maxCharacters) {
+            showError(mainProblemField, 'Please enter between ' + minCharacters + ' and ' + maxCharacters + ' characters', errorElement);
+        } else {
+            showSuccess(mainProblemField);
+            errorElement.text('');
+        }
+
+        updateContinueButton();
+    });
+
+    // Function to validate the "Key Aspects" input
+    $('#NumberOfKeyAspects').on('input', function() {
+        var numberOfKeyAspectsField = $(this);
+        var numberOfKeyAspects = numberOfKeyAspectsField.val();
+        var errorElement = $('#NumberOfKeyAspectsError');
+        if (numberOfKeyAspects.trim() === '' || parseInt(numberOfKeyAspects) < 2 || parseInt(numberOfKeyAspects) > 20) {
+            showError(numberOfKeyAspectsField, 'Please enter a valid number between 2 and 20', errorElement);
+        } else {
+            showSuccess(numberOfKeyAspectsField);
+            errorElement.text('');
+        }
+        updateContinueButton();
+    });
+
+    $('#NumberOfSteps').on('input', function() {
+        var numberOfStepsField = $(this);
+        var numberOfSteps = numberOfStepsField.val();
+        var errorElement = $('#NumberOfStepsError');
+
+        if (numberOfSteps.trim() === '' || parseInt(numberOfSteps) < 2 || parseInt(numberOfSteps) > 20) {
+            showError(numberOfStepsField, 'Please enter a valid number between 2 and 20', errorElement);
+        } else {
+            showSuccess(numberOfStepsField);
+            errorElement.text('');
+        }
+
+        updateContinueButton();
+    });
+
+    $('#strategy').on('input', function() {
+        var strategyField = $(this);
+        var strategy = strategyField.val();
+        var errorElement = $('#strategyError');
+
+        // Set the character limit
+        var minCharacters = 600;
+        var maxCharacters = 1000;
+
+        if (strategy.trim() === '') {
+            showError(strategyField, 'This field cannot be empty', errorElement);
+        } else if (strategy.length < minCharacters || strategy.length > maxCharacters) {
+            showError(strategyField, 'Please enter between ' + minCharacters + ' and ' + maxCharacters + ' characters', errorElement);
+        } else {
+            showSuccess(strategyField);
+            errorElement.text('');
+        }
+
+        updateContinueButton();
+    });
+
     // Validate the number of videos when the user selects "No" to the question
     $('input[name="have_videos"]').on('change', function() {
         var haveVideosValue = $(this).val();
@@ -193,13 +264,21 @@ $(document).ready(function() {
         return haveVideos !== undefined && workingForCompany !== undefined &&
             studentOrProfessor !== undefined && scientificPaper !== undefined;
     }
+
     // Function to enable/disable the Continue button based on validation
     function updateContinueButton() {
         var isValid = $('.form-control.is-invalid').length === 0;
         var isQuestionsAnswered = areQuestionsAnswered();
-        $('#continueButton').prop('disabled', !isValid || !isQuestionsAnswered);
+        $('#continueButtonStep1').prop('disabled', !isValid || !isQuestionsAnswered);
     }
-
+    // Function to enable/disable the Continue button based on validation for Step 2
+    function updateContinueButtonStep2() {
+        var isValid = $('.form-control.is-invalid').length === 0;
+        var isKeyAspectsValid = validateNumberOfKeyAspects();
+        var isMainProblemValid = validateMainProblem();
+        var isStrategyValid = validateStrategy();
+        $('#continueButtonStep2').prop('disabled', !isValid || !isKeyAspectsValid || !isMainProblemValid || !isStrategyValid);
+    }
 
     // Function to display a SweetAlert success dialog
     function showSuccessAlert() {

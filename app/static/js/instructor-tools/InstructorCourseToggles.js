@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $('#NumberOfHeadings').change(function() {
+$(document).ready(function () {
+    $('#NumberOfHeadings').change(function () {
         var numberOfHeadings = $(this).val();
         createDynamicFields(numberOfHeadings);
     });
@@ -15,50 +15,47 @@ $(document).ready(function() {
         numberOfHeadings = Math.min(numberOfHeadings, 20);
 
         for (var i = 0; i < numberOfHeadings; i++) {
+            var isCodeSnippetsChecked = $('#codeSnippets').is(':checked');
+            var isImageChecked = $('#Image').is(':checked');
+            var isFileArchitectureChecked = $('#fileArchitecture').is(':checked');
+            var isElectronicCircuitChecked = $('#electronicCircuit').is(':checked');
+            var isComplex3DChecked = $('#complex3D').is(':checked');
+
             dynamicFieldsContainer.append(
                 '<div class="form-group mb-4">' +
                 '<label class="form-label" for="heading' + i + '">Heading ' + (i + 1) + '</label>' +
                 '<input class="form-control" type="text" name="heading' + i + '" id="heading' + i + '">' +
 
-                // Check if Code Snippets checkbox is selected
-                ($('#codeSnippets').is(':checked') ?
+                (isCodeSnippetsChecked ?
                     '<label class="form-label mt-2" for="codeEditor' + i + '">Code Editor ' + (i + 1) + '</label>' +
-                    '<textarea class="form-control" name="codeEditor' + i + '" id="codeEditor' + i + '"></textarea>' :
+                    '<textarea class="form-control code-editor" name="codeEditor' + i + '" id="codeEditor' + i + '"></textarea>' :
                     '') +
 
-                // Check if Image checkbox is selected
-                ($('#Image').is(':checked') ?
+                (isImageChecked ?
                     '<label class="form-label mt-2" for="Image' + i + '">Image ' + (i + 1) + '</label>' +
                     '<input class="form-control" type="file" name="Image' + i + '" id="Image' + i + '">' :
                     '') +
 
-                // Check if Image checkbox is selected
-                ($('#fileArchitecture').is(':checked') ?
+                (isFileArchitectureChecked ?
                     '<label class="form-label mt-2" for="fileArchitecture' + i + '">File Architecture ' + (i + 1) + '</label>' +
                     '<input class="form-control" type="file" name="fileArchitecture' + i + '" id="fileArchitecture' + i + '">' :
                     '') +
 
-                // Check if Electronic Circuit checkbox is selected
-                ($('#electronicCircuit').is(':checked') ?
+                (isElectronicCircuitChecked ?
                     '<label class="form-label mt-2" for="electronicCircuit' + i + '">Electronic Circuit ' + (i + 1) + '</label>' +
                     '<input class="form-control" type="file" name="electronicCircuit' + i + '" id="electronicCircuit' + i + '">' :
                     '') +
 
-                // Check if Complex 3D checkbox is selected
-                ($('#complex3D').is(':checked') ?
+                (isComplex3DChecked ?
                     '<label class="form-label mt-2" for="complex3D' + i + '">Complex 3D ' + (i + 1) + '</label>' +
                     '<input class="form-control" type="file" name="complex3D' + i + '" id="complex3D' + i + '">' :
                     '') +
-                
+
                 '<label class="form-label mt-2" for="paragraph' + i + '">Paragraph ' + (i + 1) + '</label>' +
                 '<div id="quillEditor' + i + '"></div>' + // Quill container
-
-                '<button class="btn btn-outline-secondary mt-2" id="copyText' + i + '">' +
-                '<i class="bi bi-clipboard"></i> Copy' +
-                '</button>' +
-
                 '</div>'
             );
+
             var quill = new Quill('#quillEditor' + i, {
                 theme: 'snow',
                 modules: {
@@ -70,13 +67,91 @@ $(document).ready(function() {
                     ]
                 }
             });
-            $('#copyText' + i).click(function() {
-                var quillText = quill.getText();
-            });
+
+            var codeMirrorEditor = null;
+
+            if ($('#codeSnippets').is(':checked')) {
+                codeMirrorEditor = CodeMirror.fromTextArea(document.getElementById('codeEditor' + i), {
+                    lineNumbers: true,
+                    mode: 'javascript',
+                    theme: 'cobalt',
+                    matchBrackets: true,
+                    styleActiveLine: true,
+                    placeholder: 'Type your code here...',
+                    fontFamily: 'Source Code Pro'
+                });
+
+                // Add word count and file size counters
+                var wordCount = $('<div class="word-count" id="wordCount' + i + '">Word count: 0</div>').insertAfter(codeMirrorEditor.getWrapperElement());
+                var fileSize = $('<div class="file-size" id="fileSize' + i + '">File size: 0 B</div>').insertAfter(wordCount);
+
+                codeMirrorEditor.on('change', function (instance) {
+                    updateWordCount(instance, wordCount);
+                    updateFileSize(instance, fileSize);
+                });
+
+                function updateWordCount(editor, wordCountElement) {
+                    var text = editor.getValue();
+                    var words = text.split(/\s+/).filter(function (word) {
+                        return word !== '';
+                    });
+                    wordCountElement.text('Word count: ' + words.length);
+                }
+
+                function updateFileSize(editor, fileSizeElement) {
+                    var text = editor.getValue();
+                    var fileSizeBytes = text.length * 2; // Assuming 1 character = 2 bytes
+                    fileSizeElement.text('File size: ' + fileSizeBytes + ' B');
+                }
+            }
         }
     }
 
-    $('#NumberOfPapers').change(function() {
+    $('#NumberOfKeyAspects').change(function () {
+      var numberOfKeyAspects = $(this).val();
+      createKeyAspectsFields(numberOfKeyAspects);
+    });
+
+    function createKeyAspectsFields(numberOfKeyAspects) {
+      var keyAspectsContainer = $('#keyAspectsContainer');
+      keyAspectsContainer.empty();
+
+      for (var i = 0; i < numberOfKeyAspects; i++) {
+        keyAspectsContainer.append(
+          '<div class="form-group mb-4">' +
+          '<label class="form-label" for="keyAspect' + i + '">Key Aspect ' + (i + 1) + '</label>' +
+          '<input class="form-control" type="text" name="keyAspect' + i + '" id="keyAspect' + i + '">' +
+          '</div>'
+        );
+      }
+    }
+
+    // Toggle based on the initial value of NumberOfKeyAspects
+    createKeyAspectsFields($('#NumberOfKeyAspects').val());
+
+    $('#NumberOfSteps').change(function () {
+      var numberOfSteps = $(this).val();
+      createStepsFields(numberOfSteps);
+    });
+
+    function createStepsFields(numberOfSteps) {
+      var stepsContainer = $('#stepsContainer');
+      stepsContainer.empty();
+
+      for (var i = 0; i < numberOfSteps; i++) {
+        stepsContainer.append(
+          '<div class="form-group mb-4">' +
+          '<label class="form-label" for="step' + i + '">Step ' + (i + 1) + '</label>' +
+          '<input type="text" class="form-control" name="step' + i + '" id="step' + i + '"></input>' +
+          '</div>'
+        );
+      }
+    }
+
+    // Toggle based on the initial value of NumberOfSteps
+    createStepsFields($('#NumberOfSteps').val());
+
+    $('#NumberOfPapers').change(function () {
         var numberOfPapers = $(this).val();
         createPaperInputs(numberOfPapers);
     });
@@ -98,10 +173,12 @@ $(document).ready(function() {
             );
         }
     }
-    $('#NumberOfVideos').change(function() {
+
+    $('#NumberOfVideos').change(function () {
         var numberOfVideos = $(this).val();
         createVideoInputs(numberOfVideos);
     });
+
     function createVideoInputs(numVideos) {
         var videoInputsContainer = $('#videoInputsContainer');
         videoInputsContainer.empty();
