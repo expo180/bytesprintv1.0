@@ -6,6 +6,44 @@ $(document).ready(function() {
         return fileInput[0].files.length > 0;
     }
 
+    function validateNumberOfKeyAspects() {
+        var numberOfKeyAspects = $('#NumberOfKeyAspects').val();
+        return numberOfKeyAspects > 0;
+    }
+
+    // Function to validate the techField input
+    function validateTechField() {
+        var techField = $('#techField');
+        var errorElement = $('#TechFieldError');
+
+        if (techField.val().trim() === '') {
+            showError(techField, 'This field is required.', errorElement);
+            return false;
+        } else {
+            showSuccess(techField);
+            errorElement.text('');
+            return true;
+        }
+    }
+
+    function validateMainProblem() {
+        var mainProblem = $('#main_problem').val();
+        return mainProblem.trim() !== '';
+    }
+
+    function validateStrategy() {
+        var strategy = $('#strategy').val();
+        return strategy.trim() !== '';
+    }
+
+    function updateContinueButtonStep2() {
+        var isValid = $('.form-control.is-invalid').length === 0;
+        var isKeyAspectsValid = validateNumberOfKeyAspects();
+        var isMainProblemValid = validateMainProblem();
+        var isStrategyValid = validateStrategy();
+        $('#continueButtonStep2').prop('disabled', !isValid || !isKeyAspectsValid || !isMainProblemValid || !isStrategyValid);
+    }
+
     $('#main_problem').on('input', function() {
         var mainProblemField = $(this);
         var mainProblem = mainProblemField.val();
@@ -24,7 +62,7 @@ $(document).ready(function() {
             errorElement.text('');
         }
 
-        updateContinueButton();
+        updateContinueButtonStep2();
     });
 
     // Function to validate the "Key Aspects" input
@@ -38,7 +76,7 @@ $(document).ready(function() {
             showSuccess(numberOfKeyAspectsField);
             errorElement.text('');
         }
-        updateContinueButton();
+        updateContinueButtonStep2()
     });
 
     $('#NumberOfSteps').on('input', function() {
@@ -53,7 +91,7 @@ $(document).ready(function() {
             errorElement.text('');
         }
 
-        updateContinueButton();
+        updateContinueButtonStep2()
     });
 
     $('#strategy').on('input', function() {
@@ -74,7 +112,7 @@ $(document).ready(function() {
             errorElement.text('');
         }
 
-        updateContinueButton();
+        updateContinueButtonStep2()
     });
 
     // Validate the number of videos when the user selects "No" to the question
@@ -464,8 +502,141 @@ $(document).ready(function() {
         updateContinueButton();
     });
 
-    // AJAX 
-    $('#continueButton').click(function() {
+    // AJAX
+    $("#continueButtonStep2").click(function() {
+    // body...
+    })
+
+    CourseSectionData = {}
+
+    function collectComplex3DData() {
+        var complex3DData = [];
+        
+        // Loop through each complex 3D input and collect data
+        for (var i = 0; i < numberOfHeadings; i++) {
+            var complex3DFile = $('#complex3D' + i)[0].files[0];
+            complex3DData.push(complex3DFile);
+        }
+
+        return complex3DData;
+    }
+
+    function collectStepsData() {
+        var numberOfSteps = $('#NumberOfSteps').val();
+        var stepsData = [];
+
+        for (var i = 0; i < numberOfSteps; i++) {
+            stepsData.push({
+                step: $('#step' + i).val(),
+            });
+        }
+
+        return stepsData;
+    }
+
+    // Function to collect data for code snippets
+    function collectCodeSnippetsData() {
+        var codeSnippetsData = [];
+        // Loop through each code snippet input and collect data
+        for (var i = 0; i < numberOfHeadings; i++) {
+            var codeSnippetValue = $('#codeEditor' + i).val();
+            codeSnippetsData.push(codeSnippetValue);
+        }
+
+        return codeSnippetsData;
+    }
+
+    var dynamicFieldsData = [];
+        for (var i = 0; i < CourseSectionData.numberOfKeyAspects; i++) {
+            dynamicFieldsData.push({
+                keyAspect: $('#keyAspect' + i).val(),
+                consequence: $('#consequence' + i).val(),
+            });
+        }
+
+
+    // Function to collect data for file architecture
+    function collectFileArchitectureData() {
+        var fileArchitectureData = [];
+        // Loop through each file architecture input and collect data
+        for (var i = 0; i < numberOfHeadings; i++) {
+            var fileArchitectureValue = $('#fileArchitecture' + i).val();
+            fileArchitectureData.push(fileArchitectureValue);
+        }
+
+        return fileArchitectureData;
+    }
+
+    // Function to collect data for images
+    function collectImagesData() {
+        var imagesData = [];
+        // Loop through each image input and collect data
+        for (var i = 0; i < numberOfHeadings; i++) {
+            var imageFile = $('#Image' + i)[0].files[0];
+            imagesData.push(imageFile);
+        }
+
+        return imagesData;
+    }
+
+            
+    $("#SaveToCloud").click(function () {
+        $('#continueButtonStep2').prop('disabled', true);
+        $('#continueButtonStep2 .spinner-border').show();
+        $('#arrow-next').hide();
+        // Function to collect form data before AJAX
+        function collectFormData() {
+            var CourseSectionData = {
+                mainProblem: $('#main_problem').val(),
+                strategy: $('#strategy').val(),
+                techField: $('#techField').val(),
+            };
+
+            CourseSectionData.keyAspectsData = dynamicFieldsData;
+            CourseSectionData.stepsData = stepsData;
+            CourseSectionData.stepsData = collectStepsData();
+            CourseSectionData.codeSnippetsData = collectCodeSnippetsData();
+            CourseSectionData.fileArchitectureData = collectFileArchitectureData();
+            CourseSectionData.imagesData = collectImagesData();
+            CourseSectionData.electronicCircuitData = collectElectronicCircuitData();
+            CourseSectionData.complex3DData = collectComplex3DData();
+            
+            return CourseSectionData;
+        }
+       $.ajax({
+            url: 'http://127.0.0.1:5000/api/v1/save_to_database/',
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({ 'courseData': CourseSectionData }),
+            success: function (response) {
+                // Handle success
+                console.log(response.message);
+                $('#continueButtonStep2 .spinner-border').hide();
+                $('#continueButtonStep2').prop('disabled', false);
+                $('#arrow-next').show();
+                console.log(CourseSectionData)
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Data saved to the database successfully',
+                });
+            },
+            error: function (error) {
+                // Handle error
+                console.log(error);
+                $('#continueButtonStep2 .spinner-border').hide();
+                $('#continueButtonStep2').prop('disabled', false);
+                $('#arrow-next').show();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: '<a href="#">Why do I have this issue?</a>',
+                });
+            },
+        });
+    }); 
+    $('#continueButtonStep1').click(function() {
         var isWorkingForCompany = $('input[name="working_for_company"]:checked').val() === '1';
         var companyName = $('#company_name').val().trim();
 
@@ -495,8 +666,8 @@ $(document).ready(function() {
         }
 
 
-        $('#continueButton').prop('disabled', true);
-        $('#continueButton .spinner-border').show();
+        $('#continueButtonStep1').prop('disabled', true);
+        $('#continueButtonStep1 .spinner-border').show();
         $('#arrow-next').hide();
         var isValid = $('.form-control.is-invalid').length === 0;
         var isQuestionsAnswered = areQuestionsAnswered();
@@ -527,7 +698,7 @@ $(document).ready(function() {
                 CourseBasicData.append('thumbnail', $("#thumbnail")[0].files[0]);
             } else {
                 // Display an error message case where thumbnail is not selected
-                $('#continueButton .spinner-border').hide();
+                $('#continueButtonStep1 .spinner-border').hide();
                 $('#arrow-next').show();
                 Swal.fire({
                     title: 'Incomplete Form',
@@ -587,14 +758,16 @@ $(document).ready(function() {
                 contentType: false,
                 data: CourseBasicData,
                 success: function (response) {
-                    $('#continueButton').prop('disabled', false);
-                    $('#continueButton .spinner-border').hide();
+                    $('#continueButtonStep1').prop('disabled', false);
+                    $('#arrow-next').show();
+                    $('#continueButtonStep1 .spinner-border').hide();
                     window.location.href = '/api/v1/create_course/step2/';
 
                 },
                 error: function (error) {
-                    $('#continueButton').prop('disabled', false);
-                    $('#continueButton .spinner-border').hide();
+                    $('#continueButtonStep1').prop('disabled', false);
+                    $('#continueButtonStep1 .spinner-border').hide();
+                    $('#arrow-next').show();
                     Swal.fire({
                       icon: "error",
                       title: "Oops...",
@@ -603,7 +776,7 @@ $(document).ready(function() {
                     });
                     console.log(error);
                 }
-            });            
+            });           
         }
     });
 });

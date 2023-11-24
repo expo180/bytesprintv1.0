@@ -27,7 +27,7 @@ $(document).ready(function () {
                 '<input class="form-control" type="text" name="heading' + i + '" id="heading' + i + '">' +
 
                 (isCodeSnippetsChecked ?
-                    '<label class="form-label mt-2" for="codeEditor' + i + '">Code Editor ' + (i + 1) + '</label>' +
+                    '<label class="form-label mt-2 shadow-lg" for="codeEditor' + i + '">Code Editor ' + (i + 1) + '</label>' +
                     '<textarea class="form-control code-editor" name="codeEditor' + i + '" id="codeEditor' + i + '"></textarea>' :
                     '') +
 
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
                 (isFileArchitectureChecked ?
                     '<label class="form-label mt-2" for="fileArchitecture' + i + '">File Architecture ' + (i + 1) + '</label>' +
-                    '<input class="form-control" type="file" name="fileArchitecture' + i + '" id="fileArchitecture' + i + '">' :
+                    '<textarea class="form-control" name="fileArchitecture' + i + '" id="fileArchitecture' + i + '"></textarea>' :
                     '') +
 
                 (isElectronicCircuitChecked ?
@@ -81,15 +81,6 @@ $(document).ready(function () {
                     fontFamily: 'Source Code Pro'
                 });
 
-                // Add word count and file size counters
-                var wordCount = $('<div class="word-count" id="wordCount' + i + '">Word count: 0</div>').insertAfter(codeMirrorEditor.getWrapperElement());
-                var fileSize = $('<div class="file-size" id="fileSize' + i + '">File size: 0 B</div>').insertAfter(wordCount);
-
-                codeMirrorEditor.on('change', function (instance) {
-                    updateWordCount(instance, wordCount);
-                    updateFileSize(instance, fileSize);
-                });
-
                 function updateWordCount(editor, wordCountElement) {
                     var text = editor.getValue();
                     var words = text.split(/\s+/).filter(function (word) {
@@ -101,8 +92,17 @@ $(document).ready(function () {
                 function updateFileSize(editor, fileSizeElement) {
                     var text = editor.getValue();
                     var fileSizeBytes = text.length * 2; // Assuming 1 character = 2 bytes
-                    fileSizeElement.text('File size: ' + fileSizeBytes + ' B');
+                    fileSizeElement.text('File size: ' + fileSizeBytes + ' Bytes');
                 }
+
+                // Add word count and file size counters
+                var wordCount = $('<div class="word-count" id="wordCount' + i + '">Word count: 0</div>').insertAfter(codeMirrorEditor.getWrapperElement());
+                var fileSize = $('<div class="file-size" id="fileSize' + i + '">File size: 0 B</div>').insertAfter(wordCount);
+
+                codeMirrorEditor.on('change', function (instance) {
+                    updateWordCount(instance, wordCount);
+                    updateFileSize(instance, fileSize);
+                });
             }
         }
     }
@@ -112,19 +112,23 @@ $(document).ready(function () {
       createKeyAspectsFields(numberOfKeyAspects);
     });
 
+    
     function createKeyAspectsFields(numberOfKeyAspects) {
-      var keyAspectsContainer = $('#keyAspectsContainer');
-      keyAspectsContainer.empty();
+        var keyAspectsContainer = $('#keyAspectsContainer');
+        keyAspectsContainer.empty();
 
-      for (var i = 0; i < numberOfKeyAspects; i++) {
-        keyAspectsContainer.append(
-          '<div class="form-group mb-4">' +
-          '<label class="form-label" for="keyAspect' + i + '">Key Aspect ' + (i + 1) + '</label>' +
-          '<input class="form-control" type="text" name="keyAspect' + i + '" id="keyAspect' + i + '">' +
-          '</div>'
-        );
-      }
+        for (var i = 0; i < numberOfKeyAspects; i++) {
+            keyAspectsContainer.append(
+                '<div class="input-group mb-4">' +
+                '<span class="input-group-text">Key Aspect ' + (i + 1) + '</span>' +
+                '<input class="form-control" type="text" placeholder="Order delays due to high call volumes" name="keyAspect' + i + '" id="keyAspect' + i + '">' +
+                '<span class="input-group-text">Consequence</span>' +
+                '<input class="form-control" type="text" placeholder="Customer dissatisfaction" name="consequence' + i + '" id="consequence' + i + '">' +
+                '</div>'
+            );
+        }
     }
+
 
     // Toggle based on the initial value of NumberOfKeyAspects
     createKeyAspectsFields($('#NumberOfKeyAspects').val());

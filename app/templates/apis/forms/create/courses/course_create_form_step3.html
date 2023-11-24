@@ -1,6 +1,56 @@
 {% extends 'apis/forms/create/courses/create-course-base.html' %}
+
 {% block content %}
 <div class="container mt-5">
   <h2 class="display-1 text-primary">Quizz and Project Sections Design</h2>
+  <div class="mt-5">
+    <!-- Your introductory content here if needed -->
+  </div>
+
+  <!-- Quiz Form -->
+  <form method="post" action="{# Set your action URL #}" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    
+    <!-- Quiz Section -->
+    <div class="form-group mb-4">
+      <label class="form-control-label">Number of Questions for Quiz<span class="text-danger">*</span></label>
+      <input class="form-control" type="number" name="NumberOfQuestions" placeholder="0" id="NumberOfQuestions" min="30" max="60">
+      <small class="text-body-secondary">Min 30, Max 60</small>
+
+      <!-- Add fields for each question, options, and correct answer -->
+      <div id="quizQuestionsContainer" class="my-3">
+        <!-- Dynamic quiz input fields will be added here -->
+      </div>
+    </div>
+
+    <!-- Project Section -->
+    <div class="form-group mb-4">
+      <label class="form-control-label">Number of Projects<span class="text-danger">*</span></label>
+      <input class="form-control" type="number" name="NumberOfProjects" placeholder="0" id="NumberOfProjects" min="10" max="15">
+      <small class="text-body-secondary">Min 10, Max 15</small>
+
+      <!-- Add fields for each project title, requirements, etc. -->
+      <div id="projectFieldsContainer" class="my-3">
+        <!-- Dynamic project input fields will be added here -->
+      </div>
+    </div>
+
+    <!-- Continue button and other controls -->
+    <div class="d-flex justify-content-end gap-2 me-3">
+      <button type="button" id="SaveToCloud" class="btn btn-secondary">
+        <i class="bi bi-cloud-arrow-up-fill"></i>
+        Save
+      </button>
+      <a href="{{ url_for('api.create_course_step1') }}" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left-circle"></i>
+        Previous
+      </a>
+      <button type="button" disabled="disabled" id="continueButtonStep2" class="btn btn-primary">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="display: none;"></span>
+        Continue
+        <i class="bi bi-arrow-right-circle" id="arrow-next"></i>
+      </button>
+    </div>
+  </form>
 </div>
 {% endblock %}

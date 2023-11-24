@@ -357,6 +357,7 @@ class Course(db.Model):
     strategy = db.Column(db.String(1000), nullable=False)
     university_name = db.Column(db.String(155))
     core_specialization = db.Column(db.String(100))
+    category = db.Column(db.String(), nullable=False)
     course_title = db.Column(db.String(100), nullable=False)
     short_description = db.Column(db.String(265), nullable=False)
     video_url = db.Column(db.String(255), nullable=False)

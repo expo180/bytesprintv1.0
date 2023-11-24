@@ -79,44 +79,34 @@ def create_course_step1():
     return render_template('apis/forms/create/courses/course_create_form_step1.html', form=form)
 
 
-@api.route('/save_to_database/', methods=['POST'])
+
+
+@api.route('/save_to_database/', methods=['GET', 'POST'])
 @login_required
 def save_to_database():
     basic_info = session.get('basic_info', {})
     
-    # Get additional course details from the request
-    additional_info = {
-        'problem': request.form.get('problem'),
-        'strategy': request.form.get('strategy'),
-        # Add more fields as needed
-    }
+    try:
+        # Get additional course details from the request
+        additional_info = request.get_json().get('courseData', {})
 
-    # Merge basic_info and additional_info
-    course_details = {**basic_info, **additional_info}
+        # Merge basic_info and additional_info
+        course_details = {**basic_info, **additional_info}
 
-    # Save course_details to the database
-    # Example:
-    # new_course = Course(
-    #     author_name=course_details['author_name'],
-    #     email=course_details['email'],
-    #     company_name=course_details['company_name'],
-    #     university_name=course_details['university_name'],
-    #     core_specialization=course_details['core_specialization'],
-    #     course_title=course_details['course_title'],
-    #     short_description=course_details['short_description'],
-    #     video_url=course_details['video_url'],
-    #     thumbnail_url=course_details['thumbnail_url'],
-    #     problem=course_details['problem'],
-    #     strategy=course_details['strategy'],
-    #     # Add more fields as needed
-    # )
-    # db.session.add(new_course)
-    # db.session.commit()
+        new_course = Course(
+            problem=course_details.get('mainProblem', ''),
+            strategy=course_details.get('strategy', ''),
+            category=course_details.get('techField', ''),
+        )
 
-    # Clear the session data after saving to the database
-    session.pop('basic_info', None)
+        db.session.add(new_course)
+        db.session.commit()
+        session.pop('basic_info', None)
 
-    return jsonify({'message': 'Data saved to the database successfully'})
+        return jsonify({'message': 'Data saved to the database successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @api.route('/create_course/step2/', methods=['GET', 'POST'])
 @login_required
@@ -129,42 +119,16 @@ def create_course_step2():
     return render_template('apis/forms/create/courses/course_create_form_step2.html', form=form)
 
 
-# Route to save the skills asynchronously  
-@api.route('/save_skills', methods=['GET','POST'])
+@api.route('/create_course/step3', methods=['GET', 'POST'])
 @login_required
-def save_skills():
-    try:
-        selected_skills = request.json.get('skills', [])
-        session['selected_skills'] = selected_skills
-        return jsonify({'success': True, 'message': 'Skills saved successfully'})
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'Error saving skills: {str(e)}'})
+def create_course_step3():
+    return render_template('apis/forms/create/courses/course_create_form_step3.html')
+
 
 @api.route('/create_course/final', methods=['GET', 'POST'])
 @login_required
 def create_course_final():
-    basic_info = session.get('basic_info', {})
-    # Clear the session after form submission
-    if form.image.data:
-    	image_filename = secure_filename(form.image.data.filename)
-    	form.image.data.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
-    	print(f'Image saved: {image_filename}')
-
-    if form.video.data:
-    	video_filename = secure_filename(form.video.data.filename)
-    	form.video.data.save(os.path.join(app.config['UPLOAD_FOLDER'], video_filename))
-    	print(f'Video saved: {video_filename}')
-    	form.category.data = ''
-    	form.heading.data = ''
-    	form.paragraph.data = ''
-    session.pop('basic_info', None)
     return render_template('create_course_final.html', basic_info=basic_info)
-
-
-@api.route('/curriculum/add/create_new', methods=['GET', 'POST'])
-@login_required
-def curriculum_create_form():
-    return render_template('apis/forms/create/curriculum/curriculum_create_form.html')
 
 
 @api.route("/intructors/courses/templates/how_design/?")

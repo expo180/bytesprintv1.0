@@ -516,47 +516,4 @@ $(document).ready(function() {
           $('.related-skills:contains(' + skillToRemove + ')').removeClass('selected-skill');
         });
     }
-    // Button to save skills to the session
-    $('#saveSkillsButton').click(function() {
-      $.ajax({
-        url: 'http://127.0.0.1:5000/api/v1/save_skills',
-        type: 'POST',
-        contentType: 'application/json;charset=UTF-8',
-        data: JSON.stringify({ skills: selectedSkills }),
-        success: function(response) {
-        if (response.success) {
-          // Show success message using SweetAlert
-          Swal.fire({
-            icon: 'success',
-            title: 'Skills Saved!',
-            text: response.message,
-          });
-        } else {
-            // Show error message using SweetAlert
-            Swal.fire({
-              icon: 'error',
-              title: 'Error!',
-              text: response.message,
-            });
-          }
-        },
-        error: function(error) {
-          // Show error message using SweetAlert
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Failed to save skills. Please try again.',
-          });
-        }
-      });
-  });
-
-    // Button to clear selected skills
-    $('#clearSkillsButton').click(function() {
-      // Clear the selected skills array
-      selectedSkills = [];
-      // Clear the style and display
-      $('.related-skills').removeClass('selected-skill');
-      displaySelectedSkills();
-    });
 });
