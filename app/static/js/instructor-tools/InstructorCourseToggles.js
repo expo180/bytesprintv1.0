@@ -1,3 +1,9 @@
+// Global array to store Quill instances
+var quillEditors = [];
+
+// Global array to store CodeMirror instances
+var codeMirrorEditors = [];
+
 $(document).ready(function () {
     $('#NumberOfHeadings').change(function () {
         var numberOfHeadings = $(this).val();
@@ -16,10 +22,6 @@ $(document).ready(function () {
 
         for (var i = 0; i < numberOfHeadings; i++) {
             var isCodeSnippetsChecked = $('#codeSnippets').is(':checked');
-            var isImageChecked = $('#Image').is(':checked');
-            var isFileArchitectureChecked = $('#fileArchitecture').is(':checked');
-            var isElectronicCircuitChecked = $('#electronicCircuit').is(':checked');
-            var isComplex3DChecked = $('#complex3D').is(':checked');
 
             dynamicFieldsContainer.append(
                 '<div class="form-group mb-4">' +
@@ -29,26 +31,6 @@ $(document).ready(function () {
                 (isCodeSnippetsChecked ?
                     '<label class="form-label mt-2 shadow-lg" for="codeEditor' + i + '">Code Editor ' + (i + 1) + '</label>' +
                     '<textarea class="form-control code-editor" name="codeEditor' + i + '" id="codeEditor' + i + '"></textarea>' :
-                    '') +
-
-                (isImageChecked ?
-                    '<label class="form-label mt-2" for="Image' + i + '">Image ' + (i + 1) + '</label>' +
-                    '<input class="form-control" type="file" name="Image' + i + '" id="Image' + i + '">' :
-                    '') +
-
-                (isFileArchitectureChecked ?
-                    '<label class="form-label mt-2" for="fileArchitecture' + i + '">File Architecture ' + (i + 1) + '</label>' +
-                    '<textarea class="form-control" name="fileArchitecture' + i + '" id="fileArchitecture' + i + '"></textarea>' :
-                    '') +
-
-                (isElectronicCircuitChecked ?
-                    '<label class="form-label mt-2" for="electronicCircuit' + i + '">Electronic Circuit ' + (i + 1) + '</label>' +
-                    '<input class="form-control" type="file" name="electronicCircuit' + i + '" id="electronicCircuit' + i + '">' :
-                    '') +
-
-                (isComplex3DChecked ?
-                    '<label class="form-label mt-2" for="complex3D' + i + '">Complex 3D ' + (i + 1) + '</label>' +
-                    '<input class="form-control" type="file" name="complex3D' + i + '" id="complex3D' + i + '">' :
                     '') +
 
                 '<label class="form-label mt-2" for="paragraph' + i + '">Paragraph ' + (i + 1) + '</label>' +
@@ -65,8 +47,12 @@ $(document).ready(function () {
                         ['link'],
                         ['clean']
                     ]
-                }
+                },
+
             });
+            
+            // Push the Quill instance to the global array
+            quillEditors.push(quill);
 
             var codeMirrorEditor = null;
 
@@ -103,35 +89,12 @@ $(document).ready(function () {
                     updateWordCount(instance, wordCount);
                     updateFileSize(instance, fileSize);
                 });
+
+                codeMirrorEditors.push(codeMirrorEditor);
             }
         }
     }
 
-    $('#NumberOfKeyAspects').change(function () {
-      var numberOfKeyAspects = $(this).val();
-      createKeyAspectsFields(numberOfKeyAspects);
-    });
-
-    
-    function createKeyAspectsFields(numberOfKeyAspects) {
-        var keyAspectsContainer = $('#keyAspectsContainer');
-        keyAspectsContainer.empty();
-
-        for (var i = 0; i < numberOfKeyAspects; i++) {
-            keyAspectsContainer.append(
-                '<div class="input-group mb-4">' +
-                '<span class="input-group-text">Key Aspect ' + (i + 1) + '</span>' +
-                '<input class="form-control" type="text" placeholder="Order delays due to high call volumes" name="keyAspect' + i + '" id="keyAspect' + i + '">' +
-                '<span class="input-group-text">Consequence</span>' +
-                '<input class="form-control" type="text" placeholder="Customer dissatisfaction" name="consequence' + i + '" id="consequence' + i + '">' +
-                '</div>'
-            );
-        }
-    }
-
-
-    // Toggle based on the initial value of NumberOfKeyAspects
-    createKeyAspectsFields($('#NumberOfKeyAspects').val());
 
     $('#NumberOfSteps').change(function () {
       var numberOfSteps = $(this).val();
@@ -202,3 +165,5 @@ $(document).ready(function () {
         }
     }
 });
+
+export { quillEditors, codeMirrorEditors };

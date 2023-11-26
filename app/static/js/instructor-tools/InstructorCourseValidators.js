@@ -1,5 +1,9 @@
-$(document).ready(function() {
+import { quillEditors, codeMirrorEditors } from './InstructorCourseToggles.js';
+// global variable to store course section design data
+var CourseSectionData = {} ;
+var numberOfKeyAspects = $('#NumberOfKeyAspects').val()
 
+$(document).ready(function() {
 
     // Function to check if a file is selected
     function isFileSelected(fileInput) {
@@ -38,11 +42,13 @@ $(document).ready(function() {
 
     function updateContinueButtonStep2() {
         var isValid = $('.form-control.is-invalid').length === 0;
-        var isKeyAspectsValid = validateNumberOfKeyAspects();
         var isMainProblemValid = validateMainProblem();
         var isStrategyValid = validateStrategy();
-        $('#continueButtonStep2').prop('disabled', !isValid || !isKeyAspectsValid || !isMainProblemValid || !isStrategyValid);
+        var isTechFieldValid = validateTechField();
+
+        $('#continueButtonStep2').prop('disabled', !isValid || !isMainProblemValid || !isStrategyValid || !isTechFieldValid);
     }
+
 
     $('#main_problem').on('input', function() {
         var mainProblemField = $(this);
@@ -63,20 +69,6 @@ $(document).ready(function() {
         }
 
         updateContinueButtonStep2();
-    });
-
-    // Function to validate the "Key Aspects" input
-    $('#NumberOfKeyAspects').on('input', function() {
-        var numberOfKeyAspectsField = $(this);
-        var numberOfKeyAspects = numberOfKeyAspectsField.val();
-        var errorElement = $('#NumberOfKeyAspectsError');
-        if (numberOfKeyAspects.trim() === '' || parseInt(numberOfKeyAspects) < 2 || parseInt(numberOfKeyAspects) > 20) {
-            showError(numberOfKeyAspectsField, 'Please enter a valid number between 2 and 20', errorElement);
-        } else {
-            showSuccess(numberOfKeyAspectsField);
-            errorElement.text('');
-        }
-        updateContinueButtonStep2()
     });
 
     $('#NumberOfSteps').on('input', function() {
@@ -240,7 +232,6 @@ $(document).ready(function() {
 
     // Video && Thumbnail field clearer
     $('.remove-file').on('click', function () {
-        console.log("hello world")
         var inputId = $(this).data('input-id');
         var inputFile = $('#' + inputId);
         var errorElement = $('#' + inputId + 'Error');
@@ -502,24 +493,29 @@ $(document).ready(function() {
         updateContinueButton();
     });
 
-    // AJAX
-    $("#continueButtonStep2").click(function() {
-    // body...
-    })
+    var numberOfHeadings = $('#NumberOfHeadings').val();
 
-    CourseSectionData = {}
-
-    function collectComplex3DData() {
-        var complex3DData = [];
-        
-        // Loop through each complex 3D input and collect data
+    function collectHeadingsData() {
+        var headingsData = [];
         for (var i = 0; i < numberOfHeadings; i++) {
-            var complex3DFile = $('#complex3D' + i)[0].files[0];
-            complex3DData.push(complex3DFile);
+            var headingValue = $('#heading' + i).val();
+            headingsData.push(headingValue);
         }
 
-        return complex3DData;
+        return headingsData;
     }
+
+    
+
+    function getSelectedSkills() {
+        var selectedSkills = [];
+        $('.SelectedSkillsList li').each(function() {
+            var skill = $(this).text().trim();
+            selectedSkills.push(skill);
+        });
+        return selectedSkills;
+    }
+
 
     function collectStepsData() {
         var numberOfSteps = $('#NumberOfSteps').val();
@@ -534,56 +530,35 @@ $(document).ready(function() {
         return stepsData;
     }
 
-    // Function to collect data for code snippets
-    function collectCodeSnippetsData() {
-        var codeSnippetsData = [];
-        // Loop through each code snippet input and collect data
-        for (var i = 0; i < numberOfHeadings; i++) {
-            var codeSnippetValue = $('#codeEditor' + i).val();
-            codeSnippetsData.push(codeSnippetValue);
+    // Function to collect CodeMirror editor content
+    function collectCodeMirrorEditorContent() {
+        var codeMirrorContents = [];
+
+        for (var i = 0; i < codeMirrorEditors.length; i++) {
+            codeMirrorContents.push(codeMirrorEditors[i].getValue());
         }
 
-        return codeSnippetsData;
+        return codeMirrorContents;
     }
 
-    var dynamicFieldsData = [];
-        for (var i = 0; i < CourseSectionData.numberOfKeyAspects; i++) {
-            dynamicFieldsData.push({
-                keyAspect: $('#keyAspect' + i).val(),
-                consequence: $('#consequence' + i).val(),
-            });
+    
+    // Function to collect Quill editor content
+    function collectQuillEditorContent() {
+        var quillContents = [];
+        
+        for (var i = 0; i < quillEditors.length; i++) {
+            quillContents.push(quillEditors[i].root.innerHTML);
         }
 
-
-    // Function to collect data for file architecture
-    function collectFileArchitectureData() {
-        var fileArchitectureData = [];
-        // Loop through each file architecture input and collect data
-        for (var i = 0; i < numberOfHeadings; i++) {
-            var fileArchitectureValue = $('#fileArchitecture' + i).val();
-            fileArchitectureData.push(fileArchitectureValue);
-        }
-
-        return fileArchitectureData;
+        return quillContents;
     }
 
-    // Function to collect data for images
-    function collectImagesData() {
-        var imagesData = [];
-        // Loop through each image input and collect data
-        for (var i = 0; i < numberOfHeadings; i++) {
-            var imageFile = $('#Image' + i)[0].files[0];
-            imagesData.push(imageFile);
-        }
 
-        return imagesData;
-    }
-
-            
-    $("#SaveToCloud").click(function () {
+    // Continue step 2 event trigger
+    $("#continueButtonStep2").click(function() {
         $('#continueButtonStep2').prop('disabled', true);
         $('#continueButtonStep2 .spinner-border').show();
-        $('#arrow-next').hide();
+        $('#arrow-next2').hide();
         // Function to collect form data before AJAX
         function collectFormData() {
             var CourseSectionData = {
@@ -592,28 +567,91 @@ $(document).ready(function() {
                 techField: $('#techField').val(),
             };
 
-            CourseSectionData.keyAspectsData = dynamicFieldsData;
-            CourseSectionData.stepsData = stepsData;
+            // Call the getSelectedSkills function to retrieve the selected skills
+            var selectedSkills = getSelectedSkills();
+            // Include the selected skills in the CourseSectionData
+            var headingsData = collectHeadingsData();
+            CourseSectionData.selectedSkills = selectedSkills;
             CourseSectionData.stepsData = collectStepsData();
-            CourseSectionData.codeSnippetsData = collectCodeSnippetsData();
-            CourseSectionData.fileArchitectureData = collectFileArchitectureData();
-            CourseSectionData.imagesData = collectImagesData();
-            CourseSectionData.electronicCircuitData = collectElectronicCircuitData();
-            CourseSectionData.complex3DData = collectComplex3DData();
+            CourseSectionData.quillEditorData = collectQuillEditorContent();
+            CourseSectionData.codeMirrorEditorData = collectCodeMirrorEditorContent();
+            CourseSectionData.headingsData = headingsData;
             
             return CourseSectionData;
         }
-       $.ajax({
+
+        var CourseSectionData = collectFormData();
+
+        $.ajax({
+            url: 'http://127.0.0.1:5000/api/v1/create_course/step2/',
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({ 'courseData': CourseSectionData }),
+            success: function (response) {
+                // Handle success
+                $('#continueButtonStep2').prop('disabled', false);
+                $('#continueButtonStep2 .spinner-border').hide();
+                $('#arrow-next2').show();
+                console.log(response.message);
+                console.log(CourseSectionData);
+                window.location.href='/api/v1/create_course/final'
+            },
+            error: function (error) {
+                // Handle error
+                $('#continueButtonStep2').prop('disabled', false);
+                $('#continueButtonStep2 .spinner-border').hide();
+                $('#arrow-next2').show();
+                console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: '<a href="#">Why do I have this issue?</a>',
+                });
+            },
+        });
+    })
+
+    
+    // Save to the cloud button event trigger  
+    $("#SaveToCloud").click(function () {
+        $('#SaveToCloud').prop('disabled', true);
+        $('#SaveToCloud .spinner-border').show();
+        $('#cloud-button').hide();
+        // Function to collect form data before AJAX
+        function collectFormData() {
+            var CourseSectionData = {
+                mainProblem: $('#main_problem').val(),
+                strategy: $('#strategy').val(),
+                techField: $('#techField').val(),
+            };
+
+            // Call the getSelectedSkills function to retrieve the selected skills
+            var selectedSkills = getSelectedSkills();
+            // Include the selected skills in the CourseSectionData
+            var headingsData = collectHeadingsData();
+            CourseSectionData.selectedSkills = selectedSkills;
+            CourseSectionData.stepsData = collectStepsData();
+            CourseSectionData.quillEditorData = collectQuillEditorContent();
+            CourseSectionData.codeMirrorEditorData = collectCodeMirrorEditorContent();
+            CourseSectionData.headingsData = headingsData;
+            
+            return CourseSectionData;
+        }
+
+        var CourseSectionData = collectFormData();
+
+        $.ajax({
             url: 'http://127.0.0.1:5000/api/v1/save_to_database/',
             type: 'POST',
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({ 'courseData': CourseSectionData }),
             success: function (response) {
                 // Handle success
+                $('#SaveToCloud').prop('disabled', false);
+                $('#SaveToCloud .spinner-border').hide();
+                $('#cloud-button').show();
                 console.log(response.message);
-                $('#continueButtonStep2 .spinner-border').hide();
-                $('#continueButtonStep2').prop('disabled', false);
-                $('#arrow-next').show();
                 console.log(CourseSectionData)
                 Swal.fire({
                     icon: 'success',
@@ -623,10 +661,10 @@ $(document).ready(function() {
             },
             error: function (error) {
                 // Handle error
+                $('#SaveToCloud').prop('disabled', false);
+                $('#SaveToCloud .spinner-border').hide();
+                $('#cloud-button').show();
                 console.log(error);
-                $('#continueButtonStep2 .spinner-border').hide();
-                $('#continueButtonStep2').prop('disabled', false);
-                $('#arrow-next').show();
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -635,7 +673,9 @@ $(document).ready(function() {
                 });
             },
         });
-    }); 
+    });
+
+    // Continue Step 1 event trigger
     $('#continueButtonStep1').click(function() {
         var isWorkingForCompany = $('input[name="working_for_company"]:checked').val() === '1';
         var companyName = $('#company_name').val().trim();

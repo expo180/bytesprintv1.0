@@ -353,49 +353,42 @@ class Course(db.Model):
     author_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(255))
     company_name = db.Column(db.String(155))
-    problem = db.Column(db.String(1000), nullable=False)
-    strategy = db.Column(db.String(1000), nullable=False)
+    problem = db.Column(db.String(1000), nullable=False, default=" ")
+    strategy = db.Column(db.String(1000), nullable=False, default=" ")
     university_name = db.Column(db.String(155))
-    core_specialization = db.Column(db.String(100))
-    category = db.Column(db.String(), nullable=False)
-    course_title = db.Column(db.String(100), nullable=False)
+    core_specialization = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(), nullable=False, default=" ")
+    course_title = db.Column(db.String(100), nullable=False, unique=True)
     short_description = db.Column(db.String(265), nullable=False)
     video_url = db.Column(db.String(255), nullable=False)
+    thumbnail_url = db.Column(db.String(255), nullable=False)
     quizzes = db.relationship('Quiz', backref='course', lazy='dynamic')
     projects = db.relationship('Project', backref='course', lazy='dynamic')
-    visual_3d_complex = db.relationship('Visual3DComplex', secondary='course_visual_3d_complex_association', backref='courses')
-    file_architecture = db.relationship('FileArchitecture', secondary='course_file_architecture_association', backref='courses')
-    electronic_circuit_designs = db.relationship('ElectronicCircuitDesigns', secondary='course_electronic_circuit_association', backref='courses')
     headings = db.relationship('Heading', secondary='course_heading_association', backref='courses')
     paragraphs = db.relationship('Paragraph', secondary='course_paragraph_association', backref='courses')
-    images = db.relationship('Images', secondary='course_images_association', backref='courses')
-    keys = db.relationship('KeyAspects', secondary='problem_key_aspects', backref='courses')
     video_links = db.relationship('CourseVideoLinks', secondary='course_video_links', backref='courses')
-    skills = db.relationship('CourseSkillsList', secondary='course_skills_list', backref='courses') 
+    skills_list = db.relationship('CourseSkillsList', secondary='course_skills_list', backref='courses') 
     instructor_works = db.relationship('InstructorContributions', secondary='instructor_contributions_list', backref='courses')
     code_snippets = db.relationship('CodeSnippets', secondary='code_course_association', backref='courses')
+    steps_data = db.relationship('Step', secondary='course_steps_association', backref='courses')
+
+class Step(db.Model):
+    __tablename__ = 'steps'
+    id = db.Column(db.Integer, primary_key=True)
+    step = db.Column(db.String())
+
 
 class CodeSnippets(db.Model):
     __tablename__ = 'code_snippets'
     id = db.Column(db.Integer, primary_key=True)
     code_snippet = db.Column(db.Text())
 
-class Images(db.Model):
-    __tablename__ = 'images'
-    id = db.Column(db.Integer, primary_key=True)
-    image_url = db.Column(db.String(255))
-    image_caption = db.Column(db.String(255))
 
 class InstructorContributions(db.Model):
     __tablename__ = 'instructor_contributions'
     id = db.Column(db.Integer, primary_key=True)
     scientific_paper_title = db.Column(db.String(255))
     scientific_paper_link = db.Column(db.String(255))
-
-class KeyAspects(db.Model):
-    __tablename__ = 'key_aspects'
-    id = db.Column(db.Integer, primary_key=True)
-    aspect = db.Column(db.String(255), nullable=False)
 
 
 class CourseVideoLinks(db.Model):
@@ -408,23 +401,6 @@ class CourseSkillsList(db.Model):
     __tablename__ = 'course_skills'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-
-class Visual3DComplex(db.Model):
-    __tablename__ = 'visual_3d_complex'
-    id = db.Column(db.Integer, primary_key=True)
-    visual_url = db.Column(db.String(255))
-
-
-class FileArchitecture(db.Model):
-    __tablename__ = 'file_architecture'
-    id = db.Column(db.Integer, primary_key=True)
-    filesys = db.Column(db.Text())
-
-
-class ElectronicCircuitDesigns(db.Model):
-    __tablename__ = 'electronic_circuit_designs'
-    id = db.Column(db.Integer, primary_key=True)
-    design_url = db.Column(db.String(255))
 
 
 class Heading(db.Model):
@@ -476,33 +452,26 @@ class ProjectSubmission(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))    
 
+
+course_steps_association = db.Table('course_steps_association',
+    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('step_id', db.Integer, db.ForeignKey('steps.id'), primary_key=True)
+)
+
+
 # Defines the relationship between code snippets and courses
 code_course_association = db.Table(
     'code_course_association',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('code_snippet', db.Integer, db.ForeignKey('code_snippets'))
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('code_snippet', db.Integer, db.ForeignKey('code_snippets.id'), primary_key=True)
 
-)
-
-# Defines the relationship between images and courses
-course_images_association = db.Table(
-    'course_images_association',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('image_id', db.Integer, db.ForeignKey('images.id'))
-)
-
-# Defines the relationship between key_aspects  and courses
-problem_key_aspects = db.Table(
-    'problem_key_aspects',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('aspect_id', db.Integer, db.ForeignKey('key_aspects.id'))
 )
 
 # Defines the relationship between instructor contributions and courses
 instructor_contributions_list = db.Table(
     'instructor_contributions_list',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('instructor_contributions_id', db.Integer, db.ForeignKey('instructor_contributions.id'))
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('instructor_contributions_id', db.Integer, db.ForeignKey('instructor_contributions.id'), primary_key=True)
 )
 
 # Defines the relationship between courses and skills
@@ -519,34 +488,17 @@ course_video_links = db.Table(
     db.Column('link_id', db.Integer, db.ForeignKey('video_links.id'), primary_key=True)
 )
 
-course_visual_3d_complex_association = db.Table(
-    'course_visual_3d_complex_association',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('visual_3d_complex_id', db.Integer, db.ForeignKey('visual_3d_complex.id'))
-)
-
-course_file_architecture_association = db.Table(
-    'course_file_architecture_association',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('file_architecture_id', db.Integer, db.ForeignKey('file_architecture.id'))
-)
-
-course_electronic_circuit_association = db.Table(
-    'course_electronic_circuit_association',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('electronic_circuit_designs_id', db.Integer, db.ForeignKey('electronic_circuit_designs.id'))
-)
 
 course_heading_association = db.Table(
     'course_heading_association',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('heading_id', db.Integer, db.ForeignKey('headings.id'))
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('heading_id', db.Integer, db.ForeignKey('headings.id'), primary_key=True)
 )
 
 course_paragraph_association = db.Table(
     'course_paragraph_association',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('paragraph_id', db.Integer, db.ForeignKey('paragraphs.id'))
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('paragraph_id', db.Integer, db.ForeignKey('paragraphs.id'), primary_key=True)
 )
         
 enrollments = db.Table('enrollments',

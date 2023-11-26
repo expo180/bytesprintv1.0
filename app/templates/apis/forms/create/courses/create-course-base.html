@@ -63,10 +63,16 @@
 	<div class="pattern shadow-lg"></div>
 	{% include 'footers/footer.html' %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseValidators.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseToggles.js') }}"></script>
+	<script type="module" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseToggles.js') }}"></script>
+	<script type="module" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseValidators.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/instructor-tools/CourserelatedSkillLoader.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/instructor-tools/InstructorQuizzToggles.js') }}"></script>
     <script type="text/javascript">
+    $(document).ready(function() {
+        setTimeout(function() {
+            $(".warning").fadeOut("slow");
+        }, 5000);
+    });
     function toggleCompanyNameField(isWorkingForCompany) {
         var companyFields = document.querySelector('.companyFields');
         companyFields.style.display = isWorkingForCompany ? 'block' : 'none';

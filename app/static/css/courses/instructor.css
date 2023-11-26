@@ -16,3 +16,6 @@ li > span:hover{
 .form-check-label{
 	font-family:'Telegraf-Regular', sans-serif;
 }
+.alert.error {
+    color:rgb(255, 100, 100);
+}

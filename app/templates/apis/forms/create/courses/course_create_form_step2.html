@@ -2,8 +2,9 @@
 {% block content %}
 <div class="container mt-5">
   <h2 class="display-1 text-primary">Course Sections Design</h2>
-  <div class="mt-5 text-body-secondary bg-info-subtle border-start border-3 border-info px-3 py-4 shadow-md">
+  <div class="mt-5 text-light bg-gradient bg-info border-start border-5 border-primary px-3 py-4 shadow-md">
     <small>
+      <i class="bi bi-exclamation-circle-fill"></i> Note <br> 
       We believe in a <strong>revolutionary approach</strong> to education that transcends the <strong>traditional classroom model</strong>. Our courses are not structured around conventional subject matter like HTML, CSS, or JavaScript; instead, we <strong>immerse</strong> our students in <strong>real-world</strong> projects that serve as the <strong>backbone</strong> of their learning experience. Picture this: our instructors guide students through the creation of a <strong>management web application</strong> for a <strong>school</strong>, tackling <strong>challenges</strong> related to outdated <strong>average calculators</strong> and <strong>pitfalls</strong> in handling <strong>complex data</strong>. We don't start with the <strong>technology</strong>; we start with the <strong>problem</strong>. By introducing students to the inherent <strong>issues</strong> and <strong>inefficiencies</strong> in <strong>existing systems</strong>, we empower them to <strong>envision solutions</strong>. Only then do we delve into the world of <strong>web development or app</strong>, presenting a <strong>fully-fledged</strong>, <strong>feature-rich</strong> application that addresses the <strong>complexities</strong> of <strong>educational management</strong>. This unique philosophy ensures that our students not only master the <strong>technical skills</strong> required but, more importantly, develop a keen understanding of the problems they aim to solve. Our instructors play a pivotal role in guiding students to <strong>identify</strong>, <strong>comprehend</strong>, and <strong>ultimately overcome challenges</strong>, fostering a mindset that goes beyond <strong>coding</strong> to create impactful solutions in the <strong>real world</strong>. Explore these <a href="{{ url_for('api.course_templates') }}">course templates</a> to <strong>get inspired</strong>.
       <br>
       <hr>
@@ -14,7 +15,7 @@
     </small>
   </div>
   <div class="py-3"></div>
-  <form method="POST" action="{{ url_for('api.create_course_step3') }}" enctype="multipart/form-data">
+  <form method="POST" action="{{ url_for('api.create_course_step2') }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <div class="form-group mb-4">
       <label class="form-control-label">The Main Problem<span class="text-danger">*</span></label>
@@ -24,17 +25,6 @@
       <textarea class="form-control" id="main_problem" required="required" placeholder="'The Cheery Bistro', a beloved Elm Street restaurant, known for its delectable dishes, faces challenges in dinner order management. Owned by Mrs. Amelia Green, who personally handles customer relationships, the restaurant relies on phone orders, creating a bustling yet occasionally frustrating experience for customers. This popularity, while contributing to revenue, poses potential losses due to order difficulties. Mrs. Green seeks ways to enhance the ordering process, preserving personal connections while ensuring a delightful experience for valued customers."></textarea>
       <small class="text-body-secondary">Min 600, Max 1000 characters</small>
       <div class="text-danger" id="mainProblemError"></div>
-    </div>
-    <div class="form-group mb-4">
-      <label class="form-control-label">Key Aspects and Consequences<span class="text-danger">*</span></label>
-      <p class="mb-3 text-body-secondary">
-        Now, provide a brief overview of the situation by outlining <strong>key aspects</strong> and <strong>consequences</strong>. This will help individuals <strong>grasp</strong> the <strong>essential elements</strong> of the problem, enabling them to devise <strong>solutions</strong> more <strong>effectively</strong>.
-      </p>
-      <label class="form-control-label">How many <strong>key aspects</strong> and <strong>consequences</strong> will you define?</label>
-      <input class="form-control" type="number" id="NumberOfKeyAspects" name="NumberOfKeyAspects" required="required" min="2" max="20" placeholder="2">
-      <small class="text-body-secondary">Min 2, Max 20</small>
-      <div class="text-danger" id="NumberOfKeyAspectsError"></div>
-      <div id="keyAspectsContainer" class="my-3"></div>
     </div>
     <div class="form-group mr-2">
       {{ form.tech_field.label(class="mr-2 form-label") }}<span class="text-danger">*</span>
@@ -52,7 +42,6 @@
     </div>
     <div class="mt-4" id="relatedSkillsContainer">
       <strong>Now, choose relevant skills that you will employ to address the challenges presented by the earlier-described problem<span class="text-danger">*</span>. <br>
-      <small class="text-body-secondary">Min 5 skills</small>
       <ul class="list-inline mt-3" id="relatedSkillsList">
         <!-- Related skills will be dynamically added here -->
       </ul>
@@ -64,88 +53,47 @@
       <label class="form-control-label mb-3">Outline the <strong>steps</strong> you would take to solve this <strong>problem</strong> within the context of your selected course <strong>category</strong><span class="text-danger">*</span>.</label>
       <div class="form-group">
         <label class="form-control-label">Enter the number of steps</label>
-        <input class="form-control" type="number" id="NumberOfSteps" name="NumberOfSteps" required="required" max="10" min="2" placeholder="2">
+        <input class="form-control" type="number" id="NumberOfSteps" name="NumberOfSteps" required="required" max="10" min="2" placeholder="Ex: 2">
         <div class="text-danger" id="NumberOfStepsError"></div>
         <small class="text-body-secondary">Min 2, Max 10</small>
         <div id="stepsContainer" class="my-3"></div>
       </div>
     </div>
     <div class="form-group mb-4">
-      <label class="form-label">What types of <strong>content</strong>, beyond <strong>raw text</strong> and the previously <strong>uploaded video</strong>, will you <strong>incorporate</strong> into this <strong>course</strong>?</label><span class="text-danger">*</span><br>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="CodeSnippets" id="codeSnippets">
-        <label class="form-check-label" for="codeSnippets">Code Snippets</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="FileArchitecture" id="fileArchitecture">
-        <label class="form-check-label" for="fileArchitecture">File Architecture</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="Image" id="Image">
-        <label class="form-check-label" for="Image">Images</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="ElectronicCircuit" id="electronicCircuit">
-        <label class="form-check-label" for="electronicCircuit">Circuit Designs</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="" id="complex3D">
-        <label class="form-check-label" for="complex3D">Complex 3D</label>
-      </div>
-    </div>
-    <div class="form-group mb-4">
       <label class="form-label" for="NumberOfHeadings">How Many Sections For this Course?</label><span class="text-danger">*</span>
+      <div class="form-check my-2">
+        <input class="form-check-input" type="checkbox" name="contentTypes[]" value="CodeSnippets" id="codeSnippets">
+        <label class="form-check-label" for="codeSnippets">
+          I would like to include some lines of code.
+        </label>
+      </div>
       <input class="form-control" type="number" name="NumberOfHeadings" placeholder="Ex: 3" id="NumberOfHeadings" min="3" max="20">
-      <small class="text-body-secondary">Min 3, Max 20</small>
+      <small class="text-body-secondary">Min 3, Max 20</small><br>
+      <hr>
+      <small class="text-body-secondary">
+        Here you can give more explanations for some abstract concepts outlined in your course. 
+      </small>
     </div>
     <div id="dynamicFieldsContainer" class="mb-4">
     <!-- Dynamic input fields will be added here -->
     </div>
-    <div class="bg-info-subtle border-start border-3 border-info px-3 py-4 shadow-md mb-5">
-      <h4 class="display-6"><i class="bi bi-exclamation-diamond-fill"></i> Warning</h4>
-      <p class="lead">
-        Our platform supports a variety of file types to enhance your course content. Please note the following maximum file sizes:
-      </p>
-      <ul>
-        <li><strong>Images:</strong> 5MB</li>
-        <li><strong>Electronic Circuit Designs:</strong> 15MB</li>
-        <li><strong>3D Models:</strong> 300MB</li>
-      </ul>
-      <small class="text-body-secondary">
-        The file formats for the various types of files you might be dealing with are commonly as follows:
-        <ul>
-          <li>
-            <strong>File Architecture (.zip, .tar, etc.):</strong> A compressed archive format is common for file architecture. Formats include .zip and .tar. You might compress a folder containing the necessary files and folders for the architecture.
-          </li>
-          <li>
-            <strong>Images (.jpg, .png, .gif, etc.):</strong> Common image formats include .jpg, .png, .gif, and others. The choice of format depends on the type of image and whether you need transparency or animation.
-          </li>
-          <li>
-            <strong>Electronic Circuit Designs (.pdf, .png, etc.):</strong> The format for electronic circuit designs can vary. You might use an image format like .png, or a document format like .pdf for more complex designs.
-          </li>
-          <li>
-            <strong>Complex 3D (.obj, .fbx, .gltf, etc.):</strong> For large 3D visualizations, formats like .obj, .fbx, and .gltf are common. These formats can store 3D models along with textures and animations.
-          </li>
-        </ul>
-      </small>
-      <hr>
-      <strong>Important:</strong> To ensure optimal performance and user experience, it's crucial to adhere to these size limits. If you have questions or need more details, consult our <a href="">documentation</a> for a comprehensive understanding of our file upload policy.
-    </div>
     <div class="py-3"></div>
     <div class="d-flex justify-content-end gap-2 me-3">
       <button type="button" id="SaveToCloud" class="btn btn-secondary">
-        <i class="bi bi-cloud-arrow-up-fill"></i>
+        <i class="bi bi-cloud-arrow-up-fill" id="cloud-button"></i>
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="display: none;"></span>
         Save
       </button>
-      <a href="{{ url_for('api.create_course_step1') }}" class="btn btn-outline-primary">
+      <button type="button" class="btn btn-outline-info">
         <i class="bi bi-arrow-left-circle"></i>
         Previous
-      </a>
-      <button type="button" disabled="disabled" id="continueButtonStep2" class="btn btn-primary">
+      </button>
+      <button type="button" id="continueButtonStep2" class="btn btn-primary">
         <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="display: none;"></span>
         Continue
-        <i class="bi bi-arrow-right-circle" id="arrow-next"></i>
+        <i class="bi bi-arrow-right-circle" id="arrow-next2"></i>
       </button>
+      <button type="submit" style="display: none;"></button>
     </div>
   </form>
 </div>
