@@ -54,47 +54,49 @@
 <body>
 	{% include 'headers/header-index.html' %}
 	<div class="py-4"></div>
-	<div class="pattern shadow-lg"></div>
+	<div class="pattern-2 shadow-lg"></div>
 	<div class="py-3"></div>
 	{% block content %}{% endblock %}
 	<div class="py-3"></div>
 	{% include 'footers/footer-instructor.html' %}
 	<div class="py-5"></div>
-	<div class="pattern shadow-lg"></div>
+	<div class="pattern-2 shadow-lg"></div>
 	{% include 'footers/footer.html' %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 	<script type="module" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseToggles.js') }}"></script>
 	<script type="module" src="{{ url_for('static', filename='js/instructor-tools/InstructorCourseValidators.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/instructor-tools/CourserelatedSkillLoader.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/instructor-tools/InstructorQuizzToggles.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/instructor-tools/CourserelatedSkillLoader.js') }}"></script>
+	<script type="module" src="{{ url_for('static', filename='js/instructor-tools/InstructorQuizzToggles.js') }}"></script>
+	<script type="module" src="{{ url_for('static', filename='js/instructor-tools/InstructorQuizzValidators.js') }}"></script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        setTimeout(function() {
-            $(".warning").fadeOut("slow");
-        }, 5000);
-    });
-    function toggleCompanyNameField(isWorkingForCompany) {
-        var companyFields = document.querySelector('.companyFields');
-        companyFields.style.display = isWorkingForCompany ? 'block' : 'none';
-    }
-    function toggleUniversityNameField(isWorkingUniversity) {
-        var SchoolFields = document.querySelector('.SchoolFields');
-        SchoolFields.style.display = isWorkingUniversity ? 'block' : 'none';
-    }
-    function toggleScientificPaper(hasScientificPaper) {
-        var ScientificPaperFields = document.querySelector('.ScientificPaperFields');
-        ScientificPaperFields.style.display = hasScientificPaper ? 'block' : 'none';
-    }
-    function toggleHaveVideosField(hasVideos) {
-    var videosField = document.getElementById('videosField');
-    var videoTextLinks = document.getElementById('VideoTextLinks');
-	    if (hasVideos) {
-	        videosField.style.display = 'block';
-	        videoTextLinks.style.display = 'none';
-	    } else {
-	        videosField.style.display = 'none';
-	        videoTextLinks.style.display = 'block';
+	    $(document).ready(function() {
+	        setTimeout(function() {
+	            $(".warning").fadeOut("slow");
+	        }, 5000);
+	    });
+	    function toggleCompanyNameField(isWorkingForCompany) {
+	        var companyFields = document.querySelector('.companyFields');
+	        companyFields.style.display = isWorkingForCompany ? 'block' : 'none';
 	    }
-	}
+	    function toggleUniversityNameField(isWorkingUniversity) {
+	        var SchoolFields = document.querySelector('.SchoolFields');
+	        SchoolFields.style.display = isWorkingUniversity ? 'block' : 'none';
+	    }
+	    function toggleScientificPaper(hasScientificPaper) {
+	        var ScientificPaperFields = document.querySelector('.ScientificPaperFields');
+	        ScientificPaperFields.style.display = hasScientificPaper ? 'block' : 'none';
+	    }
+	    function toggleHaveVideosField(hasVideos) {
+	    var videosField = document.getElementById('videosField');
+	    var videoTextLinks = document.getElementById('VideoTextLinks');
+		    if (hasVideos) {
+		        videosField.style.display = 'block';
+		        videoTextLinks.style.display = 'none';
+		    } else {
+		        videosField.style.display = 'none';
+		        videoTextLinks.style.display = 'block';
+		    }
+		}
+	</script>
 	</script>
 </body>

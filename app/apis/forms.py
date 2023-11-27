@@ -149,13 +149,6 @@ class BasicCourseInfoForm(FlaskForm):
             )
         ]
     )
-
-    video_links = TextAreaField(
-        'Video Links (separated by commas)', 
-        validators=[
-            Optional()
-        ]
-    )
     thumbnail = FileField(
         'Please upload a nice thumbnail for your course',
         validators = [

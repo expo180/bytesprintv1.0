@@ -253,6 +253,7 @@ $(document).ready(function() {
         return false;
     }
 
+
     // Function to validate video link fields
     function validateVideoLinks() {
         var haveVideos = $('input[name="have_videos"]:checked').val();
@@ -300,15 +301,6 @@ $(document).ready(function() {
         var isQuestionsAnswered = areQuestionsAnswered();
         $('#continueButtonStep1').prop('disabled', !isValid || !isQuestionsAnswered);
     }
-    // Function to enable/disable the Continue button based on validation for Step 2
-    function updateContinueButtonStep2() {
-        var isValid = $('.form-control.is-invalid').length === 0;
-        var isKeyAspectsValid = validateNumberOfKeyAspects();
-        var isMainProblemValid = validateMainProblem();
-        var isStrategyValid = validateStrategy();
-        $('#continueButtonStep2').prop('disabled', !isValid || !isKeyAspectsValid || !isMainProblemValid || !isStrategyValid);
-    }
-
     // Function to display a SweetAlert success dialog
     function showSuccessAlert() {
         Swal.fire({
@@ -652,11 +644,10 @@ $(document).ready(function() {
                 $('#SaveToCloud .spinner-border').hide();
                 $('#cloud-button').show();
                 console.log(response.message);
-                console.log(CourseSectionData)
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
-                    text: 'Data saved to the database successfully',
+                    text: 'Details saved to the database successfully',
                 });
             },
             error: function (error) {
@@ -759,36 +750,45 @@ $(document).ready(function() {
             }
 
             // Append paper data
-            var numberOfPapers = $('#NumberOfPapers').val();
-            for (var i = 0; i < numberOfPapers; i++) {
-                var paperTitleValue = $('input[name="paperTitle' + i + '"]').val();
-                var paperLinkValue = $('input[name="paperLink' + i + '"]').val();
+            function PaperData() {
+                var papersData = [];
+                var numberOfPapers = $('#NumberOfPapers').val();
+                for (var i = 0; i < numberOfPapers; i++) {
+                    var paperTitleValue = $('input[name="paperTitle' + i + '"]').val();
+                    var paperLinkValue = $('input[name="paperLink' + i + '"]').val();
 
-                // Check if values are not empty before appending
-                if (paperTitleValue !== "") {
-                    CourseBasicData.append('paperTitle' + i, paperTitleValue);
+                    papersData.push({
+                        title: paperTitleValue,
+                        link: paperLinkValue
+                    });
                 }
 
-                if (paperLinkValue !== "") {
-                    CourseBasicData.append('paperLink' + i, paperLinkValue);
-                }
+                return papersData;
             }
 
-            // Append video data
-            var numberOfVideos = $('#NumberOfVideos').val();
-            for (var i = 0; i < numberOfVideos; i++) {
-                var videoTitleValue = $('input[name="videoTitle' + i + '"]').val();
-                var videoLinkValue = $('input[name="videoLink' + i + '"]').val();
+            // Append video links data
+            function VideoLinksData() {
+                var videoLinksData = [];
+                var numberOfVideos = $('#NumberOfVideos').val();
+                for (var i = 0; i < numberOfVideos; i++) {
+                    var videoTitleValue = $('input[name="videoTitle' + i + '"]').val();
+                    var videoLinkValue = $('input[name="videoLink' + i + '"]').val();
 
-                // Check if values are not empty before appending
-                if (videoTitleValue !== "") {
-                    CourseBasicData.append('videoTitle' + i, videoTitleValue);
+                    videoLinksData.push({
+                        title: videoTitleValue,
+                        link: videoLinkValue
+                    });
                 }
-
-                if (videoLinkValue !== "") {
-                    CourseBasicData.append('videoLink' + i, videoLinkValue);
-                }
+                return videoLinksData;
             }
+
+            var papersData = PaperData();
+            CourseBasicData.append('papersData', JSON.stringify(papersData));
+
+            var videoLinksData = VideoLinksData();
+            CourseBasicData.append('videoLinksData', JSON.stringify(videoLinksData));
+
+            console.log(CourseBasicData)
 
             // Make the AJAX request only if required files are selected
             $.ajax({
@@ -820,4 +820,3 @@ $(document).ready(function() {
         }
     });
 });
-

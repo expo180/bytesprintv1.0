@@ -2,11 +2,11 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="display-1 text-primary">Quizz and Requirements Design</h2>
-  <div class="bg-gradient bg-info border-start border-5 border-primary px-3 py-4 shadow-md">
+  <h2 class="display-1 text-primary">Quizz and Requirements Design <strong>.</strong></h2>
+  <div class="bg-gradient bg-primary border-start border-5 border-info px-3 py-5 shadow-md">
     <small class="text-light">
       <i class="bi bi-exclamation-circle-fill"></i> Note <br> 
-      In this context, it is crucial to identify the <strong>materials</strong> necessary for participants to derive <strong>maximum</strong> benefit from your course. Additionally, we should determine the specific questions to pose, ensuring they effectively assess whether the participants have truly <strong>grasped</strong> the <strong>content</strong>. Congratulations this is your <strong>last step</strong>!
+      In this context, it is crucial to identify the <strong>materials</strong> necessary for participants to derive <strong>maximum</strong> benefit from your course. Additionally, we should determine the specific questions to pose, ensuring they effectively assess whether the participants have truly <strong>grasped</strong> the <strong>content</strong>. Congratulations this is your <strong>last step</strong>! Before publishing you course make sure that you've read our <a href="">instructor guide</a> in order to get the best of what is a true teaching in science and engineering. 
       <br>
       <hr>
       <strong>
@@ -17,7 +17,6 @@
   </div>
   <!-- Quiz Form -->
   <form method="POST" action="" enctype="multipart/form-data" class="mt-5">
-    
     <!-- Quiz Section -->
     <div class="form-group mb-4">
       <label class="form-control-label">Enter the number of questions for quizz<span class="text-danger">*</span></label>
@@ -34,8 +33,9 @@
     <!-- Project Section -->
     <div class="form-group mb-4">
       <label class="form-control-label">Number of Projects<span class="text-danger">*</span></label>
-      <input class="form-control" type="number" name="NumberOfProjects" placeholder="0" id="NumberOfProjects" min="10" max="15">
-      <small class="text-body-secondary">Min 10, Max 15</small>
+      <input class="form-control" type="number" name="NumberOfProjects" placeholder="Ex: 3" id="NumberOfProjects" min="10" max="15">
+      <div class="mt-2 text-danger" id="projectWarningContainer"></div>
+      <small class="text-body-secondary">Min 1, Max 3</small>
 
       <!-- Add fields for each project title, requirements, etc. -->
       <div id="projectFieldsContainer" class="my-3">
@@ -43,17 +43,51 @@
       </div>
     </div>
 
+    <div class="form-group mb-4">
+      <label class="form-control-label">Course Duration<span class="text-danger">*</span></label>
+      <div class="input-group mb-3">
+        <input type="number" id="courseDurationInput" class="form-control" placeholder="Ex: 2">
+        <span class="input-group-text" id="basic-addon1">Hours</span>
+      </div>
+      <div class="mt-2 text-danger" id="feedbackMessage"></div>
+      <div class="text-body-secondary mt-3">
+        <small>
+          Please specify the duration of your <strong>course</strong> based on the length of your <strong>video</strong>. This information will assist <strong>students</strong> in understanding the time commitment <strong>required</strong>.
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group mb-4">
+      <label class="form-control-label" for="NumberOfRequirements">Please specify the number of requirements<span class="text-danger">*</span></label>
+      <div class="form-group mb-3">
+        <input type="number" class="form-control" placeholder="Ex: 5" id="NumberOfRequirements">
+        <div class="mt-2 text-danger" id="requirementsWarningContainer"></div>
+      </div>
+      <div class="text-body-secondary mt-3">
+        <small>
+          In order to ensure a <strong>successful</strong> learning experience, we kindly request that you provide comprehensive details regarding the course <strong>prerequisites</strong>. This should encompass the essential <strong>skills</strong> and resources that students need to <strong>possess</strong> or <strong>acquire</strong> before undertaking the <strong>course</strong>.
+        </small>
+      </div>
+
+      <!-- Add fields for each requirements -->
+      <div id="requirementsFieldsContainer" class="my-3">
+        <!-- Dynamic requirements input fields will be added here -->
+      </div>
+
+    </div>
+
+    <div class="py-5"></div>
     <!-- Continue button and other controls -->
     <div class="d-flex justify-content-end gap-2 me-3">
       <button type="button" id="SaveToCloud" class="btn btn-secondary">
         <i class="bi bi-cloud-arrow-up-fill"></i>
         Save
       </button>
-      <a href="{{ url_for('api.create_course_step1') }}" class="btn btn-outline-info">
+      <a href="{{ url_for('api.create_course_step2') }}" class="btn btn-info text-light">
         <i class="bi bi-arrow-left-circle"></i>
         Previous
       </a>
-      <button type="button" disabled="disabled" id="continueButtonStep2" class="btn btn-primary">
+      <button type="button" id="SubmitButton" class="btn btn-primary">
         <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="display: none;"></span>
         Submit
         <i class="bi bi-send" id="arrow-next"></i>

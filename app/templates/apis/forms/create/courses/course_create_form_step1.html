@@ -1,12 +1,12 @@
 {% extends 'apis/forms/create/courses/create-course-base.html' %}
 {% block content %}
 	<div class="container mt-5">
-		<h2 class="display-1 text-primary">Course Basic Informations</h2>
-		<div class="mt-5 bg-gradient bg-info border-start border-5 border-primary px-3 py-4 shadow-md">
+		<h2 class="display-1 text-primary">Course Basic Informations <strong>.</strong></h2>
+		<div class="mt-5 bg-gradient bg-primary border-start border-5 border-info px-3 py-5 shadow-md">
 		<small class="text-light ">
 			<i class="bi bi-exclamation-circle-fill"></i> Note <br> 
-		    Greetings, <strong>{{ current_user.first_name }}</strong>! We're delighted to welcome you to our esteemed <strong>instructor community</strong>. If you're currently occupied, no need to worry – you can conveniently <strong>save</strong> your progress by clicking the <strong>save button</strong> to revisit later and complete this initial step. Take the opportunity to navigate the platform, craft compelling courses, and contribute to the realm of tech education. Here, you'll discover effective problem-solving techniques, breaking down the <strong>greatest challenges</strong> into <strong>manageable components</strong> for enhanced understanding.
-		   <hr>
+		    We believe in a <strong>revolutionary approach</strong> to education that transcends the <strong>traditional classroom model</strong>. Our courses are not structured around conventional subject matter like HTML, CSS, or JavaScript; instead, we <strong>immerse</strong> our students in <strong>real-world</strong> projects that serve as the <strong>backbone</strong> of their learning experience. Picture this: our instructors guide students through the creation of a <strong>management web application</strong> for a <strong>school</strong>, tackling <strong>challenges</strong> related to outdated <strong>average calculators</strong> and <strong>pitfalls</strong> in handling <strong>complex data</strong>. We don't start with the <strong>technology</strong>; we start with the <strong>problem</strong>. By introducing students to the inherent <strong>issues</strong> and <strong>inefficiencies</strong> in <strong>existing systems</strong>, we empower them to <strong>envision solutions</strong>. Only then do we delve into the world of <strong>web development or app</strong>, presenting a <strong>fully-fledged</strong>, <strong>feature-rich</strong> application that addresses the <strong>complexities</strong> of <strong>educational management</strong>. This unique philosophy ensures that our students not only master the <strong>technical skills</strong> required but, more importantly, develop a keen understanding of the problems they aim to solve. Our instructors play a pivotal role in guiding students to <strong>identify</strong>, <strong>comprehend</strong>, and <strong>ultimately overcome challenges</strong>, fostering a mindset that goes beyond <strong>coding</strong> to create impactful solutions in the <strong>real world</strong>. Explore these <a href="{{ url_for('api.course_templates') }}">course templates</a> to <strong>get inspired</strong>
+			<hr>
 		   <strong>
 				Fields marked with a red asterisk <span class="text-danger">(*)</span>
 				are mandatory fields. Therefore, you must complete them to proceed.

@@ -360,17 +360,37 @@ class Course(db.Model):
     category = db.Column(db.String(), nullable=False, default=" ")
     course_title = db.Column(db.String(100), nullable=False, unique=True)
     short_description = db.Column(db.String(265), nullable=False)
-    video_url = db.Column(db.String(255), nullable=False)
-    thumbnail_url = db.Column(db.String(255), nullable=False)
-    quizzes = db.relationship('Quiz', backref='course', lazy='dynamic')
-    projects = db.relationship('Project', backref='course', lazy='dynamic')
+    video_url = db.Column(db.String(), nullable=False)
+    thumbnail_url = db.Column(db.String(), nullable=False)
+    requirements = db.relationship('Requirements', backref='courses', lazy='dynamic')
+    quizzes = db.relationship('Quiz', backref='courses', lazy='dynamic')
+    projects = db.relationship('Project', backref='courses', lazy='dynamic')
     headings = db.relationship('Heading', secondary='course_heading_association', backref='courses')
     paragraphs = db.relationship('Paragraph', secondary='course_paragraph_association', backref='courses')
-    video_links = db.relationship('CourseVideoLinks', secondary='course_video_links', backref='courses')
     skills_list = db.relationship('CourseSkillsList', secondary='course_skills_list', backref='courses') 
-    instructor_works = db.relationship('InstructorContributions', secondary='instructor_contributions_list', backref='courses')
     code_snippets = db.relationship('CodeSnippets', secondary='code_course_association', backref='courses')
     steps_data = db.relationship('Step', secondary='course_steps_association', backref='courses')
+    video_links = db.relationship('VideoLinks', secondary='course_video_links_association', backref='courses')
+    instructor_contributions = db.relationship('Contributions', secondary='course_instructor_contribution_association', backref='courses')    
+
+class Contributions(db.Model):
+    __tablename__ = 'contributions'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String())
+    reference = db.Column(db.String())
+
+class VideoLinks(db.Model):
+    __tablename__ = 'course_video_links'
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String())
+    mask_text = db.Column(db.String())
+
+class Requirements(db.Model):
+    __tablename__ = 'requirements'
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    prerequisite = db.Column(db.String())
+
 
 class Step(db.Model):
     __tablename__ = 'steps'
@@ -383,19 +403,6 @@ class CodeSnippets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code_snippet = db.Column(db.Text())
 
-
-class InstructorContributions(db.Model):
-    __tablename__ = 'instructor_contributions'
-    id = db.Column(db.Integer, primary_key=True)
-    scientific_paper_title = db.Column(db.String(255))
-    scientific_paper_link = db.Column(db.String(255))
-
-
-class CourseVideoLinks(db.Model):
-    __tablename__ = 'video_links'
-    id = db.Column(db.Integer, primary_key=True)
-    link = db.Column(db.String(255))
-    mask_text = db.Column(db.String(255))
 
 class CourseSkillsList(db.Model):
     __tablename__ = 'course_skills'
@@ -442,8 +449,10 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text(), nullable=False)
+    deadline = db.Column(db.DateTime(), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))  # Foreign key to link projects to courses
     submissions = db.relationship('ProjectSubmission', backref='project', lazy='dynamic')
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+
 
 class ProjectSubmission(db.Model):
     __tablename__ = 'project_submissions'
@@ -452,6 +461,16 @@ class ProjectSubmission(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))    
 
+course_video_links_association = db.Table('course_video_links_association',
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
+    db.Column('video_links_id', db.Integer, db.ForeignKey('course_video_links.id'))
+)
+
+
+course_instructor_contribution_association = db.Table('course_instructor_contribution_association',
+    db.Column('contributions_id', db.Integer, db.ForeignKey('contributions.id'), primary_key=True),
+    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True)
+)
 
 course_steps_association = db.Table('course_steps_association',
     db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
@@ -467,12 +486,6 @@ code_course_association = db.Table(
 
 )
 
-# Defines the relationship between instructor contributions and courses
-instructor_contributions_list = db.Table(
-    'instructor_contributions_list',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
-    db.Column('instructor_contributions_id', db.Integer, db.ForeignKey('instructor_contributions.id'), primary_key=True)
-)
 
 # Defines the relationship between courses and skills
 course_skills_list = db.Table(
@@ -481,12 +494,6 @@ course_skills_list = db.Table(
     db.Column('skill_id', db.Integer, db.ForeignKey('course_skills.id'), primary_key=True)
 )
 
-# Defines the relationship between courses and video links.
-course_video_links = db.Table(
-    'course_video_links',
-    db.Column('courses_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
-    db.Column('link_id', db.Integer, db.ForeignKey('video_links.id'), primary_key=True)
-)
 
 
 course_heading_association = db.Table(

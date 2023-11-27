@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from . import api
 from ..decorators import admin_required, permission_required
 from ..models import db, Course, CodeSnippets,Paragraph, \
-CourseSkillsList, Step, Heading
+CourseSkillsList, Step, Heading, Contributions, VideoLinks
 import random
 from .forms import CheckoutForm, BasicCourseInfoForm, CourseDetailsForm
 from .. import rapi
@@ -51,7 +51,8 @@ def create_course_step1():
             core_specialization = request.form.get('core_specialization')
             course_title = request.form.get('course_title')
             short_description = request.form.get('short_description')
-
+            papers_data = request.form.get('papersData')
+            video_links_data = request.form.get('videoLinksData')
             # Get file data from the request
             thumbnail = request.files['thumbnail']
             video = request.files.get('video')
@@ -87,9 +88,10 @@ def create_course_step1():
                 'course_title': course_title,
                 'short_description': short_description,
                 'video_url': video_url,
-                'thumbnail_url': thumbnail_url
+                'thumbnail_url': thumbnail_url,
+                'papers' : papers_data,
+                'video_links' : video_links_data
             }
-
 
         except Exception as e:
             return jsonify({'error': str(e)}), 500
@@ -137,6 +139,8 @@ def save_to_database():
         # Get additional course details from the request
         additional_info = request.get_json().get('courseData', {})
 
+        print(additional_info)
+
         # Query the database to find the existing course by title
         existing_course = Course.query.filter_by(course_title=course_title).first()
 
@@ -150,6 +154,8 @@ def save_to_database():
             existing_course.short_description = basic_info.get('short_description', '')
             existing_course.video_url = basic_info.get('video_url', '')
             existing_course.thumbnail_url = basic_info.get('thumbnail_url', '')
+            existing_course.video_links_data = basic_info.get('videoLinksData', [])
+            existing_course.contributions_data = basic_info.get('contributionsData', [])
 
             # Update with additional_info
             existing_course.problem = additional_info.get('mainProblem', '')
@@ -185,6 +191,15 @@ def save_to_database():
                 paragraphs=[Paragraph(paragraph=content) for content in additional_info.get('quillEditorData', [])],
                 headings=[Heading(heading=heading) for heading in additional_info.get('headingsData', [])]
             )
+
+            # Add video links
+            video_links_data = request.get('videoLinksData', [])
+            new_course.video_links = [VideoLinks(link=video_link['link'], mask_text=video_link['mask_text']) for video_link in video_links_data]
+                
+            # Add contributions
+            contributions_data = request.get('contributionsData', [])
+            new_course.instructor_contributions = [Contributions(title=contribution['title'], reference=contribution['reference']) for contribution in contributions_data]
+                
 
             # Add steps
             new_course.steps_data = [Step(step=step['step']) for step in additional_info.get('stepsData', [])]
@@ -225,6 +240,9 @@ def create_course_step2():
             existing_course.short_description = basic_info.get('short_description', '')
             existing_course.video_url = basic_info.get('video_url', '')
             existing_course.thumbnail_url = basic_info.get('thumbnail_url', '')
+            existing_course.video_links_data = basic_info.get('videoLinksData', [])
+            existing_course.contributions_data = basic_info.get('contributionsData', [])
+            course_id = existing_course.id
             
             # Update with additional_info
             existing_course.problem = additional_info.get('mainProblem', '')
@@ -262,13 +280,26 @@ def create_course_step2():
                 headings=[Heading(heading=heading) for heading in additional_info.get('headingsData', [])]
             )
 
+            # Add video links
+            video_links_data = request.get('videoLinksData', [])
+            new_course.video_links = [VideoLinks(link=video_link['link'], mask_text=video_link['mask_text']) for video_link in video_links_data]
+                
+            # Add contributions
+            contributions_data = request.get('contributionsData', [])
+            new_course.instructor_contributions = [Contributions(title=contribution['title'], reference=contribution['reference']) for contribution in contributions_data]
+
             # Add steps
             new_course.steps_data = [Step(step=step['step']) for step in additional_info.get('stepsData', [])]
+
+            # Get the course ID
+            course_id = new_course.id
 
             try:
                 db.session.add(new_course)
                 db.session.commit()
                 return jsonify({'message': 'Course saved to the database successfully'}), 200
+                # Store the course ID in the session
+                session['course_id'] = course_id
             except IntegrityError:
                 db.session.rollback()
                 return jsonify({'error': 'Course with the same title already exists'}), 409
@@ -281,7 +312,24 @@ def create_course_step2():
 @api.route('/create_course/final/', methods=['GET', 'POST'])
 @login_required
 def create_course_final():
-    return render_template('apis/forms/create/courses/create_course_final.html')
+    # Retrieve the course ID from the session
+    course_id = session.get('course_id')
+
+    if not course_id:
+        # Handle the case where the course ID is not found in the session
+        return jsonify({'error': 'Course ID not found in session'}), 400
+
+    # Use the course ID to fetch the course details from the database
+    course = Course.query.get(course_id)
+
+    if not course:
+        # Handle the case where the course with the given ID is not found
+        return jsonify({'error': 'Course not found'}), 404
+
+    # Perform additional actions with the course details
+
+    return render_template('apis/forms/create/courses/create_course_final.html', course=course)
+
 
 
 @api.route("/intructors/courses/templates/how_design/?")
