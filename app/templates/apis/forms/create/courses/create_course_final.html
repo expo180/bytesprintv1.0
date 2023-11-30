@@ -3,10 +3,11 @@
 {% block content %}
 <div class="container mt-5">
   <h2 class="display-1 text-primary">Quizz and Requirements Design <strong>.</strong></h2>
+  <div class="py-2"></div>
   <div class="bg-gradient bg-primary border-start border-5 border-info px-3 py-5 shadow-md">
     <small class="text-light">
       <i class="bi bi-exclamation-circle-fill"></i> Note <br> 
-      In this context, it is crucial to identify the <strong>materials</strong> necessary for participants to derive <strong>maximum</strong> benefit from your course. Additionally, we should determine the specific questions to pose, ensuring they effectively assess whether the participants have truly <strong>grasped</strong> the <strong>content</strong>. Congratulations this is your <strong>last step</strong>! Before publishing you course make sure that you've read our <a href="">instructor guide</a> in order to get the best of what is a true teaching in science and engineering. 
+      In this context, it is crucial to identify the <strong>materials</strong> necessary for participants to derive <strong>maximum</strong> benefit from your course. Additionally, we should determine the specific questions to pose, ensuring they effectively assess whether the participants have truly <strong>grasped</strong> the <strong>content</strong>. Congratulations this is your <strong>last step</strong>! Before publishing you course make sure that you've read our <a href="" class="exploreTemplates">instructor guide</a> in order to get the best of what is a true teaching in science and engineering. 
       <br>
       <hr>
       <strong>
@@ -46,8 +47,8 @@
     <div class="form-group mb-4">
       <label class="form-control-label">Course Duration<span class="text-danger">*</span></label>
       <div class="input-group mb-3">
-        <input type="number" id="courseDurationInput" class="form-control" placeholder="Ex: 2">
-        <span class="input-group-text" id="basic-addon1">Hours</span>
+        <input type="number" id="courseDurationInput" class="form-control" placeholder="Ex: 5">
+        <span class="input-group-text bg-info bg-gradient" id="basic-addon1">Hours</span>
       </div>
       <div class="mt-2 text-danger" id="feedbackMessage"></div>
       <div class="text-body-secondary mt-3">
@@ -73,15 +74,31 @@
       <div id="requirementsFieldsContainer" class="my-3">
         <!-- Dynamic requirements input fields will be added here -->
       </div>
+    </div>
 
+    <!-- Authorization Checkbox -->
+    <div class="form-check mt-4">
+      <input class="form-check-input" type="checkbox" id="authorizationCheckbox">
+      <label class="form-check-label" for="authorizationCheckbox">
+        I authorize the publication of this course.
+      </label>
+    </div>
+    <div id="authorizationWarningContainer" class="text-danger mt-1"></div>
+
+    <!-- Academic Honesty Message -->
+    <div class="text-body-secondary mt-3">
+      <small>
+        By submitting this course, I <strong>confirm</strong> my dedication to promoting <strong>academic honesty</strong> and <strong>integrity</strong>. I acknowledge that the materials provided are <strong>accurate</strong>, and I adhere to the principles of <strong>fair use</strong> and <strong>proper citation of sources</strong>.
+      </small>
     </div>
 
     <div class="py-5"></div>
     <!-- Continue button and other controls -->
     <div class="d-flex justify-content-end gap-2 me-3">
-      <button type="button" id="SaveToCloud" class="btn btn-secondary">
-        <i class="bi bi-cloud-arrow-up-fill"></i>
+      <button type="button" id="SaveToCloud2" class="btn btn-secondary">
+        <i class="bi bi-cloud-arrow-up-fill" id="cloud2"></i>
         Save
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="display: none;"><
       </button>
       <a href="{{ url_for('api.create_course_step2') }}" class="btn btn-info text-light">
         <i class="bi bi-arrow-left-circle"></i>

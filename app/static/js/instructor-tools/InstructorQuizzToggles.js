@@ -124,28 +124,6 @@ $(document).ready(function(){
         generateRequirementsFields();
     });
 
-    function validateCourseDuration() {
-        const courseDurationInput = $('#courseDurationInput');
-        const inputValue = courseDurationInput.val();
-
-        // Perform validation
-        if (inputValue.trim() === '') {
-            $('#feedbackMessage').text('Please enter the course duration.');
-            courseDurationInput[0].setCustomValidity('Please enter the course duration.');
-        } else if (inputValue <= 0) {
-            $('#feedbackMessage').text('Duration must be a positive number.');
-            courseDurationInput[0].setCustomValidity('Duration must be a positive number.');
-        } else {
-            $('#feedbackMessage').text('');
-            courseDurationInput[0].setCustomValidity('');
-
-            // Store the validated data for later use
-            const validatedData = {
-                courseDuration: inputValue
-            };
-        }
-    }
-
 })
 
 export function collectAndValidateQuizData() {
@@ -239,7 +217,7 @@ export function collectAndValidateRequirementsData() {
     $('#requirementsWarningContainer').text('');
     return requirementsData;
 }
-function validateCourseDuration() {
+export function validateCourseDuration() {
     const courseDurationInput = $('#courseDurationInput');
     const inputValue = courseDurationInput.val();
 
@@ -258,5 +236,23 @@ function validateCourseDuration() {
         const validatedData = {
             courseDuration: inputValue
         };
+        return validatedData;  // Return the validated data
     }
+}
+
+export function collectAndValidateAuthorization() {
+    const authorizationCheckbox = $('#authorizationCheckbox');
+    
+    // Validate the authorization checkbox
+    if (!authorizationCheckbox.prop('checked')) {
+        // Display an error message or handle the validation failure
+        $('#authorizationWarningContainer').text('Please authorize the publication of this course.');
+        return null; // Stop further processing
+    }
+
+    // Clear any previous warning messages
+    $('#authorizationWarningContainer').text('');
+
+    // Return a flag to indicate successful validation
+    return true;
 }

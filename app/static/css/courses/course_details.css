@@ -1,0 +1,9 @@
+@import url('../fonts.css')
+.pattern-2{
+	background-image:url("../background-slider.png");
+	padding:5em 5em;
+	background-position:center;	
+}
+.course-title{
+	font-family:'Telegraf-UltraBold';
+}

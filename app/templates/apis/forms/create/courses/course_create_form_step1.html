@@ -2,10 +2,11 @@
 {% block content %}
 	<div class="container mt-5">
 		<h2 class="display-1 text-primary">Course Basic Informations <strong>.</strong></h2>
+		<div class="py-2"></div>
 		<div class="mt-5 bg-gradient bg-primary border-start border-5 border-info px-3 py-5 shadow-md">
 		<small class="text-light ">
 			<i class="bi bi-exclamation-circle-fill"></i> Note <br> 
-		    We believe in a <strong>revolutionary approach</strong> to education that transcends the <strong>traditional classroom model</strong>. Our courses are not structured around conventional subject matter like HTML, CSS, or JavaScript; instead, we <strong>immerse</strong> our students in <strong>real-world</strong> projects that serve as the <strong>backbone</strong> of their learning experience. Picture this: our instructors guide students through the creation of a <strong>management web application</strong> for a <strong>school</strong>, tackling <strong>challenges</strong> related to outdated <strong>average calculators</strong> and <strong>pitfalls</strong> in handling <strong>complex data</strong>. We don't start with the <strong>technology</strong>; we start with the <strong>problem</strong>. By introducing students to the inherent <strong>issues</strong> and <strong>inefficiencies</strong> in <strong>existing systems</strong>, we empower them to <strong>envision solutions</strong>. Only then do we delve into the world of <strong>web development or app</strong>, presenting a <strong>fully-fledged</strong>, <strong>feature-rich</strong> application that addresses the <strong>complexities</strong> of <strong>educational management</strong>. This unique philosophy ensures that our students not only master the <strong>technical skills</strong> required but, more importantly, develop a keen understanding of the problems they aim to solve. Our instructors play a pivotal role in guiding students to <strong>identify</strong>, <strong>comprehend</strong>, and <strong>ultimately overcome challenges</strong>, fostering a mindset that goes beyond <strong>coding</strong> to create impactful solutions in the <strong>real world</strong>. Explore these <a href="{{ url_for('api.course_templates') }}">course templates</a> to <strong>get inspired</strong>
+		    We believe in a <strong>revolutionary approach</strong> to education that transcends the <strong>traditional classroom model</strong>. Our courses are not structured around conventional subject matter like HTML, CSS, or JavaScript; instead, we <strong>immerse</strong> our students in <strong>real-world</strong> projects that serve as the <strong>backbone</strong> of their learning experience. Picture this: our instructors guide students through the creation of a <strong>management web application</strong> for a <strong>school</strong>, tackling <strong>challenges</strong> related to outdated <strong>average calculators</strong> and <strong>pitfalls</strong> in handling <strong>complex data</strong>. We don't start with the <strong>technology</strong>; we start with the <strong>problem</strong>. By introducing students to the inherent <strong>issues</strong> and <strong>inefficiencies</strong> in <strong>existing systems</strong>, we empower them to <strong>envision solutions</strong>. Only then do we delve into the world of <strong>web development or app</strong>, presenting a <strong>fully-fledged</strong>, <strong>feature-rich</strong> application that addresses the <strong>complexities</strong> of <strong>educational management</strong>. This unique philosophy ensures that our students not only master the <strong>technical skills</strong> required but, more importantly, develop a keen understanding of the problems they aim to solve. Our instructors play a pivotal role in guiding students to <strong>identify</strong>, <strong>comprehend</strong>, and <strong>ultimately overcome challenges</strong>, fostering a mindset that goes beyond <strong>coding</strong> to create impactful solutions in the <strong>real world</strong>. Explore these <a href="{{ url_for('api.course_templates') }}" class="exploreTemplates">course templates</a> to <strong>get inspired</strong>.
 			<hr>
 		   <strong>
 				Fields marked with a red asterisk <span class="text-danger">(*)</span>
@@ -140,6 +141,8 @@
 		        {{ form.course_title(class="form-control", placeholder="Power of data in the decision making process", id='course_title') }}
 		        <small class="text-body-secondary">Max 100 characters</small>
                 <div id="courseTitleError" class="invalid-feedback"></div>
+                <div id="CourseTitleInUse" class="mt-2"></div>
+                <div id="courseTitleError'" class="mt-2"></div>
                 <div class="mt-3">
 		          	<small>
 			           	<i class="bi bi-smile"></i> 
@@ -248,22 +251,6 @@
 				    <span class="get-Inpired"><strong>Note</strong></span><br>
 				    A <strong>well-crafted</strong> thumbnail contributes to the <strong>attractiveness</strong> of your course and helps learners <strong>identify</strong> and engage with the <strong>content</strong>.
 				</div>
-			</div>
-			<div class="my-3">
-				{% with messages = get_flashed_messages(with_categories=true) %}
-				{% if messages %}
-					{% for category, message in messages %}
-						<small class="alert {{ category }} warning">
-							{% if category == 'success' %}
-							<i class="bi bi-check-circle"></i>
-							{% elif category == 'error' %}
-							<i class="bi bi-exclamation-circle"></i>
-							{% endif %}
-							{{ message }}
-						</small>
-					{% endfor %}
-				{% endif %}
-			{% endwith %}
 			</div>
 		    <div class="d-flex justify-content-end gap-2me-3">
 		    	<button type="button" disabled="disabled" id="continueButtonStep1" class="btn btn-primary">

@@ -1,0 +1,51 @@
+<div class="d-flex flex-column gap-2 border border-1 px-4 py-4 rounded-3">
+  <h2 class="text-body-secondary">My Courses</h2>
+  <div class="album py-5 bg-body-tertiary">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% if current_user.is_instructor() %}
+          {% for course in courses %}
+            <div class="col">
+              <div class="card shadow-sm h-100">
+                <div class="px-3 py-3" style="border-bottom-right-radius: 20px; max-width: 100px; background-color: rgb(0,63,140)">
+                  <img src="{{ url_for('static', filename='media/cyber.png') }}" alt="cyber-securité" style="max-width: 75px;">
+                </div>
+                <div class="card-body">
+                  <h6 style="font-size: 1.2rem; font-weight: 500;">{{ course.course_title | capitalize }}</h6>
+                  <p class="card-text">{{ course.short_description }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <a href="{{ url_for('main.course_details', course_id=course.id) }}" class="btn btn-outline-primary d-flex flex-row gap-2">
+                        <span class="align-middle">Open</span>
+                        <i class="bi bi-box-arrow-up-right"></i>
+                      </a>
+                    </div>
+                    <small class="text-body-secondary fs-italic">$ 750</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          {% if not courses %}
+          <div class="px-4 pt-5 my-5 text-center w-100">
+            <div>
+              <div class="container px-5">
+                <img src="{{ url_for('static', filename='media/create-file.png') }}" class="img-fluid mb-4" alt="Example image" width="100" loading="lazy">
+              </div>
+            </div>
+            <h1 class="display-4 fw-bold text-body-secondary">No courses created</h1>
+            <div class="col-lg-6 mx-auto">
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+                <a href="{{ url_for('api.create_course_step1') }}" class="btn btn-primary btn-lg px-4 me-sm-3">
+                  <i class="bi bi-plus-circle-dotted"></i>
+                  Create a new course
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

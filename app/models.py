@@ -355,16 +355,17 @@ class Course(db.Model):
     company_name = db.Column(db.String(155))
     problem = db.Column(db.String(1000), nullable=False, default=" ")
     strategy = db.Column(db.String(1000), nullable=False, default=" ")
+    duration = db.Column(db.Integer(), default=2)
     university_name = db.Column(db.String(155))
     core_specialization = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(), nullable=False, default=" ")
     course_title = db.Column(db.String(100), nullable=False, unique=True)
     short_description = db.Column(db.String(265), nullable=False)
-    video_url = db.Column(db.String(), nullable=False)
+    video_url = db.Column(db.String())
     thumbnail_url = db.Column(db.String(), nullable=False)
-    requirements = db.relationship('Requirements', backref='courses', lazy='dynamic')
-    quizzes = db.relationship('Quiz', backref='courses', lazy='dynamic')
-    projects = db.relationship('Project', backref='courses', lazy='dynamic')
+    quizzes = db.relationship('Quiz', backref='course', lazy='dynamic')
+    requirements = db.relationship('Requirements', backref='course', lazy='dynamic')
+    projects = db.relationship('Project', backref='course', lazy='dynamic')
     headings = db.relationship('Heading', secondary='course_heading_association', backref='courses')
     paragraphs = db.relationship('Paragraph', secondary='course_paragraph_association', backref='courses')
     skills_list = db.relationship('CourseSkillsList', secondary='course_skills_list', backref='courses') 
@@ -372,6 +373,14 @@ class Course(db.Model):
     steps_data = db.relationship('Step', secondary='course_steps_association', backref='courses')
     video_links = db.relationship('VideoLinks', secondary='course_video_links_association', backref='courses')
     instructor_contributions = db.relationship('Contributions', secondary='course_instructor_contribution_association', backref='courses')    
+
+class Project(db.Model):
+    __tablename__ = 'projects'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String())
+    description = db.Column(db.String())
+    deadline = db.Column(db.DateTime(), default=lambda: datetime.utcnow())
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
 
 class Contributions(db.Model):
     __tablename__ = 'contributions'
@@ -385,18 +394,32 @@ class VideoLinks(db.Model):
     link = db.Column(db.String())
     mask_text = db.Column(db.String())
 
-class Requirements(db.Model):
-    __tablename__ = 'requirements'
-    id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
-    prerequisite = db.Column(db.String())
-
 
 class Step(db.Model):
     __tablename__ = 'steps'
     id = db.Column(db.Integer, primary_key=True)
     step = db.Column(db.String())
 
+class Quiz(db.Model):
+    __tablename__ = 'quizzes'
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String())
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    questions = db.relationship('Question', backref='quiz', lazy='dynamic', cascade='all, delete-orphan')
+
+class Question(db.Model):
+    __tablename__ = 'questions'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text(), nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+    options = db.relationship('Option', backref='question', lazy='dynamic', cascade='all, delete-orphan')
+
+class Option(db.Model):
+    __tablename__ = 'options'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text(), nullable=False)
+    is_correct = db.Column(db.Boolean, default=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
 
 class CodeSnippets(db.Model):
     __tablename__ = 'code_snippets'
@@ -409,6 +432,12 @@ class CourseSkillsList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
 
+class Requirements(db.Model):
+    __tablename__ = 'requirements'
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String())
+    details = db.Column(db.String())
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
 
 class Heading(db.Model):
     __tablename__ = 'headings'
@@ -421,51 +450,12 @@ class Paragraph(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     paragraph = db.Column(db.Text(), nullable=False)
 
-class Quiz(db.Model):
-    __tablename__ = 'quizzes'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text(), nullable=False)
-    questions = db.relationship('Question', backref='quiz', lazy='dynamic')
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-    questions = db.relationship('Question', backref='quiz', lazy='dynamic', cascade='all, delete-orphan')
 
-class Question(db.Model):
-    __tablename__ = 'questions'
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text(), nullable=False)
-    options = db.relationship('Option', backref='question', lazy='dynamic')
-    quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
-
-class Option(db.Model):
-    __tablename__ = 'options'
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text(), nullable=False)
-    is_correct = db.Column(db.Boolean, default=False)
-    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
-
-class Project(db.Model):
-    __tablename__ = 'projects'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text(), nullable=False)
-    deadline = db.Column(db.DateTime(), nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))  # Foreign key to link projects to courses
-    submissions = db.relationship('ProjectSubmission', backref='project', lazy='dynamic')
-
-
-class ProjectSubmission(db.Model):
-    __tablename__ = 'project_submissions'
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text(), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))    
-
-course_video_links_association = db.Table('course_video_links_association',
+course_video_links_association = db.Table(
+    'course_video_links_association',
     db.Column('courses_id', db.Integer, db.ForeignKey('courses.id')),
-    db.Column('video_links_id', db.Integer, db.ForeignKey('course_video_links.id'))
+    db.Column('video_links_id', db.Integer, db.ForeignKey('course_video_links.id')),
 )
-
 
 course_instructor_contribution_association = db.Table('course_instructor_contribution_association',
     db.Column('contributions_id', db.Integer, db.ForeignKey('contributions.id'), primary_key=True),

@@ -1,68 +1,9 @@
 <h4 class="py-4 mt-4 border-3 border-bottom mb-4 col-8 col-lg-12 ms-2 ms-lg-5 border-primary" style="font-family:'Telegraf-UltraBold', sans-serif">
-  {% if current_user.is_authenticated %}
-    My courses
-  {% else %}
   Courses and Trainings
-  {% endif %}
 </h4>
 <div class="album py-5 bg-body-tertiary">
   <div class="container">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      {% if current_user.is_authenticated %}
-        {% if current_user.is_instructor() %}
-          {% if courses_created %}
-            {% for courses_created in courses_created %}
-              <div class="col">
-                <div class="card shadow-sm">
-                <!-- Add your course card content here -->
-                <!-- Use course.image, course.title, course.description, etc. as needed-->
-                </div>
-              </div>
-            {% endfor %}
-          {% else %}
-            <div class="px-4 py-5 my-5 mx-auto text-center">
-              <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='media/create-file.png') }}" alt="" width="100">
-              <div class="">
-                <p class="lead mb-4">
-                  You have not created any courses yet.
-                </p>
-                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                  <a href="{{ url_for('api.create_course_step1') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle-dotted"></i>
-                    Create a new course
-                  </a>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        {% else %}
-            {% if enrolled_courses %}
-              {% for course in enrolled_courses %}
-                <div class="col">
-                  <div class="card shadow-sm">
-                    <!-- Add your course card content here -->
-                    <!-- Use course.image, course.title, course.description, etc. as needed-->
-                  </div>
-                </div>
-              {% endfor %}
-            {% else %}
-              <div class="px-4 py-5 my-5 mx-auto text-center">
-                <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='media/no_courses.png') }}" alt="" width="100">
-                <div class="">
-                <p class="lead mb-4">
-                  You have not enrolled in any courses yet.
-                </p>
-                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                  <a href="{{ url_for('main.courselist') }}" class="btn btn-primary">
-                    <i class="bi bi-search"></i>
-                    Browse courses
-                  </a>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        {% endif %}
-      {% else %}
       <div class="col">
         <div class="card shadow-sm h-100">
           <div class="px-3 py-3" style="border-bottom-right-radius:20px;max-width:100px;background-color:rgb(0,63,140)">
@@ -280,7 +221,6 @@
             </div>              
           </div>
         </div>
-      {% endif %}
     </div>
   </div>
 </div>

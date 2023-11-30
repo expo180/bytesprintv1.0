@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from flask_login import login_required, current_user
 from . import main
 from ..decorators import admin_required, permission_required
-from ..models import Permission
+from ..models import Permission, Course
 from .. import db
 import random
 
@@ -21,6 +21,7 @@ quotes_with_authors = [
     {"quote": "The scientist only imposes two things, namely truth and sincerity, imposes them upon himself and upon other scientists.", "author": "Erwin Schrödinger"},
     {"quote": "The engineer's first problem in any design situation is to discover what the problem really is.", "author": "Unknown"},
 ]
+
 @main.route("/courses&trainings/pricing")
 def pricing():
     return render_template('courses/pricing.html')
@@ -123,6 +124,22 @@ def map3D():
 @main.route("/user/settings/")
 def preferences():
     return render_template('user/settings.html')
+
+@login_required
+@main.route("/user/home/")
+def user_home():
+    courses = Course.query.filter_by(email=current_user.email).all()
+    return render_template('user/home.html', courses=courses)
+
+@main.route("/courses/<int:course_id>/details")
+def course_details(course_id):
+    course = Course.query.get(course_id)
+
+    if course:
+        return render_template('/courses/course_details.html', course=course)
+    else:
+        return render_template('/courses/course_not_found.html'), 404
+
 
 @main.route("/user/profile/")
 def profile():

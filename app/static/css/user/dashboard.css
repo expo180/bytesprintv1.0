@@ -1,0 +1,45 @@
+/*
+ * Sidebar
+ */
+
+@media (min-width: 768px) {
+  .sidebar .offcanvas-lg {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px;
+  }
+  .navbar-search {
+    display: block;
+  }
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #f8f9fa;
+}
+
+.sidebar .nav-link {
+  font-size: .875rem;
+  font-weight: 500;
+}
+
+.sidebar .nav-link.active {
+  color: #2470dc;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+}
+
+/* Main Content */
+
+
+.pattern-2 {
+  background-image: url("../background-slider.png");
+  padding: 5em 5em;
+  background-position: center;
+}

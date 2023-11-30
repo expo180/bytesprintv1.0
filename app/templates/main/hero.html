@@ -28,14 +28,6 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                {% if current_user.is_authenticated %}
-                <div class="d-flex flex-column gap-4 quote py-4">
-                    <blockquote class="display-6" style="font-family:'Telegraf-UltraBold', sans-serif;color:white;">
-                       {{ random_quote.quote }}
-                    </blockquote>
-                    <footer class="blockquote-footer text-light">{{ random_quote.author }}</footer>
-                </div>
-                {% else %}
                 <div class="d-flex flex-column gap-2">
                     <h1 class="display-3" style="font-family:'Telegraf-Ultrabold', sans-serif; color:white">Explore Complexity.</h1>
                     <p class="lead text-light hero-paragraph">
@@ -51,7 +43,6 @@
                         </a>
                     </div>
                 </div>
-                {% endif %}
             </div>
         </div>
         <div class="py-5"></div>

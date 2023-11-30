@@ -3,6 +3,9 @@
   font-family:'Telegraf-Regular', sans-serif;
   box-sizing:border-box;
 }
+.custom-alert{
+  margin-bottom:8em;
+}
 html,
 body
 {

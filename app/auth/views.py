@@ -78,7 +78,7 @@ def login():
             next = request.args.get('next')
             if not next or not next.startswith('/'):
                 print(current_user.is_instructor())
-                next = url_for('main.home')
+                next = url_for('main.user_home')
             return redirect(next)
         flash('Incorrect password or email address!', 'error')
     return render_template('auth/login.html', form=form)
@@ -92,7 +92,7 @@ def logout():
 @auth.route('/reset_password/', methods=['GET', 'POST'])
 def password_reset_request():
     if not current_user.is_anonymous:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.user_home'))
     form = PasswordResetRequestForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
@@ -113,7 +113,7 @@ def change_password():
             db.session.add(current_user)
             db.session.commit()
             flash('Your password has been successfully updated!')
-            return redirect(url_for('main.home'))
+            return redirect(url_for('main.user_home'))
         else:
             flash('Invalid password.', 'error')
     return render_template('auth/change_password.html', form=form)
@@ -143,7 +143,7 @@ def google_login_authorized():
         login_user(user)
         next = request.args.get('next')
         if not next or not next.startswith('/'):
-            next = url_for('main.home')
+            next = url_for('main.user_home')
         return redirect(next)
     flash('Incorrect password or email address!', 'error')
     return render_template('auth/login.html', form=form)
@@ -177,7 +177,7 @@ def google_signup_authorized():
     db.session.add(user)
     db.session.commit()
     login_user(user)
-    return redirect(url_for('main.home'))
+    return redirect(url_for('main.user_home'))
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
@@ -206,7 +206,7 @@ def facebook_login_authorized():
         login_user(user)
         next = request.args.get('next')
         if not next or not next.startswith('/'):
-            next = url_for('main.home')
+            next = url_for('main.user_home')
         return redirect(next)
 
     flash('Incorrect password or email address!', 'error')
@@ -242,4 +242,4 @@ def facebook_sign_up_authorized():
     db.session.add(user)
     db.session.commit()
     flash('You have successfully logged into your account', 'success')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('main.user_home'))

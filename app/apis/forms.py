@@ -181,4 +181,7 @@ class CourseDetailsForm(FlaskForm):
         validators=[InputRequired()]
     )
 
+class CourseFinalStepForm(FlaskForm):
+    
+
 
