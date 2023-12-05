@@ -22,7 +22,6 @@ cred = credentials.Certificate(json_file_path)
 initialize_app(cred, {'storageBucket': 'bytesprintv0.appspot.com'})
 
 @api.route("/courses/enrollment/checkout/",  methods=['GET', 'POST'])
-@login_required
 def enroll():
     form = CheckoutForm()
     all_countries = rapi.get_all()
@@ -30,7 +29,7 @@ def enroll():
         (f"{country.name}")
         for country in all_countries
     ]
-    return render_template('checkout/course_online.html', form=form)
+    return render_template('apis/forms/checkout/enroll.html', form=form)
 
 @api.route("/courses/enrollment/finances/financial_aid_form/",  methods=['GET', 'POST'])
 @login_required

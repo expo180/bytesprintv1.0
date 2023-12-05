@@ -115,7 +115,6 @@ class RegistrationForm(FlaskForm):
         ("You have read and accepted our <a href=''>Terms and Conditions</a>."),
         validators=[InputRequired()]
     )
-    submit = SubmitField( ('Next'))
 
 
 class LoginForm(FlaskForm):

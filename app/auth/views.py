@@ -1,5 +1,5 @@
 # auth/views.py
-from flask import render_template, redirect, request, url_for, flash, session
+from flask import render_template, redirect, request, url_for, flash, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
@@ -44,14 +44,19 @@ def email_slicer(email):
     first_name = email.split('@')[0]
     return first_name
 
+
 @auth.route('/register/', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
+
         if user:
-            flash('Account already exists please login!', 'error')
+            # Display a flash message for existing email
+            flash('Account already exists. Please log in.', 'error')
             return redirect(url_for('auth.register'))
+
         user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
@@ -62,11 +67,16 @@ def register():
             gender=form.gender.data,
             password_hash=generate_password_hash(form.password2.data)
         )
+
         db.session.add(user)
         db.session.commit()
+
+        # Display a flash message for successful registration
         flash("Your account has been created successfully!", 'success')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('api.enroll'))
+
     return render_template('auth/register.html', form=form)
+
 
 @auth.route('/sign_in/', methods=['GET', 'POST'])
 def login():
@@ -177,7 +187,7 @@ def google_signup_authorized():
     db.session.add(user)
     db.session.commit()
     login_user(user)
-    return redirect(url_for('main.user_home'))
+    return redirect(url_for('api.enroll'))
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
