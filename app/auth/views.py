@@ -1,5 +1,5 @@
 # auth/views.py
-from flask import render_template, redirect, request, url_for, flash, session, jsonify
+from flask import render_template, redirect, request, url_for, flash, session, jsonify, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
@@ -9,6 +9,7 @@ from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from flask_oauthlib.client import OAuth
 from .. import rapi 
+from datetime import datetime
 
 oauth = OAuth()
 
@@ -56,6 +57,8 @@ def register():
             # Display a flash message for existing email
             flash('Account already exists. Please log in.', 'error')
             return redirect(url_for('auth.register'))
+        
+        current_datetime = datetime.utcnow()
 
         user = User(
             first_name=form.first_name.data,
@@ -65,7 +68,8 @@ def register():
             age=form.age.data,
             areas_of_interest=form.areas_of_interest.data,
             gender=form.gender.data,
-            password_hash=generate_password_hash(form.password2.data)
+            password_hash=generate_password_hash(form.password2.data),
+            member_since=current_datetime
         )
 
         db.session.add(user)
@@ -73,7 +77,7 @@ def register():
 
         # Display a flash message for successful registration
         flash("Your account has been created successfully!", 'success')
-        return redirect(url_for('api.enroll'))
+        return redirect(url_for('main.user_home'))
 
     return render_template('auth/register.html', form=form)
 
@@ -168,26 +172,33 @@ def google_signup_authorized():
             request.args['error_reason'],
             request.args['error_description']
         )
+    
     session['google_token'] = (response['access_token'], '')
     user_info = google.get('userinfo')
     email = user_info.data.get('email')
     first_name = email_slicer(email)
     user = User.query.filter_by(email=email.lower()).first()
+
     if user:
-        flash('Account already exists please login!', 'error')
+        flash('Account already exists, please log in!', 'error')
         return redirect(url_for('auth.register'))
+
+    current_datetime = datetime.utcnow()
     
-    default_password='ghp_gcxdTBEc3e3M9'
+    default_password = 'ghp_gcxdTBEc3e3M9'
     user = User(
         email=email,
         first_name=first_name,
         last_name=first_name,
-        password_hash=generate_password_hash(default_password)
+        password_hash=generate_password_hash(default_password),
+        member_since=current_datetime
     )
+
     db.session.add(user)
     db.session.commit()
+
     login_user(user)
-    return redirect(url_for('api.enroll'))
+    return redirect(url_for('main.user_home'))
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
