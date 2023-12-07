@@ -1,4 +1,4 @@
-<section class="hero-section">
+<section class="">
     <!--header section-->
     {% include 'headers/header-index.html' %}
     <!--end header section-->
@@ -9,16 +9,16 @@
                 <div id="slideshow" class="carousel slide" data-bs-ride="carousel" data-interval="5000">
                     <div class="carousel-inner">
                         {% set images = [
-                            {'image': 'blockchain_technology.svg', 'text': 'Exploring the Complexity of Blockchain Technology'},
-                            {'image': 'mind_map2.svg', 'text': 'Diving into Creative Mind Mapping Techniques'},
-                            {'image': 'artificial_intelligence(2).svg', 'text': 'Unveiling the Future of Artificial Intelligence'}
+                            {'image': 'circuit.svg', 'text': 'Exploring the Complexity of Blockchain Technology'},
+                            {'image': 'critical_thinking_blue.svg', 'text': 'Diving into Creative Mind Mapping Techniques'},
+                            {'image': 'gears.svg', 'text': 'Unveiling the Future of Artificial Intelligence'}
                         ] %}    
                         {% for image_data in images %}
                             <div class="carousel-item {% if loop.index == 1 %}active{% endif %} position-relative w-100">
                                 <img src="{{ url_for('static', filename='media/' + image_data['image']) }}"
-                                    class="img-fluid display-block mx-auto" alt="Slideshow Image" width="700"
+                                    class="img-fluid slideshow display-block mx-auto" alt="Slideshow Image" width="700"
                                     height="400" loading="lazy">
-                                <span class="position-absolute top-0 end-0 text-end text-white img--text">
+                                <span class="position-absolute top-0 end-0 text-end img--text">
                                     <i class="bi bi-info-circle"></i>
                                     {{ image_data['text'] }}
                                 </span>
@@ -28,20 +28,21 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="d-flex flex-column gap-2">
-                    <h1 class="display-3" style="font-family:'Telegraf-Ultrabold', sans-serif; color:white">Explore Complexity.</h1>
-                    <p class="lead text-light hero-paragraph">
+                <div class="d-flex flex-column gap-2 position-relative">
+                    <h1 class="display-3" style="font-family:'Telegraf-Ultrabold', sans-serif;">Explore Complexity.</h1>
+                    <p class="lead hero-paragraph">
                         Complexity challenges our intellect, encourages <strong style="font-family:'Telegraf-Ultrabold', sans-serif;">critical thinking</strong>, and fosters a 
                         deeper understanding of the world around us. Our courses and materials are meticulously designed 
                         to guide learners through <strong style="font-family:'Telegraf-Ultrabold', sans-serif;">complex concepts</strong>, breaking them down into manageable pieces and encouraging 
                         exploration.
                     </p>
                     <div class="mt-auto">
-                        <a href="{{ url_for('main.courses') }}" class="icon-link icon-link-hover cta-discover">
+                        <a href="{{ url_for('main.courses') }}" class="icon-link icon-link-hover">
                             <span class="mt-2">Discover now</span>
                             <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
+                    <div class="overlay"></div>
                 </div>
             </div>
         </div>
