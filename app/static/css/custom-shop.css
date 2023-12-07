@@ -37,26 +37,28 @@ h1,h4{
     color:rgb(1,16,89);
 }
 .navbar{
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    background-color:rgb(7,95,195);
-
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-image:url("hero-bg.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
 }
 .btn{
-    font-family:'Telegraf-UltraBold', sans-serif;
+  font-family:'Telegraf-UltraBold', sans-serif;
 }
 .cta-learn{
-    color:white;
-    text-decoration: none;
+  color:white;
+  text-decoration: none;
 }
 .dropdown-toggle::after {
-    display: none;
+  display: none;
 }
 .offer-section{
-    background-image:url("Sans titre 110_20230804184131.png");
-    background-position:center;
-    background-repeat: no-repeat;
-    background-size:cover;
-    padding:10em 5em;
+  background-image:url("Sans titre 110_20230804184131.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  padding:10em 5em;
 }
 .pattern{
   background-image:url("Sans titre 110_20230804184040.png");

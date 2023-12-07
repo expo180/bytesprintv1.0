@@ -49,8 +49,10 @@ strong
 }
 .navbar{
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-color:rgb(7,95,195);
-
+  background-image:url("hero-bg.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
 }
 .enroll{
     transition:.5s ease-in;
