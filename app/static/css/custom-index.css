@@ -11,6 +11,10 @@ body
 {
   overflow-x:hidden;
 }
+.discover-text{
+  text-decoration:none;
+  color:#000;
+}
 .grad-img{
   width:200px;
   height:auto;

@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
     <!--custom css-->
     <link rel="stylesheet" href="{{url_for('static', filename='css/custom-index.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/user/home.css')}}">
     <!-- Slick Slider CSS -->
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <!-- bootstrap-icons-->
@@ -41,13 +42,15 @@
   {% include 'headers/header-index.html' %}
   <div class="py-5"></div>
   {% include 'user/components/TechHandTools.html' %}
-  <div class="pattern shadow-lg"></div>
+  <div class="pattern-2">
+    <h1 class="display-3 text-white">Welcome back, {{ current_user.first_name }}</h1>
+  </div>
   <div class="py-5"></div>
   <div class="container">
     {% include 'user/components/courses.html' %}
   </div>
   <div class="py-5"></div>
-  <div class="pattern shadow-lg"></div>
+  <div class="pattern-2 shadow-lg"></div>
   {% include 'footers/footer.html' %}
   <!--bundle-->
   <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
