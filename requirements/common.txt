@@ -19,7 +19,7 @@ Flask-Login==0.6.3
 Flask-Mail==0.9.1
 Flask-Migrate==4.0.5
 Flask-Moment==1.0.5
-Flask-OAuthlib==0.9.6
+Flask-OAuthlib==0.9.5
 Flask-PageDown==0.4.0
 Flask-Principal==0.4.0
 Flask-RestCountries==1.2.0
