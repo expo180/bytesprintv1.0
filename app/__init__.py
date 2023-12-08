@@ -21,10 +21,10 @@ rapi = CountriesAPI()
 migrate = Migrate()
 
 
-def create_app(development=True):
+def create_app(production=True):
     app = Flask(__name__)
     app.config.from_object(config['development'])
-    config['development'].init_app(app)
+    config['production'].init_app(app)
     bootstrap.init_app(app)
     mail.init_app(app)
     db.init_app(app)
