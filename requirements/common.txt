@@ -33,7 +33,7 @@ flask-change-password
 httpx
 psycopg2-binary
 gunicorn
+Flask-OAuthlib
 Flask-RestCountries
 pycountry
 firebase-admin
-git+https://github.com/expo180/flask-oauthlib@master
