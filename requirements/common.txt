@@ -36,4 +36,4 @@ gunicorn
 Flask-RestCountries
 pycountry
 firebase-admin
-git+https://github.com/expo180/flask-oauthlib@master
+git+https://github.com/expo180/authlib@master
