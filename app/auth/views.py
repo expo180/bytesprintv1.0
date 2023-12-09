@@ -27,6 +27,8 @@ auth.before_request(facebook_bp.before_request)
 auth.register_blueprint(google_bp, url_prefix='/google_login')
 auth.register_blueprint(facebook_bp, url_prefix='/facebook_login')
 
+google = google_bp
+
 @google_bp.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
