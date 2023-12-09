@@ -9,8 +9,8 @@ from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
-from .. import rapi 
 
+# Replace these with your actual Google and Facebook OAuth client IDs and secrets
 google_bp = make_google_blueprint(client_id='176959984300-4t6mne05ddmd866l7eije2eq2t2gia5m.apps.googleusercontent.com',
                                   client_secret='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',
                                   redirect_to='google_login')
@@ -27,11 +27,6 @@ auth.before_request(facebook_bp.before_request)
 auth.register_blueprint(google_bp, url_prefix='/google_login')
 auth.register_blueprint(facebook_bp, url_prefix='/facebook_login')
 
-google = google_bp
-
-@google_bp.tokengetter
-def get_google_oauth_token():
-    return session.get('google_token')
 
 def email_slicer(email):
     first_name = email.split('@')[0]
