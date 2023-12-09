@@ -118,12 +118,12 @@ def change_password():
 
 @auth.route('/google/login/')
 def google_login():
-    return redirect(url_for('google.login'))
+    return redirect(url_for('auth.google.login'))
 
 @auth.route('/google/login/authorized/')
 def google_login_authorized():
     if not google.authorized:
-        return redirect(url_for('google.login'))
+        return redirect(url_for('auth.google.login'))
 
     resp = google.get('/plus/v1/people/me')
     assert resp.ok, resp.text
@@ -141,12 +141,12 @@ def google_login_authorized():
 
 @auth.route('/google/sign_up/')
 def google_signup():
-    return redirect(url_for('google.login'))
+    return redirect(url_for('auth.google.login'))
 
 @auth.route('/google/sign_up/authorized/')
 def google_signup_authorized():
     if not google.authorized:
-        return redirect(url_for('google.login'))
+        return redirect(url_for('auth.google.login'))
 
     resp = google.get('/plus/v1/people/me')
     assert resp.ok, resp.text
@@ -165,12 +165,12 @@ def google_signup_authorized():
 
 @auth.route('/facebook/login/')
 def facebook_login():
-    return redirect(url_for('facebook.login'))
+    return redirect(url_for('auth.facebook.login'))
 
 @auth.route('/facebook/login/authorized/')
 def facebook_login_authorized():
     if not facebook.authorized:
-        return redirect(url_for('facebook.login'))
+        return redirect(url_for('auth.facebook.login'))
 
     resp = facebook.get('/me?fields=id,email')
     assert resp.ok, resp.text
@@ -188,12 +188,12 @@ def facebook_login_authorized():
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
-    return redirect(url_for('facebook.login'))
+    return redirect(url_for('auth.facebook.login'))
 
 @auth.route('/facebook/sign_up/authorized/')
 def facebook_sign_up_authorized():
     if not facebook.authorized:
-        return redirect(url_for('facebook.login'))
+        return redirect(url_for('auth.facebook.login'))
 
     resp = facebook.get('/me?fields=id,email')
     assert resp.ok, resp.text
