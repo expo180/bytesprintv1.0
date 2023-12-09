@@ -109,12 +109,12 @@ def change_password():
 
 @auth.route('/google/login/')
 def google_login():
-    return redirect(url_for('auth.google.login'))
+    return redirect(url_for('auth.login'))
 
 @auth.route('/google/login/authorized/')
 def google_login_authorized():
     if not google_bp.authorized:
-        return redirect(url_for('auth.google.login'))
+        return redirect(url_for('auth.login'))
 
     user_info = google_bp.get('userinfo')
     print(user_info)
@@ -129,7 +129,7 @@ def google_login_authorized():
 
     if user is not None:
         login_user(user)
-        next = request.args.get('next') or url_for('main.user_home')
+        next = url_for('main.user_home')
         return redirect(next)
 
     flash('Incorrect password or email address!', 'error')
@@ -137,12 +137,12 @@ def google_login_authorized():
 
 @auth.route('/google/sign_up/')
 def google_signup():
-    return redirect(url_for('auth.google.register'))
+    return redirect(url_for('auth.register'))
 
 @auth.route('/google/sign_up/authorized/')
 def google_signup_authorized():
     if not google_bp.authorized:
-        return redirect(url_for('auth.google.register'))
+        return redirect(url_for('auth.register'))
 
     resp = google_bp.get('/plus/v1/people/me')
     assert resp.ok, resp.text
@@ -161,12 +161,12 @@ def google_signup_authorized():
 
 @auth.route('/facebook/login/')
 def facebook_login():
-    return redirect(url_for('auth.facebook.login'))
+    return redirect(url_for('auth.login'))
 
 @auth.route('/facebook/login/authorized/')
 def facebook_login_authorized():
     if not facebook_bp.authorized:
-        return redirect(url_for('auth.facebook.login'))
+        return redirect(url_for('auth.login'))
 
     resp = facebook_bp.get('/me?fields=id,email')
     assert resp.ok, resp.text
@@ -184,12 +184,12 @@ def facebook_login_authorized():
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
-    return redirect(url_for('auth.facebook.register'))
+    return redirect(url_for('auth.register'))
 
 @auth.route('/facebook/sign_up/authorized/')
 def facebook_sign_up_authorized():
     if not facebook_bp.authorized:
-        return redirect(url_for('auth.facebook.register'))
+        return redirect(url_for('auth.register'))
 
     resp = facebook_bp.get('/me?fields=id,email')
     assert resp.ok, resp.text
