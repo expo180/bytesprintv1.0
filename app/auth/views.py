@@ -109,7 +109,7 @@ def change_password():
 
 @auth.route('/google/login/')
 def google_login():
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.google_bp.login'))
 
 @auth.route('/google/login/authorized/')
 def google_login_authorized():
@@ -137,7 +137,7 @@ def google_login_authorized():
 
 @auth.route('/google/sign_up/')
 def google_signup():
-    return redirect(url_for('auth.register'))
+    return redirect(url_for('auth.google_bp.login'))
 
 @auth.route('/google/sign_up/authorized/')
 def google_signup_authorized():
@@ -161,7 +161,7 @@ def google_signup_authorized():
 
 @auth.route('/facebook/login/')
 def facebook_login():
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.facebook_bp.login'))
 
 @auth.route('/facebook/login/authorized/')
 def facebook_login_authorized():
@@ -184,7 +184,7 @@ def facebook_login_authorized():
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
-    return redirect(url_for('auth.register'))
+    return redirect(url_for('auth.facebook_bp.login'))
 
 @auth.route('/facebook/sign_up/authorized/')
 def facebook_sign_up_authorized():
