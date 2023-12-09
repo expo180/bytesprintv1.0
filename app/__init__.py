@@ -8,8 +8,8 @@ from flask_login import LoginManager
 from flask_restcountries import CountriesAPI
 from flask_cors import CORS
 from flask_migrate import Migrate
-from flask_oauthlib.client import OAuth
-
+from oauthlib.oauth2 import WebApplicationClient  # Import from oauthlib
+from authlib.integrations.flask_client import OAuth
 
 oauth = OAuth()
 login_manager = LoginManager()
@@ -20,7 +20,6 @@ db = SQLAlchemy()
 moment = Moment()
 rapi = CountriesAPI()
 migrate = Migrate()
-
 
 def create_app(production=True):
     app = Flask(__name__)
@@ -33,7 +32,7 @@ def create_app(production=True):
     moment.init_app(app)
     login_manager.init_app(app)
     rapi.init_app(app)
-    oauth.init_app(app)
+    oauth.init_app(app, fetch_token=lambda: None)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
@@ -48,6 +47,5 @@ def create_app(production=True):
         db.create_all()
         from app.models import Role
         Role.insert_roles()
-        
 
     return app
