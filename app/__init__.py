@@ -8,7 +8,7 @@ from flask_login import LoginManager
 from flask_restcountries import CountriesAPI
 from flask_cors import CORS
 from flask_migrate import Migrate
-flask_oauthlib.client import OAuth
+from flask_oauthlib.client import OAuth
 
 
 oauth = OAuth()
