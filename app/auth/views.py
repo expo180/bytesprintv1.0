@@ -19,13 +19,9 @@ facebook_bp = make_facebook_blueprint(client_id='350477707655423',
                                       client_secret='952f700df029093910a999d747c938a2',
                                       redirect_to='facebook_login')
 
+# Add the blueprints to the app
 auth.register_blueprint(google_bp, url_prefix='/google_login')
 auth.register_blueprint(facebook_bp, url_prefix='/facebook_login')
-
-google_bp.before_request(google_bp.before_request)
-facebook_bp.before_request(facebook_bp.before_request)
-
-
 
 def email_slicer(email):
     first_name = email.split('@')[0]
