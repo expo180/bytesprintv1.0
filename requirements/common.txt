@@ -19,7 +19,6 @@ Flask-Login==0.6.3
 Flask-Mail==0.9.1
 Flask-Migrate==4.0.5
 Flask-Moment==1.0.5
-requests==2.21.0
 oauthlib==3.2.2 
 pyOpenSSL==19.0.0
 Flask-PageDown==0.4.0
@@ -42,8 +41,5 @@ psycopg2-binary==2.9.9
 pycountry==22.3.5
 python-dotenv==1.0.0
 requests==2.27.1
-requests-oauthlib==1.1.0
 six==1.16.0
-SQLAlchemy==2.0.23
-Werkzeug==3.0.1
 WTForms==3.1.1
