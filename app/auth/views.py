@@ -19,9 +19,6 @@ facebook_bp = make_facebook_blueprint(client_id='350477707655423',
                                       client_secret='952f700df029093910a999d747c938a2',
                                       redirect_to='facebook_login')
 
-google = google_bp.blueprint
-facebook = facebook_bp.blueprint
-
 # Register the blueprints
 auth.before_request(google_bp.before_request)
 auth.before_request(facebook_bp.before_request)
