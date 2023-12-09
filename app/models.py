@@ -8,10 +8,19 @@ from itsdangerous import Serializer
 from . import db
 from . import login_manager
 from .instructors import INSTRUCTORS
+from flask_dance.consumer.storage.sqla import OAuthConsumerMixin, SQLAlchemyStorage
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class OAuth(OAuthConsumerMixin, db.Model):
+    __tablename__ = 'oauth'
+    id = db.Column(db.Integer, primary_key=True)
+    provider_user_id = db.Column(db.String(256), unique=True, nullable=False)
+    users = db.relationship('User', backref='oauth', lazy='dynamic')
+
 
 # Permission definition
 class Permission:
@@ -203,6 +212,7 @@ class User(UserMixin, db.Model):
     articles = db.relationship('Article', secondary='article_authors', backref='users')
     comments = db.relationship('Comments', secondary='comment_authors', backref='users')
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    oauth_id = db.Column(db.Integer, db.ForeignKey('oauth.id'))
     confirmed = db.Column(db.Boolean, default=False)
     skills_avg = db.Column(db.Integer)
     games_avg = db.Column(db.Integer)
@@ -355,7 +365,7 @@ class Course(db.Model):
     company_name = db.Column(db.String(155))
     problem = db.Column(db.String(1000), nullable=False, default=" ")
     strategy = db.Column(db.String(1000), nullable=False, default=" ")
-    duration = db.Column(db.Integer(), default=2)
+    course_duration = db.Column(db.Integer, default=2)
     university_name = db.Column(db.String(155))
     core_specialization = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(), nullable=False, default=" ")

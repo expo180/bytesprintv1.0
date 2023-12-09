@@ -19,10 +19,6 @@ facebook_bp = make_facebook_blueprint(client_id='350477707655423',
                                       client_secret='952f700df029093910a999d747c938a2',
                                       redirect_to='main.user_home')
 
-# Add the blueprints to the app
-auth.register_blueprint(google_bp, url_prefix='/google_login')
-auth.register_blueprint(facebook_bp, url_prefix='/facebook_login')
-
 def email_slicer(email):
     first_name = email.split('@')[0]
     return first_name
@@ -117,10 +113,10 @@ def google_login():
 
 @auth.route('/google/login/authorized/')
 def google_login_authorized():
-    if not google.authorized:
+    if not google_bp.authorized:
         return redirect(url_for('auth.google.login'))
 
-    user_info = google.get('userinfo')
+    user_info = google_bp.get('userinfo')
     print(user_info)
     email = user_info.data.get('email')
     user = User.query.filter_by(email=email.lower()).first()
@@ -141,14 +137,14 @@ def google_login_authorized():
 
 @auth.route('/google/sign_up/')
 def google_signup():
-    return redirect(url_for('auth.google.login'))
+    return redirect(url_for('auth.google.register'))
 
 @auth.route('/google/sign_up/authorized/')
 def google_signup_authorized():
-    if not google.authorized:
-        return redirect(url_for('auth.google.login'))
+    if not google_bp.authorized:
+        return redirect(url_for('auth.google.register'))
 
-    resp = google.get('/plus/v1/people/me')
+    resp = google_bp.get('/plus/v1/people/me')
     assert resp.ok, resp.text
     user_info = resp.json()
     email = user_info['emails'][0]['value']
@@ -169,10 +165,10 @@ def facebook_login():
 
 @auth.route('/facebook/login/authorized/')
 def facebook_login_authorized():
-    if not facebook.authorized:
+    if not facebook_bp.authorized:
         return redirect(url_for('auth.facebook.login'))
 
-    resp = facebook.get('/me?fields=id,email')
+    resp = facebook_bp.get('/me?fields=id,email')
     assert resp.ok, resp.text
     user_info = resp.json()
     email = user_info['email']
@@ -188,14 +184,14 @@ def facebook_login_authorized():
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
-    return redirect(url_for('auth.facebook.login'))
+    return redirect(url_for('auth.facebook.register'))
 
 @auth.route('/facebook/sign_up/authorized/')
 def facebook_sign_up_authorized():
-    if not facebook.authorized:
-        return redirect(url_for('auth.facebook.login'))
+    if not facebook_bp.authorized:
+        return redirect(url_for('auth.facebook.register'))
 
-    resp = facebook.get('/me?fields=id,email')
+    resp = facebook_bp.get('/me?fields=id,email')
     assert resp.ok, resp.text
     user_info = resp.json()
     email = user_info['email']
