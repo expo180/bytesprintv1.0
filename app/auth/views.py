@@ -7,7 +7,7 @@ from ..models import User
 from werkzeug.security import generate_password_hash
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
-from authlib.integrations.flask_client import OAuth 
+from oauthlib.integrations.flask_client import OAuth 
 from .. import rapi 
 
 oauth = OAuth()
