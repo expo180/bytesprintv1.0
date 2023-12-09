@@ -7,7 +7,6 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_oauthlib.client import OAuth
 from flask_restcountries import CountriesAPI
-from flask_cors import CORS
 from flask_migrate import Migrate
 
 login_manager = LoginManager()
