@@ -8,7 +8,10 @@ from flask_login import LoginManager
 from flask_restcountries import CountriesAPI
 from flask_cors import CORS
 from flask_migrate import Migrate
+flask_oauthlib.client import OAuth
 
+
+oauth = OAuth()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 bootstrap = Bootstrap()
@@ -21,7 +24,7 @@ migrate = Migrate()
 
 def create_app(production=True):
     app = Flask(__name__)
-    app.config.from_object(config['production'])
+    app.config.from_object(config['development'])
     config['production'].init_app(app)
     bootstrap.init_app(app)
     mail.init_app(app)
@@ -30,6 +33,7 @@ def create_app(production=True):
     moment.init_app(app)
     login_manager.init_app(app)
     rapi.init_app(app)
+    oauth.init_app(app)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
