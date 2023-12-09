@@ -37,3 +37,4 @@ Flask-OAuthlib
 Flask-RestCountries
 pycountry
 firebase-admin
+Werkzeug==2.2.2
