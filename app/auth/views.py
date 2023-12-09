@@ -7,43 +7,30 @@ from ..models import User
 from werkzeug.security import generate_password_hash
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
-from oauthlib.integrations.flask_client import OAuth 
+from flask_dance.contrib.google import make_google_blueprint, google
+from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from .. import rapi 
 
-oauth = OAuth()
+google_bp = make_google_blueprint(client_id='176959984300-4t6mne05ddmd866l7eije2eq2t2gia5m.apps.googleusercontent.com',
+                                  client_secret='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',
+                                  redirect_to='google_login')
 
-google = oauth.register(
-    name='google',
-    client_id='176959984300-4t6mne05ddmd866l7eije2eq2t2gia5m.apps.googleusercontent.com',
-    client_secret='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',
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    authorize_params=None,
-    authorize_callback=None,
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    access_token_params=None,
-    refresh_token_url=None,
-    refresh_token_params=None,
-    redirect_uri=None,
-    client_kwargs={'scope': 'openid profile email'},
-)
+facebook_bp = make_facebook_blueprint(client_id='350477707655423',
+                                      client_secret='952f700df029093910a999d747c938a2',
+                                      redirect_to='facebook_login')
 
-facebook = oauth.register(
-    name='facebook',
-    client_id='350477707655423',
-    client_secret='952f700df029093910a999d747c938a2',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    authorize_params=None,
-    authorize_callback=None,
-    access_token_url='https://graph.facebook.com/oauth/access_token',
-    access_token_params=None,
-    refresh_token_url=None,
-    refresh_token_params=None,
-    redirect_uri=None,
-    client_kwargs={'scope': 'email'},
-)
+google = google_bp.blueprint
+facebook = facebook_bp.blueprint
 
+# Register the blueprints
+auth.before_request(google_bp.before_request)
+auth.before_request(facebook_bp.before_request)
 
-@google.tokengetter
+# Add the blueprints to the app
+auth.register_blueprint(google_bp, url_prefix='/google_login')
+auth.register_blueprint(facebook_bp, url_prefix='/facebook_login')
+
+@google_bp.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
 
@@ -137,13 +124,17 @@ def change_password():
 
 @auth.route('/google/login/')
 def google_login():
-    return oauth.google.authorize_redirect(url_for('auth.google_login_authorized', _external=True))
+    return redirect(url_for('google.login'))
 
 @auth.route('/google/login/authorized/')
 def google_login_authorized():
-    token = oauth.google.authorize_access_token()
-    user_info = oauth.google.parse_id_token(token)
-    email = user_info['email']
+    if not google.authorized:
+        return redirect(url_for('google.login'))
+
+    resp = google.get('/plus/v1/people/me')
+    assert resp.ok, resp.text
+    user_info = resp.json()
+    email = user_info['emails'][0]['value']
     user = User.query.filter_by(email=email.lower()).first()
 
     if user is not None:
@@ -156,13 +147,17 @@ def google_login_authorized():
 
 @auth.route('/google/sign_up/')
 def google_signup():
-    return oauth.google.authorize_redirect(url_for('auth.google_signup_authorized', _external=True))
+    return redirect(url_for('google.login'))
 
 @auth.route('/google/sign_up/authorized/')
 def google_signup_authorized():
-    token = oauth.google.authorize_access_token()
-    user_info = oauth.google.parse_id_token(token)
-    email = user_info['email']
+    if not google.authorized:
+        return redirect(url_for('google.login'))
+
+    resp = google.get('/plus/v1/people/me')
+    assert resp.ok, resp.text
+    user_info = resp.json()
+    email = user_info['emails'][0]['value']
     first_name = email_slicer(email)
 
     user = User.query.filter_by(email=email.lower()).first()
@@ -171,16 +166,21 @@ def google_signup_authorized():
         return redirect(url_for('auth.login'))
 
     create_user(email, first_name)
-    return redirect(url_for('api.enroll'))
+    flash('You have successfully signed up!', 'success')
+    return redirect(url_for('main.user_home'))
 
 @auth.route('/facebook/login/')
 def facebook_login():
-    return oauth.facebook.authorize_redirect(url_for('auth.facebook_login_authorized', _external=True))
+    return redirect(url_for('facebook.login'))
 
 @auth.route('/facebook/login/authorized/')
 def facebook_login_authorized():
-    token = oauth.facebook.authorize_access_token()
-    user_info = oauth.facebook.get('me?fields=id,email').json()
+    if not facebook.authorized:
+        return redirect(url_for('facebook.login'))
+
+    resp = facebook.get('/me?fields=id,email')
+    assert resp.ok, resp.text
+    user_info = resp.json()
     email = user_info['email']
     user = User.query.filter_by(email=email.lower()).first()
 
@@ -194,12 +194,16 @@ def facebook_login_authorized():
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
-    return oauth.facebook.authorize_redirect(url_for('auth.facebook_sign_up_authorized', _external=True))
+    return redirect(url_for('facebook.login'))
 
 @auth.route('/facebook/sign_up/authorized/')
 def facebook_sign_up_authorized():
-    token = oauth.facebook.authorize_access_token()
-    user_info = oauth.facebook.get('me?fields=id,email').json()
+    if not facebook.authorized:
+        return redirect(url_for('facebook.login'))
+
+    resp = facebook.get('/me?fields=id,email')
+    assert resp.ok, resp.text
+    user_info = resp.json()
     email = user_info['email']
     first_name = email_slicer(email)
 
@@ -209,5 +213,5 @@ def facebook_sign_up_authorized():
         return redirect(url_for('auth.login'))
 
     create_user(email, first_name)
-    flash('You have successfully logged into your account', 'success')
+    flash('You have successfully signed up!', 'success')
     return redirect(url_for('main.user_home'))
