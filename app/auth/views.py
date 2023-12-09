@@ -1,5 +1,5 @@
 # auth/views.py
-from flask import render_template, redirect, request, url_for, flash, session, jsonify
+from flask import render_template, redirect, request, url_for, flash, session
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
@@ -9,8 +9,8 @@ from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
+from .. import rapi
 
-# Replace these with your actual Google and Facebook OAuth client IDs and secrets
 google_bp = make_google_blueprint(client_id='176959984300-4t6mne05ddmd866l7eije2eq2t2gia5m.apps.googleusercontent.com',
                                   client_secret='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',
                                   redirect_to='google_login')
@@ -19,9 +19,9 @@ facebook_bp = make_facebook_blueprint(client_id='350477707655423',
                                       client_secret='952f700df029093910a999d747c938a2',
                                       redirect_to='facebook_login')
 
-# Register the blueprints
-auth.before_request(google_bp.before_request)
-auth.before_request(facebook_bp.before_request)
+# Move the before_request calls before registering the blueprints
+google_bp.before_request(google_bp.before_request)
+facebook_bp.before_request(facebook_bp.before_request)
 
 # Add the blueprints to the app
 auth.register_blueprint(google_bp, url_prefix='/google_login')
