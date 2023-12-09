@@ -13,11 +13,11 @@ from .. import rapi
 
 google_bp = make_google_blueprint(client_id='176959984300-4t6mne05ddmd866l7eije2eq2t2gia5m.apps.googleusercontent.com',
                                   client_secret='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',
-                                  redirect_to='auth.login')
+                                  redirect_to='main.user_home')
 
 facebook_bp = make_facebook_blueprint(client_id='350477707655423',
                                       client_secret='952f700df029093910a999d747c938a2',
-                                      redirect_to='auth.login')
+                                      redirect_to='main.user_home')
 
 # Add the blueprints to the app
 auth.register_blueprint(google_bp, url_prefix='/google_login')
