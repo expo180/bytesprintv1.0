@@ -241,6 +241,11 @@ h6{
 .dropdown-toggle::after {
   display: none;
 }
+.dropdown-links{
+  color:rgb(9,9,121);
+  text-decoration:none;
+  font-size:1rem;
+}
 .rocket-cta{
   padding:2em 2em;
   background-image:url("background-cta.png");
@@ -265,3 +270,4 @@ h6{
   pointer-events: none;
   z-index: -1;
 }
+

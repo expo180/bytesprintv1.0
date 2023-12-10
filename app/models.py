@@ -191,12 +191,13 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     age = db.Column(db.String)
     name = db.Column(db.String(64))
-    gender = db.Column(db.String)
-    country = db.Column(db.String)
-    areas_of_interest = db.Column(db.String)
+    gender = db.Column(db.String())
+    country = db.Column(db.String())
+    areas_of_interest = db.Column(db.String())
     bio = db.Column(db.Text())
     position = db.Column(db.String(64))
     profile_picture = db.Column(db.Text())
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     iq = db.Column(db.Integer)
     eq = db.Column(db.Integer)
     courses = db.relationship('Course', secondary='enrollments', backref='users')
@@ -336,16 +337,6 @@ class User(UserMixin, db.Model):
     def can_remove_courses(self):
         return self.role is not None and self.role.has_permission(Permission.REMOVE_COURSES)
 
-    
-
-class AnonymousUser(AnonymousUserMixin):
-    def can(self, permissions):
-        return False
-
-    def is_administrator(self):
-        return False
-
-login_manager.anonymous_user = AnonymousUser
 
 class Course(db.Model):
     __tablename__ = 'courses'

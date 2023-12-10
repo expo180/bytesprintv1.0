@@ -76,9 +76,7 @@ def register():
         db.session.commit()
 
         # Display a flash message for successful registration
-        flash("Your account has been created successfully!", 'success')
-        return redirect(url_for('main.user_home'))
-
+        return redirect(url_for('main.register_success'))
     return render_template('auth/register.html', form=form)
 
 

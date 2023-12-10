@@ -125,8 +125,13 @@ def map3D():
 def preferences():
     return render_template('user/settings.html')
 
+@main.route("/registration/success")
 @login_required
+def register_success():
+    return render_template('user/register_success.html')
+
 @main.route("/user/home/")
+@login_required
 def user_home():
     courses = Course.query.filter_by(email=current_user.email).all()
     return render_template('user/home.html', courses=courses)
