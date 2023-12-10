@@ -44,14 +44,10 @@ body
   color:rgb(7,95,195);
   cursor:pointer;
 }
-.navbar{
+.navbar {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-image:url("hero-bg.png");
-  background-position:center;
-  background-repeat: no-repeat;
-  background-size:cover;
+  background: radial-gradient(circle, #3498db, #2980b9);
 }
-
 .btn{
   font-family:'Telegraf-UltraBold', sans-serif;
 }

@@ -47,13 +47,11 @@ strong
 {
   font-family:'Telegraf-UltraBold',sans-serif;
 }
-.navbar{
+.navbar {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-image:url("hero-bg.png");
-  background-position:center;
-  background-repeat: no-repeat;
-  background-size:cover;
+  background: radial-gradient(circle, #3498db, #2980b9);
 }
+
 .enroll{
     transition:.5s ease-in;
 }

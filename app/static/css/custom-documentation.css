@@ -3,13 +3,11 @@
   font-family:'Telegraf-Regular', sans-serif;
   box-sizing:border-box;
 }
-.navbar{
+.navbar {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-image:url("hero-bg.png");
-  background-position:center;
-  background-repeat: no-repeat;
-  background-size:cover;
+  background: radial-gradient(circle, #3498db, #2980b9);
 }
+
 .pattern{
   background-image:url("Sans titre 110_20230804184040.png");
   background-position:center;
