@@ -9,10 +9,7 @@ strong{
 .dropdown-toggle::after {
   display: none;
 }
-.navbar{
+.navbar {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-image:url("hero-bg.png");
-  background-position:center;
-  background-repeat: no-repeat;
-  background-size:cover;
+  background: linear-gradient(45deg, #3498db, #2ecc71);
 }
