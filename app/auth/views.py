@@ -57,7 +57,7 @@ def register():
             # Display a flash message for existing email
             flash('Account already exists. Please log in.', 'error')
             return redirect(url_for('auth.register'))
-        
+
         current_datetime = datetime.utcnow()
 
         user = User(
@@ -75,8 +75,21 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        # Save user data in the session for template usage
+        session['user_data'] = {
+            'first_name': form.first_name.data,
+            'last_name': form.last_name.data,
+            'email': form.email.data.lower(),
+            'country': form.country.data,
+            'age': form.age.data,
+            'areas_of_interest': form.areas_of_interest.data,
+            'gender': form.gender.data,
+            'member_since': current_datetime
+        }
+
         # Display a flash message for successful registration
-        return redirect(url_for('main.register_success'))
+        return redirect(url_for('main.register_success', session['user_data']['first_name']))
+
     return render_template('auth/register.html', form=form)
 
 

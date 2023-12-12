@@ -125,8 +125,12 @@ def map3D():
 def preferences():
     return render_template('user/settings.html')
 
-@main.route("/registration/success")
-@login_required
+
+@main.route("/register/payment/success/")
+def pay_success():
+    return render_template('user/pay_success.html')
+
+@main.route("/registration/success/")
 def register_success():
     return render_template('user/register_success.html')
 

@@ -27,16 +27,47 @@
   <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
   <!-- custom style -->
   <link rel="stylesheet" href="{{url_for('static', filename='css/user/register_success.css')}}">
+  <script src="https://www.paypal.com/sdk/js?client-id=AR0lBTaEVV5IcOc8nlmSvyi4GvjFHzgK7oavcXwriKHIyFAeeAWyf3WWG-ljRLEZuVgdnQj29yrwa8WU&currency=USD"></script>
 </head>
 <body>
   <div class="container">
     <div class="success-container">
       <div class="icon-container">
-        <img src="{{ url_for('static', filename='media/icons/PNG/icons8-check-480.png') }}" alt="check by icons8" class="success-icon">
+        <img width="256" height="256" src="https://img.icons8.com/nolan/256/00C6FF/0072FF/symantec.png" alt="symantec"/>
       </div>
       <h1 class="display-1 text-primary fw-bold">Registration Successful!</h1>
-      <p class="mt-3">Thank you for signing up. You are now a member of our platform.</p>
-      <button id="continueBtn">Continue to Checkout</button>
+      <p class="mt-3">
+        <strong class="blue-underline">Thank</strong> you for <strong class="blue-underline">joining</strong> our platform <strong class="blue-underline">{{ session['user_data']['first_name'] }}!</strong>. Your <strong class="blue-underline">registration</strong> is <strong class="blue-underline">complete</strong>. 
+        To <strong class="blue-underline">secure</strong> your <strong class="blue-underline">place</strong>, kindly proceed with the payment of <strong class="blue-underline">$15 USD</strong>.
+      </p>
+      <div class="button-container">
+        <div id="paypal-button-container"></div>
+      </div>
+      <script>
+        paypal.Buttons({
+          style: {
+            layout: 'vertical',
+            color:  'blue',
+            shape:  'rect',
+            label:  'paypal'
+          },
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                amount: {
+                  value: '15.00'
+                }
+              }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              console.log('Transaction completed by ' + details.payer.name.given_name);
+              window.location.href = "http://register/payment/success/"
+            });
+          }
+        }).render('#paypal-button-container');
+      </script>
     </div>
   </div>
 </body>
