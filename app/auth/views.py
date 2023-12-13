@@ -208,8 +208,16 @@ def google_signup_authorized():
     db.session.add(user)
     db.session.commit()
 
+    session['user_data'] = {
+        'first_name': form.first_name.data,
+        'last_name': form.last_name.data,
+        'email': form.email.data.lower(),
+        'gender': form.gender.data,
+        'member_since': current_datetime
+    }
+
     login_user(user)
-    return redirect(url_for('main.user_home'))
+    return redirect(url_for('main.register_success'))
 
 @auth.route('/facebook/sign_up/')
 def facebook_sign_up():
