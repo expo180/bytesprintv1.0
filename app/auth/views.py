@@ -88,7 +88,7 @@ def register():
         }
 
         # Display a flash message for successful registration
-        return redirect(url_for('main.register_success', session['user_data']['first_name']))
+        return redirect(url_for('main.register_success', first_name=session['user_data']['first_name']))
 
     return render_template('auth/register.html', form=form)
 
