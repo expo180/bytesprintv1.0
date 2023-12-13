@@ -209,10 +209,8 @@ def google_signup_authorized():
     db.session.commit()
 
     session['user_data'] = {
-        'first_name': form.first_name.data,
-        'last_name': form.last_name.data,
-        'email': form.email.data.lower(),
-        'gender': form.gender.data,
+        'first_name': first_name,
+        'email': email.lower(),
         'member_since': current_datetime
     }
 
