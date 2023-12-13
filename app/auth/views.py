@@ -271,13 +271,20 @@ def facebook_sign_up_authorized():
         return redirect(url_for('auth.login'))
 
     default_password = 'ghp_gcxdTBEc3e3M9'
+    current_datetime = datetime.utcnow()
     user = User(
         email=email,
         first_name=first_name,
         last_name=first_name,
         password_hash=generate_password_hash(default_password)
+        member_since=current_datetime
     )
     db.session.add(user)
     db.session.commit()
+    session['user_data'] = {
+        'first_name': first_name,
+        'email': email.lower(),
+        'member_since': current_datetime
+    }
     flash('You have successfully logged into your account', 'success')
-    return redirect(url_for('main.user_home'))
+    return redirect(url_for('main.register_success'))
