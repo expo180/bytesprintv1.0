@@ -276,7 +276,7 @@ def facebook_sign_up_authorized():
         email=email,
         first_name=first_name,
         last_name=first_name,
-        password_hash=generate_password_hash(default_password)
+        password_hash=generate_password_hash(default_password),
         member_since=current_datetime
     )
     db.session.add(user)
