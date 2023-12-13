@@ -575,7 +575,7 @@ $(document).ready(function() {
         var CourseSectionData = collectFormData();
 
         $.ajax({
-            url: 'http://127.0.0.1:5000/api/v1/create_course/step2/',
+            url: 'https://bytesprint.onrender.com/api/v1/create_course/step2/',
             type: 'POST',
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({ 'courseData': CourseSectionData }),
@@ -634,7 +634,7 @@ $(document).ready(function() {
         var CourseSectionData = collectFormData();
 
         $.ajax({
-            url: 'http://127.0.0.1:5000/api/v1/save_to_database/',
+            url: 'https://bytesprint.onrender.com/api/v1/save_to_database/',
             type: 'POST',
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({ 'courseData': CourseSectionData }),
