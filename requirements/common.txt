@@ -31,7 +31,7 @@ WTForms
 email_validator
 flask-change-password
 httpx
-psycopg2-binary
+psycopg2
 gunicorn
 Flask-OAuthlib
 Flask-RestCountries
