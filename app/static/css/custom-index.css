@@ -55,6 +55,12 @@ body
 .FAQs{
   font-family:'Telegraf-Regular', sans-serif;
 }
+.about-section--course{
+  background-image:url("background-cta.png");
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size:cover;
+}
 .hero-section{
   background-image:url("hero-bg.png");
   background-position:center;
