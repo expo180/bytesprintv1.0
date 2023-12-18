@@ -134,6 +134,10 @@ def pay_success():
 def register_success():
     return render_template('user/register_success.html')
 
+@main.route("/register/payment/reminder/complete")
+def payment_reminder():
+    return render_template('user/payment_reminder.html')
+
 @main.route("/user/home/")
 @login_required
 def user_home():
