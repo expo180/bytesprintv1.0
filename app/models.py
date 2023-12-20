@@ -182,6 +182,16 @@ class Role(db.Model):
 
 db.Table('roles', db.Model.metadata, extend_existing=True)
 
+class BootcampParticipants(UserMixin, db.Model):
+    __tablename__ = 'bootcamp_participants'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(64), unique=True, nullable=False)
+    full_name = db.Column(db.String(), nullable=False)
+    country = db.Column(db.String())
+    areas_of_interest = db.Column(db.String())
+    profile_picture = db.Column(db.Text())
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)

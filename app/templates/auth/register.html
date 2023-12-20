@@ -152,7 +152,7 @@
 					<form id="stepByStepForm"  method="POST" action="{{ url_for('auth.register') }}">
 						<div class="step" id="step-1">
 							<h2 class="text-secondary my-4">Personal informations</h2>
-							{{  form.hidden_tag() }}
+							{{ form.hidden_tag() }}
 							{{ form.first_name.label }}
 							{{ form.first_name(class='form-control mt-2', placeholder='Max', id='last_name') }}
 							<small class="name-error-msg text-danger my-4">

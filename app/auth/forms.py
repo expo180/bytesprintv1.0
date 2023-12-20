@@ -188,6 +188,63 @@ class PasswordResetForm(FlaskForm):
     submit = SubmitField( ('Next'))
 
 
+class BootcampForm(FlaskForm):
+    email = StringField(
+        ('Email'), 
+        validators = [
+            InputRequired(), 
+            Length(1, 64),
+            Email()
+        ]
+    )
+    full_name = StringField(
+         ("Full name"),
+        validators = [
+            InputRequired(),
+        ]
+    )
+    country = CountrySelectField(
+        "Enter your current location",
+        validators=[InputRequired()]
+    )
+    areas = [
+        ("None", "-Select an area-"),
+        ("Health informatics", "Healthcare"),
+        ("Algorithmic trading", "Finance"),
+        ("EdTech", "Education"),
+        ("Recommender systems", "E-commerce"),
+        ("Robotics in automation", "Manufacturing"),
+        ("Game development", "Entertainment"),
+        ("Autonomous vehicles", "Transportation"),
+        ("Precision farming", "Agriculture"),
+        ("Smart grids", "Energy"),
+        ("Network optimization", "Telecommunications"),
+        ("Data-driven policy-making", "Government"),
+        ("Data analysis for climate studies", "Environmental Science"),
+        ("Inventory management", "Retail"),
+        ("Data analysis in space missions", "Space Exploration"),
+        ("Data-driven decision-making for social programs", "Social Services"),
+        ("Legal analytics", "Legal Services"),
+        ("Property valuation", "Real Estate"),
+        ("HR analytics", "Human Resources"),
+        ("Travel and Hospitality", "Personalized recommendations"),
+        ("Non-Profit Organizations", "Data-driven impact assessment"),
+    ]
+    default_choice = areas[0][0]
+
+    areas_of_interest = SelectField(
+        "Select an area that interests you",
+        choices=areas,
+        default=default_choice
+    )
+    privacy_policy_agreement = BooleanField(
+        ("You have read and accepted our <a href=''>Terms and Conditions</a>."),
+        validators=[InputRequired()]
+    )
+    submit = SubmitField(('Submit'))
+
+
+
 class ChangeEmailForm(FlaskForm):
     email = StringField(
          ('New Email Adress'), 

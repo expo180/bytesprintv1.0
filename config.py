@@ -4,7 +4,7 @@
 
 import os
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY ='AAAAB3NzaC1yc2EAAAADAQABAAABAQCjrFncQTzkFeeK7GB7b2Y6CqGBAiuovcWeWr3W1dqwZHu86kJxuNSAEUnJG82HlHOxmPT7tZNYaruKaoMUufxqnLWPr+1+m0Jg4hZMTRA3Uoh/TELKjj+LpObLhZT7Mphk0T+n27hrW6gF+hmq4sd3wYAJYPQx3iou65pqN78DXe8wDBjm0evHoDmgeQ1mPZBFcjmsGz+ntjiEhnobEmADmhDEYdF3aQQGUIEiyFVpMns5W1t4VvUTfVjQCjdGljMzW7rH3dJkraALwWlUmcX3LXetJLQWuOV3ezsx0q3zp84XLQMHUV62jtDOJy39aIjQDE+lo2/kqnQJ3Du1DE8p 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'
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.googlemail.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() in ['true', 'on', '1']

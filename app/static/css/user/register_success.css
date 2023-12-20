@@ -4,11 +4,6 @@ body {
   background:url("../background-cta.png");
   background-position:center;
 }
-
-h1{
-  font-weight:500;
-}
-
 .container {
   display: flex;
   justify-content: center;

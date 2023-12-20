@@ -3,10 +3,10 @@ from flask import render_template, redirect, request, url_for, flash, session, j
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
-from ..models import User
+from ..models import User, BootcampParticipants
 from werkzeug.security import generate_password_hash
 from ..email import send_email
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm, BootcampForm
 from flask_oauthlib.client import OAuth
 from .. import rapi 
 from datetime import datetime
@@ -288,3 +288,30 @@ def facebook_sign_up_authorized():
     }
     flash('You have successfully logged into your account', 'success')
     return redirect(url_for('main.register_success'))
+
+@auth.route("/bootcamp/register/", methods=['GET', 'POST'])
+def bootcamp_register():
+    form = BootcampForm()
+    if form.validate_on_submit():
+        participant = BootcampParticipants.query.filter_by(email=form.email.data.lower()).first()
+
+        if participant:
+            # Display a flash message for existing email
+            flash('You have already registered for this activity', 'error')
+            return redirect(url_for('auth.bootcamp_register'))
+
+        current_datetime = datetime.utcnow()
+
+        participant = BootcampParticipants(
+            full_name=form.full_name.data,
+            email=form.email.data.lower(),
+            country=form.country.data,
+            areas_of_interest=form.areas_of_interest.data,
+            member_since=current_datetime
+        )
+
+        db.session.add(participant)
+        db.session.commit()
+        return redirect(url_for('main.register_success'))
+
+    return render_template('auth/register_bootcamp.html', form=form)

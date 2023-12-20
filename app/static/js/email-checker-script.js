@@ -1,26 +1,36 @@
 $(document).ready(function() {
-    const emailInput = $("#floatingInput");
-    const passInput = $("#floatingPassword");
+    const emailInput = $("#EmailInput");
+    const nameInput = $("#NameInput");
     const errorText = $(".email-serverless-raise-error");
-    const submitButton = $(".submit-login");
-
-    emailInput.on('input', validateFields);
-    passInput.on('input', validateFields);
+    const NameErrorText = $(".name-serverless-raise-error");
+    const submitButton = $(".btn");
 
     function validateFields() {
         const email = emailInput.val().trim();
-        const password = passInput.val().trim();
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-        if (email && password && isValidEmail) {
+        if (email && isValidEmail) {
             errorText.hide();
             submitButton.prop('disabled', false);
-        } else if (email && !isValidEmail) {
-            errorText.addClass("text-danger").show();
-            submitButton.prop('disabled', true);
-        } else {
-            errorText.hide();
+        }
+        else {
+            errorText.show();
             submitButton.prop('disabled', true);
         }
     }
+    function validateName(){
+        const name = nameInput.val().trim();
+        if(name){
+            NameErrorText.hide();
+            submitButton.prop('disabled', false);
+        }
+        else{
+            NameErrorText.show();
+            submitButton.prop('disabled', true)
+        }
+    }
+
+    // call the functions
+    emailInput.on('input', validateFields);
+    nameInput.on('input', validateName);
 });

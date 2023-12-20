@@ -1,0 +1,72 @@
+@import url('../../fonts.css');
+
+*{
+  font-family:'Telegraf-Regular';
+}
+h1,
+.btn
+{
+  font-family: 'Telegraf-UltraBold';
+}
+
+html,
+body {
+  height: 100%;
+}
+body{
+  background-image: url('../../background-cta.png');
+}
+
+
+.alert.success {
+  color: green;
+}  
+.alert.error {
+  color:rgb(255, 100, 100);
+}
+.email-serverless-raise-error{
+  display: none;
+}
+.email-serverless-raise-error {
+  display: none;
+  color: rgb(255, 100, 100);
+}
+.name-serverless-raise-error{
+  color:rgb(255, 100, 100);
+  display: none;
+}
+
+.submit-login:disabled {
+  color: rgb(180, 180, 180);
+}
+
+
+.form-signin {
+  max-width: 500px;
+  padding: 2.5rem;
+  background-color:white;
+  border-radius:10px;
+
+}
+@media (min-width:1200px) {
+  .form-signin{
+    max-width:600px;
+  }
+  
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

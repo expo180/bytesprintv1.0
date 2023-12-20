@@ -120,7 +120,6 @@ def boutique():
 @main.route("/3Dmap/")
 def map3D():
     return render_template('3D/map.html')
-
 @main.route("/user/settings/")
 def preferences():
     return render_template('user/settings.html')
